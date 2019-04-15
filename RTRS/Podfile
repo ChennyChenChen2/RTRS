@@ -1,0 +1,13 @@
+platform :ios, '9.0'
+
+def all_pods
+  use_frameworks!
+
+  pod 'FLEX', '~> 2.4', :configurations => ['debug']
+  pod 'SwiftSoup'
+
+end
+
+target 'RTRS' do
+  all_pods
+end
