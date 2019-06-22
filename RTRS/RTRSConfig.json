@@ -1,0 +1,44 @@
+{
+	"pages": [
+		{
+			"name": "Home",
+			"link": "https://www.rightstorickysanchez.com",
+			"type": "homepage"
+		},
+		{
+			"name": "About",
+			"link": "https://www.rightstorickysanchez.com/about",
+			"type": "descriptionPage"
+		},
+		{
+            "name": "Podcasts",
+            "link": "https://www.rightstorickysanchez.com/podcast",
+            "type": "multimedia"
+		},
+        {
+            "name": "If Not, Pick Will Convey As Two Second-Rounders",
+            "link": "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders",
+            "type": "contentlist"
+        },
+        {
+            "name": "Newsletter",
+            "link": "https://www.rightstorickysanchez.com/newsletter",
+            "type": "textform"
+        },
+        {
+            "name": "Subscribe",
+            "link": "https://www.rightstorickysanchez.com/subscribe",
+            "type": "multimedia"
+        },
+        {
+            "name": "Process Pups",
+            "link": "https://www.rightstorickysanchez.com/processpups",
+            "type": "contentlist"
+        },
+        {
+            "name": "T-Shirt Store",
+            "link": "https://crackedbellphl.com/collections/rights-to-ricky-sanchez",
+            "type": "externallink"
+        }
+	]
+}

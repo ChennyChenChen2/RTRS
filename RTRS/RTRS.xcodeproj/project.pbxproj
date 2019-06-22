@@ -13,7 +13,11 @@
 		87095A562263BC2B0081A540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87095A542263BC2B0081A540 /* Main.storyboard */; };
 		87095A582263BC2C0081A540 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87095A572263BC2C0081A540 /* Assets.xcassets */; };
 		87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87095A592263BC2C0081A540 /* LaunchScreen.storyboard */; };
+		877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0A226A90BE00F061FA /* RTRSOperation.swift */; };
+		877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */; };
+		877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 877B3A0E226A932800F061FA /* RTRSConfig.json */; };
 		8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8785EF422264120B0011CF6C /* RTRSNavigation.swift */; };
+		87B95F5F2267FEFC008AC7C9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B95F5E2267FEFC008AC7C9 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +28,11 @@
 		87095A572263BC2C0081A540 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		87095A5A2263BC2C0081A540 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87095A5C2263BC2C0081A540 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		877B3A0A226A90BE00F061FA /* RTRSOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperation.swift; sourceTree = "<group>"; };
+		877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperationCoordinator.swift; sourceTree = "<group>"; };
+		877B3A0E226A932800F061FA /* RTRSConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RTRSConfig.json; sourceTree = SOURCE_ROOT; };
 		8785EF422264120B0011CF6C /* RTRSNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigation.swift; sourceTree = "<group>"; };
+		87B95F5E2267FEFC008AC7C9 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		AF1DB3465F792B361E3E82F6 /* Pods_RTRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RTRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ACBB0ECF34B42056B0084 /* Pods-RTRS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.release.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.release.xcconfig"; sourceTree = "<group>"; };
 		FB2E3E34293CDA6B7B1DD506 /* Pods-RTRS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -80,6 +88,8 @@
 		87095A4F2263BC2B0081A540 /* RTRS */ = {
 			isa = PBXGroup;
 			children = (
+				877B3A09226A90A800F061FA /* Loaders */,
+				87B95F5D2267FEEC008AC7C9 /* Utils */,
 				8785EF41226411D80011CF6C /* Navigation */,
 				87095A502263BC2B0081A540 /* AppDelegate.swift */,
 				87095A522263BC2B0081A540 /* ViewController.swift */,
@@ -87,8 +97,18 @@
 				87095A572263BC2C0081A540 /* Assets.xcassets */,
 				87095A592263BC2C0081A540 /* LaunchScreen.storyboard */,
 				87095A5C2263BC2C0081A540 /* Info.plist */,
+				877B3A0E226A932800F061FA /* RTRSConfig.json */,
 			);
 			path = RTRS;
+			sourceTree = "<group>";
+		};
+		877B3A09226A90A800F061FA /* Loaders */ = {
+			isa = PBXGroup;
+			children = (
+				877B3A0A226A90BE00F061FA /* RTRSOperation.swift */,
+				877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */,
+			);
+			path = Loaders;
 			sourceTree = "<group>";
 		};
 		8785EF41226411D80011CF6C /* Navigation */ = {
@@ -97,6 +117,14 @@
 				8785EF422264120B0011CF6C /* RTRSNavigation.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		87B95F5D2267FEEC008AC7C9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				87B95F5E2267FEFC008AC7C9 /* Utils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +187,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */,
 				87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */,
 				87095A582263BC2C0081A540 /* Assets.xcassets in Resources */,
 				87095A562263BC2B0081A540 /* Main.storyboard in Resources */,
@@ -222,8 +251,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */,
+				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
 				87095A532263BC2B0081A540 /* ViewController.swift in Sources */,
+				877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */,
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
+				87B95F5F2267FEFC008AC7C9 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

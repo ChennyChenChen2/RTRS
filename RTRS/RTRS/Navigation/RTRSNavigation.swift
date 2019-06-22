@@ -8,11 +8,40 @@
 
 import Foundation
 import SwiftSoup
+import WebKit
 
-class RTRSNavigation {
-    var doc: Document?
+enum RTRSScreens {
+    case home
+    case about
+    case podcasts
+    case au
+    case newsletter
+    case subscribe
+    case processPups
+    case shirts
+    case events(String) // Event name param
+    case lotteryParty
+    case contact
+    case advertise
+    
+//    var urlSuffix: String {
+//        switch self {
+//
+//        }
+//    }
+}
+
+class RTRSNavigation: NSObject, WKUIDelegate {
+    fileprivate var doc: Document?
+    fileprivate var webView: WKWebView!
+    
+    override init() {
+        super.init()
+        
+    }
     
     init(html: String) {
+        super.init()
         do {
             self.doc = try SwiftSoup.parse(html)
         } catch Exception.Error(let type, let message) {
@@ -20,8 +49,12 @@ class RTRSNavigation {
         } catch {
             print("error")
         }
+        print("HERE!")
     }
     
-    
-    
+    fileprivate func fetchLatestHtml() {
+        let url = URL(string: "https://www.rightstorickysanchez.com")!
+        let myRequest = URLRequest(url: url)
+        self.webView.load(myRequest)
+    }
 }
