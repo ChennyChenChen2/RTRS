@@ -15,27 +15,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let urlSession = URLSession(configuration: URLSessionConfiguration.default)
-        let request = URLRequest(url: URL(string: "https://www.rightstorickysanchez.com/?format=json-pretty")!)
-        let task = urlSession.dataTask(with: request) { (data, response, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            
-            if let data = data,
-                let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
-                let collectionDict = dict["collection"] as? [String: Any], let updated = collectionDict["updatedOn"] as? Int {
-                
-                let lastUpdate = UserDefaults.standard.integer(forKey: RTRSUserDefaultsKeys.lastUpdated)
-                if updated > lastUpdate {
-                    UserDefaults.standard.set(updated, forKey: RTRSUserDefaultsKeys.lastUpdated)
-                    
-                }
-            }
-        }
-        task.resume()
+        setRootViewController()
         
         return true
+    }
+    
+    fileprivate func setRootViewController() {
+        self.window?.rootViewController?.view.removeFromSuperview()
+        
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: LoadingViewController.storyboardId)
+        let navController = RTRSNavigationController(rootViewController: vc)
+        self.window?.rootViewController = navController
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

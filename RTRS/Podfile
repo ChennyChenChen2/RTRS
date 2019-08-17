@@ -4,7 +4,9 @@ def all_pods
   use_frameworks!
 
   pod 'FLEX', '~> 2.4', :configurations => ['debug']
-  pod 'SwiftSoup'
+  pod 'SwiftSoup', '2.2.0'
+  pod 'Atributika', '4.8.2'
+
 
 end
 

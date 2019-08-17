@@ -1,0 +1,37 @@
+//
+//  RTRSAboutViewController.swift
+//  RTRS
+//
+//  Created by Jonathan Chen on 8/17/19.
+//  Copyright © 2019 Jonathan Chen. All rights reserved.
+//
+
+import UIKit
+
+class RTRSAboutViewController: UIViewController {
+
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var textView: UITextView!
+    fileprivate var viewModel: RTRSAboutViewModel?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.viewModel = RTRSNavigation.shared.viewModel(for: .about) as? RTRSAboutViewModel
+        self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
+        self.imageView.image = self.viewModel?.image
+        
+    }
+    
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+}

@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class RootTabController: UITabBarController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()

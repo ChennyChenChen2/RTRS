@@ -8,53 +8,34 @@
 
 import Foundation
 import SwiftSoup
-import WebKit
 
-enum RTRSScreens {
-    case home
-    case about
-    case podcasts
-    case au
-    case newsletter
-    case subscribe
-    case processPups
-    case shirts
-    case events(String) // Event name param
-    case lotteryParty
-    case contact
-    case advertise
-    
-//    var urlSuffix: String {
-//        switch self {
-//
-//        }
-//    }
+enum RTRSScreenType: String, Hashable {
+    case home = "Home"
+    case about = "About"
+    case podcasts = "The Pod"
+    case au = "If Not, Pick Will Convey As Two Second-Rounders"
+    case newsletter = "Newsletter"
+    case subscribe = "Subscribe"
+    case processPups = "Process Pups"
+    case shirts = "T-Shirt Store"
+    case events = "Events"
+    case lotteryParty = "Lottery Party"
+    case contact = "Contact"
+    case advertise = "Advertise"
+    case more = "More"
 }
 
-class RTRSNavigation: NSObject, WKUIDelegate {
-    fileprivate var doc: Document?
-    fileprivate var webView: WKWebView!
+class RTRSNavigation: NSObject {
+    public static let shared = RTRSNavigation()
+    override private init() {}
     
-    override init() {
-        super.init()
-        
+    fileprivate var pages = [RTRSScreenType: RTRSViewModel]()
+    
+    func registerViewModel(viewModel: RTRSViewModel, for page: RTRSScreenType) {
+        pages[page] = viewModel
     }
     
-    init(html: String) {
-        super.init()
-        do {
-            self.doc = try SwiftSoup.parse(html)
-        } catch Exception.Error(let type, let message) {
-            print(message)
-        } catch {
-            print("error")
-        }
-        print("HERE!")
-    }
-    
-    fileprivate func fetchLatestHtml() {
-        let url = URL(string: "https://www.rightstorickysanchez.com")!
-        let myRequest = URLRequest(url: url)
-        self.webView.load(myRequest)
+    func viewModel(for page: RTRSScreenType) -> RTRSViewModel? {
+        return pages[page]
     }
 }
