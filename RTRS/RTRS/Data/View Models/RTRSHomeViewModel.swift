@@ -110,10 +110,11 @@ class RTRSHomeViewModel: RTRSViewModel {
                             let homeItem = HomeItem(imageUrl: imgURL, text: title.string, actionText: actionText, actionUrl: actionURL)
                             homeItems.append(homeItem)
                         }
-                        
                     }
                 }
             }
+            
+            self.items = homeItems
         } catch {
             print("Unable to parse home page HTML")
         }

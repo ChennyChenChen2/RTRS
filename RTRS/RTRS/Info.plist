@@ -48,5 +48,7 @@
 	</array>
 	<key>RTRSBaseURL</key>
 	<string>https://www.rightstorickysanchez.com/</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

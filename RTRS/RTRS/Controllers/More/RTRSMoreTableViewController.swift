@@ -16,6 +16,9 @@ class RTRSMoreTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
+        self.view.backgroundColor = .black
+        self.tableView.backgroundColor = .black
+        self.navigationController?.navigationBar.backgroundColor = .black
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -40,6 +43,7 @@ class RTRSMoreTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
         if let page = self.viewModel?.pages?[indexPath.row] {
             cell.textLabel?.text = page.pageName()
+            cell.textLabel?.textColor = .white
             cell.imageView?.image = page.pageImage()
         }
 
