@@ -91,20 +91,27 @@ class RTRSHomeViewModel: RTRSViewModel {
     func extractDataFromDoc(doc: Document) {
         do {
             var homeItems = [HomeItem]()
-            let homeItemElems = try doc.getElementsByClass("col sqs-col-6 span-6")
-            for homeItemElem in homeItemElems {
-                if let imgElem = try homeItemElem.getElementsByTag("img").first(),
-                    let textElem = try homeItemElem.getElementsByClass("sqs-block html-block sqs-block-html").first(),
-                    let h1Elem = try textElem.getElementsByTag("h1").first(),
-                    let actionElem = try homeItemElem.getElementsByClass("sqs-block-button-container--center").first(),
-                    let aElem = try actionElem.getElementsByTag("a").first(),
-                    let imgURL = URL(string: try imgElem.attr("src")),
-                    let actionURL = URL(string: try aElem.attr("href")) {
-                    let text = NSAttributedString.attributedStringFrom(element: h1Elem)
-                    let actionText = try aElem.text()
-                    
-                    let homeItem = HomeItem(imageUrl: imgURL, text: text.string, actionText: actionText, actionUrl: actionURL)
-                    homeItems.append(homeItem)
+            
+            let imgElems = try doc.getElementsByClass("thumb-image")
+            let titleElems = try doc.getElementsByClass("sqs-block html-block sqs-block-html")
+            let actionElems = try doc.getElementsByClass("sqs-block-button-element--large sqs-block-button-element")
+            
+            for i in 0..<actionElems.count {
+                let actionElem = actionElems[i]
+                if i < titleElems.count && i < imgElems.count {
+                    let titleElem = titleElems[i]
+                    let imgElem = imgElems[i]
+                    if let imgURL = URL(string: try imgElem.attr("data-src")),
+                    let h1Elem = try titleElem.getElementsByTag("h1").first(),
+                    let actionText = try? actionElem.text(),
+                    let actionURL = URL(string: try actionElem.attr("href")) {
+                        let title = NSAttributedString.attributedStringFrom(element: h1Elem)
+                        if !title.string.contains("Squarespace") {
+                            let homeItem = HomeItem(imageUrl: imgURL, text: title.string, actionText: actionText, actionUrl: actionURL)
+                            homeItems.append(homeItem)
+                        }
+                        
+                    }
                 }
             }
         } catch {
