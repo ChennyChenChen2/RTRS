@@ -88,6 +88,8 @@ fileprivate class RTRSViewModelFactory {
     class func viewModelForType(name: String, doc: Document) -> RTRSViewModel? {
         
         switch name {
+        case "Home":
+            return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
         case "If Not, Pick Will Convey As Two Second-Rounders":
             return AUCornerMultiArticleViewModel(doc: doc, name: name, articles: nil)
         case "About":

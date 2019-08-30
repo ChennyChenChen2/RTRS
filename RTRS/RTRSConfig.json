@@ -14,10 +14,10 @@
 		{
 			"name": "Home",
 			"link": "https://www.rightstorickysanchez.com",
-			"type": "homepage"
+			"type": "homepage",
             "announcement":
             {
-                "title": "Join the Bark in the Park team!"
+                "title": "Join the Bark in the Park team!",
                 "url": "https://www.firstgiving.com/team/391999"
             }
 		},

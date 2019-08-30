@@ -20,6 +20,7 @@
 		8746130823084CF400C57400 /* RTRSMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130723084CF400C57400 /* RTRSMoreViewModel.swift */; };
 		8746130D230877CC00C57400 /* RTRSMoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */; };
 		8746130F2308818C00C57400 /* RTRSAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130E2308818C00C57400 /* RTRSAboutViewController.swift */; };
+		874613112308E15800C57400 /* RTRSHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874613102308E15800C57400 /* RTRSHomeViewModel.swift */; };
 		875566CB22FB8B6100C8070A /* AUCornerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CA22FB8B6100C8070A /* AUCornerTableViewCell.swift */; };
 		875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */; };
 		877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0A226A90BE00F061FA /* RTRSOperation.swift */; };
@@ -54,6 +55,7 @@
 		8746130723084CF400C57400 /* RTRSMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSMoreViewModel.swift; sourceTree = "<group>"; };
 		8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSMoreTableViewController.swift; sourceTree = "<group>"; };
 		8746130E2308818C00C57400 /* RTRSAboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAboutViewController.swift; sourceTree = "<group>"; };
+		874613102308E15800C57400 /* RTRSHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewModel.swift; sourceTree = "<group>"; };
 		875566CA22FB8B6100C8070A /* AUCornerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerTableViewCell.swift; sourceTree = "<group>"; };
 		875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAboutViewModel.swift; sourceTree = "<group>"; };
 		877B3A0A226A90BE00F061FA /* RTRSOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperation.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */,
 				875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */,
 				8746130723084CF400C57400 /* RTRSMoreViewModel.swift */,
+				874613102308E15800C57400 /* RTRSHomeViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
 				879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */,
 				875566CB22FB8B6100C8070A /* AUCornerTableViewCell.swift in Sources */,
+				874613112308E15800C57400 /* RTRSHomeViewModel.swift in Sources */,
 				87B95F5F2267FEFC008AC7C9 /* Utils.swift in Sources */,
 				8746130823084CF400C57400 /* RTRSMoreViewModel.swift in Sources */,
 				87C3B5A922EBC76F00560958 /* AUCornerTableViewController.swift in Sources */,
