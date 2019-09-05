@@ -45,7 +45,7 @@ class RTRSHomeViewController: UITableViewController {
                 let actionText = homeItem.actionText {
                 cell.titleLabel.text = text
                 cell.actionLabel.text = "\(actionText) ->"
-                cell.getImage(from: url)
+                cell.homeImageView.pin_setImage(from: url)
             }
         }
         
@@ -58,15 +58,4 @@ class RTRSHomeTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var homeImageView: UIImageView!
     @IBOutlet weak var actionLabel: UILabel!
-    
-    func getImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let theData = data {
-                DispatchQueue.main.async {
-                    self.homeImageView.image = UIImage(data: theData)
-                }
-            }
-        }.resume()
-    }
-    
 }

@@ -15,7 +15,6 @@ class RTRSOperation: Operation {
     let url: URL!
     let pageName: String!
     let type: String!
-    var viewModel: Any?
     var customCompletion: ((RTRSViewModel?) -> ())?
     
     required init(url: URL, pageName: String, type: String) {
@@ -48,6 +47,7 @@ class RTRSOperation: Operation {
                         if let viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc),
                             let type = RTRSScreenType(rawValue: self.pageName) {
                             RTRSNavigation.shared.registerViewModel(viewModel: viewModel, for: type)
+                            RTRSPersistentStorage.save(viewModel: viewModel, type: type)
                             self.customCompletion?(viewModel)
                         } else {
                             self.customCompletion?(nil)
@@ -57,24 +57,20 @@ class RTRSOperation: Operation {
                         self.customCompletion?(nil)
                     }
                 } else {
-                    guard let html = UserDefaults.standard.string(forKey: "\(self.pageName!)-\(RTRSUserDefaultsKeys.htmlStorage)") else {
-                        // TODO: Retrieve persisted view model for the given type
-                        self.customCompletion?(nil)
-                        return
+                    if let type = RTRSScreenType(rawValue: self.pageName) {
+                        var viewModel: RTRSViewModel?
+                        if type == .pod || type == .auArticle {
+                            viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
+                        } else {
+                            viewModel = RTRSPersistentStorage.getViewModel(type: type)
+                        }
+                        if let theViewModel = viewModel {
+                            self.customCompletion?(theViewModel)
+                            return
+                        }
                     }
                     
-                    do {
-                        let doc = try SwiftSoup.parse(html)
-                        self.customCompletion?(RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc))
-                        print("HERE!")
-                    } catch Exception.Error(let type, let message) {
-                        print("\(message)... TYPE: \(type)")
-                        self.customCompletion?(nil)
-                    } catch {
-                        print("error")
-                        self.customCompletion?(nil)
-                    }
-                
+                    self.customCompletion?(nil)
                 }
             }
         }

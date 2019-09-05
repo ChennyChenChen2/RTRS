@@ -9,7 +9,7 @@
 import UIKit
 import SwiftSoup
 
-class RTRSAboutViewModel: RTRSViewModel {
+class RTRSAboutViewModel: NSObject, RTRSViewModel {
     func pageName() -> String {
         return self.name ?? "About"
     }
@@ -30,6 +30,7 @@ class RTRSAboutViewModel: RTRSViewModel {
     var body: NSAttributedString?
     
     init(doc: Document?, name: String?, image: UIImage?, body: NSAttributedString?) {
+        super.init()
         self.name = name
         self.image = image
         self.body = body

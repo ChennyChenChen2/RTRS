@@ -9,7 +9,7 @@
 import UIKit
 import SwiftSoup
 
-class AUCornerMultiArticleViewModel: RTRSViewModel {
+class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel {
     func pageName() -> String {
         return self.name ?? "AU's Corner"
     }
@@ -41,6 +41,7 @@ class AUCornerMultiArticleViewModel: RTRSViewModel {
 
     required init(doc: Document?, name: String?, articles: [AUCornerSingleArticleViewModel]?) {
         self.name = name
+        super.init()
         if let theDoc = doc {
             extractDataFromDoc(doc: theDoc)
         }
@@ -61,14 +62,14 @@ class AUCornerMultiArticleViewModel: RTRSViewModel {
                     let urlSuffix = try? aElement.attr("href"),
                     let date = try? dateElement.text(),
                     let descriptionTextElement = try? descriptionElement.getElementsByTag("p").first(),
-                    let description = try? descriptionTextElement.text(),
+                    let articleDescription = try? descriptionTextElement.text(),
                     let imageAttribute = try? imageElement.attr("style"),
                     let openParenIndex = imageAttribute.firstIndex(of: "("),
                     let imageEndIndex = imageAttribute.lastIndex(of: "?")
                 {
                     let imageStartIndex = imageAttribute.index(after: openParenIndex)
                     let substring = imageAttribute[imageStartIndex..<imageEndIndex]
-                    let singleArticleViewModel = AUCornerSingleArticleViewModel(title: title, description: description, urlSuffix: urlSuffix, dateString: date, imageUrl: URL(string: String(substring)))
+                    let singleArticleViewModel = AUCornerSingleArticleViewModel(title: title, articleDescription: articleDescription, urlSuffix: urlSuffix, dateString: date, imageUrl: URL(string: String(substring)))
                     articles.append(singleArticleViewModel)
                 }
             }

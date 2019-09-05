@@ -1,24 +1,40 @@
 PODS:
   - Atributika (4.8.2)
+  - FLAnimatedImage (1.0.12)
   - FLEX (2.4.0)
+  - PINCache (2.3)
+  - PINRemoteImage (2.1.4):
+    - PINRemoteImage/FLAnimatedImage (= 2.1.4)
+  - PINRemoteImage/Core (2.1.4):
+    - PINCache (>= 2.1)
+  - PINRemoteImage/FLAnimatedImage (2.1.4):
+    - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
   - SwiftSoup (2.2.0)
 
 DEPENDENCIES:
   - Atributika (= 4.8.2)
   - FLEX (~> 2.4)
+  - PINRemoteImage
   - SwiftSoup (= 2.2.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Atributika
+    - FLAnimatedImage
     - FLEX
+    - PINCache
+    - PINRemoteImage
     - SwiftSoup
 
 SPEC CHECKSUMS:
   Atributika: 7b3631032cf11f2197b352343e0bd1b783d8ca88
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+  PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 08c949ef86d13eba9f47a1917a4e63d375796dfb
+PODFILE CHECKSUM: 4ba6d27a8fcfe9a6cca372f746c522d12eca1e8d
 
 COCOAPODS: 1.7.4

@@ -44,7 +44,7 @@ struct Announcement: Codable {
     }
 }
 
-class RTRSHomeViewModel: RTRSViewModel {
+class RTRSHomeViewModel: NSObject, RTRSViewModel {
     
     enum CodingKeys: String {
         case items = "Items"
@@ -79,6 +79,7 @@ class RTRSHomeViewModel: RTRSViewModel {
     }
     
     required init(doc: Document?, items: [HomeItem]?, name: String?, announcement: Announcement?) {
+        super.init()
         self.items = items
         self.name = name
         self.announcement = announcement

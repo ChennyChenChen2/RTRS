@@ -9,7 +9,7 @@
 import UIKit
 import SwiftSoup
 
-class RTRSMoreViewModel: RTRSViewModel {
+class RTRSMoreViewModel: NSObject, RTRSViewModel {
     func pageName() -> String {
         return "More"
     }

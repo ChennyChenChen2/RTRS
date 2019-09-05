@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PINRemoteImage
 
 class AUCornerTableViewCell: UITableViewCell {
 
@@ -32,19 +33,22 @@ class AUCornerTableViewCell: UITableViewCell {
     
     func applyViewModel(viewModel: AUCornerSingleArticleViewModel) {
         self.auTitleLabel.text = viewModel.title
-        self.auDescriptionLabel.text = viewModel.description
+        self.auDescriptionLabel.text = viewModel.articleDescription
         self.auTimestampLabel.text = viewModel.dateString
         
         if let imageUrl = viewModel.imageUrl {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: imageUrl) { [weak self] (data, response, error) in
-                if let theData = data, let weakSelf = self {
-                    DispatchQueue.main.async {
-                        weakSelf.previewImageView.image = UIImage(data: theData)
-                    }
-                }
-            }
-            task.resume()
+//            let session = URLSession(configuration: .default)
+//            let task = session.dataTask(with: imageUrl) { [weak self] (data, response, error) in
+//                if let theData = data, let weakSelf = self {
+//                    DispatchQueue.main.async {
+//                        weakSelf.previewImageView.image = UIImage(data: theData)
+//                    }
+//                }
+//            }
+//            task.resume()
+            self.previewImageView.pin_setImage(from: imageUrl)
+
+            
         }
     }
 
