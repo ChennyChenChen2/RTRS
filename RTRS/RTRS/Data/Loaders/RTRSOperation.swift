@@ -39,15 +39,17 @@ class RTRSOperation: Operation {
                 let keyName = "\(self.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
                 let lastUpdate = UserDefaults.standard.integer(forKey: keyName)
 //                if updated > lastUpdate {
-                if true {
+                if false {
                     UserDefaults.standard.set(updated, forKey: keyName)
                     do {
                         let htmlString = try String.init(contentsOf: self.url)
                         let doc = try SwiftSoup.parse(htmlString)
                         if let viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc),
                             let type = RTRSScreenType(rawValue: self.pageName) {
-                            RTRSNavigation.shared.registerViewModel(viewModel: viewModel, for: type)
-                            RTRSPersistentStorage.save(viewModel: viewModel, type: type)
+                            DispatchQueue.main.async {
+                                RTRSNavigation.shared.registerViewModel(viewModel: viewModel, for: type)
+                                RTRSPersistentStorage.save(viewModel: viewModel, type: type)
+                            }
                             self.customCompletion?(viewModel)
                         } else {
                             self.customCompletion?(nil)
@@ -65,6 +67,9 @@ class RTRSOperation: Operation {
                             viewModel = RTRSPersistentStorage.getViewModel(type: type)
                         }
                         if let theViewModel = viewModel {
+                            DispatchQueue.main.async {
+                                RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                            }
                             self.customCompletion?(theViewModel)
                             return
                         }
@@ -89,7 +94,7 @@ fileprivate class RTRSViewModelFactory {
         case "If Not, Pick Will Convey As Two Second-Rounders":
             return AUCornerMultiArticleViewModel(doc: doc, name: name, articles: nil)
         case "About":
-            return RTRSAboutViewModel(doc: doc, name: name, image: nil, body: nil)
+            return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         default:
             break
         }

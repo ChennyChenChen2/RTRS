@@ -41,6 +41,7 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel {
 
     required init(doc: Document?, name: String?, articles: [AUCornerSingleArticleViewModel]?) {
         self.name = name
+        self.articles = articles ?? []
         super.init()
         if let theDoc = doc {
             extractDataFromDoc(doc: theDoc)

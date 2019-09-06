@@ -32,7 +32,7 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     let dateString: String?
     let imageUrl: URL?
     
-    init(title: String, articleDescription: String, urlSuffix: String, dateString: String, imageUrl: URL?) {
+    init(title: String?, articleDescription: String?, urlSuffix: String?, dateString: String?, imageUrl: URL?) {
         self.title = title
         self.articleDescription = articleDescription
         self.urlSuffix = urlSuffix
@@ -49,15 +49,13 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let title = aDecoder.decodeObject(forKey: CodingKeys.title.rawValue) as! String
-        let articleDescription = aDecoder.decodeObject(forKey: CodingKeys.articleDescription.rawValue) as! String
-        let urlSuffix = aDecoder.decodeObject(forKey: CodingKeys.urlSuffix.rawValue) as! String
-        let dateString = aDecoder.decodeObject(forKey: CodingKeys.dateString.rawValue) as! String
+        let title = aDecoder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
+        let articleDescription = aDecoder.decodeObject(forKey: CodingKeys.articleDescription.rawValue) as? String
+        let urlSuffix = aDecoder.decodeObject(forKey: CodingKeys.urlSuffix.rawValue) as? String
+        let dateString = aDecoder.decodeObject(forKey: CodingKeys.dateString.rawValue) as? String
         let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? URL
         self.init(title: title, articleDescription: articleDescription, urlSuffix: urlSuffix, dateString: dateString, imageUrl: imageUrl)
     }
     
-    func extractDataFromDoc(doc: Document) {
-        
-    }
+    func extractDataFromDoc(doc: Document) {}
 }

@@ -21,11 +21,6 @@ class RTRSPersistentStorage: NSObject {
         - AUCorner
             - AUTitle1.rtrs
             - AUTitle2.rtrs
-     
-     
-     
-     
- 
  */
     static let storageDir: URL = {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -85,13 +80,10 @@ class RTRSPersistentStorage: NSObject {
             do {
                 let fullPath = storageDir.appendingPathComponent("\(type.rawValue()).rtrs")
                 if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
-                    try FileManager.default.createDirectory(at: fullPath, withIntermediateDirectories: true, attributes: nil)
+                    FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                 }
                 return fullPath
-            } catch {
-                print("Couldn't create directory for screen type: \(type.rawValue())")
             }
-            break
 
         case .auArticle:
             let dirPath = storageDir.appendingPathComponent("AUArticles", isDirectory: true)
@@ -104,7 +96,7 @@ class RTRSPersistentStorage: NSObject {
                 if let theSpecificName = specificName {
                     let fullPath = dirPath.appendingPathComponent("\(theSpecificName).rtrs")
                     if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
-                        try FileManager.default.createDirectory(at: fullPath, withIntermediateDirectories: true, attributes: nil)
+                        FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                     }
                     return fullPath
                 }
@@ -123,7 +115,7 @@ class RTRSPersistentStorage: NSObject {
                 if let theSpecificName = specificName {
                     let fullPath = dirPath.appendingPathComponent("\(theSpecificName).rtrs")
                     if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
-                        try FileManager.default.createDirectory(at: fullPath, withIntermediateDirectories: true, attributes: nil)
+                        FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                     }
                     return fullPath
                 }
@@ -135,74 +127,4 @@ class RTRSPersistentStorage: NSObject {
         
         return nil
     }
-    
-//    func saveData() {
-//        // 1) Do nothing if there is nothing to save
-//        guard let data = data else { return }
-//
-//        // 2) Create the docPath and the folder on disk
-//        do {
-//            try createDataPath()
-//        }catch {
-//            print("Couldn't create save folder. " + error.localizedDescription)
-//            return
-//        }
-//
-//        // 3) Build the path of the file to write
-//        let dataURL = docPath!.appendingPathComponent(Keys.dataFile.rawValue)
-//
-//        // 4) Encode the data using NSCoding
-//        let codedData = try! NSKeyedArchiver.archivedData(withRootObject: data, requiringSecureCoding: true)
-//
-//        // 5) Write the encoded data to the file.
-//        do {
-//            try codedData.write(to: dataURL)
-//        }catch {
-//            print("Couldn't write to save file: " + error.localizedDescription)
-//        }
-//    }
-    
-//    static let privateDocsDir: URL = {
-//        // 1
-//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//
-//        // 2
-//        let documentsDirectoryURL = paths.first!.appendingPathComponent("PrivateDocuments")
-//
-//        // 3
-//        do {
-//            try FileManager.default.createDirectory(at: documentsDirectoryURL,
-//                                                    withIntermediateDirectories: true,
-//                                                    attributes: nil)
-//        } catch {
-//            print("Couldn't create directory")
-//        }
-//        return documentsDirectoryURL
-//    }()
-//
-//    class func nextScaryCreatureDocPath() -> URL? {
-//        // 1) Get all the files and folders within the database folder
-//        guard let files = try? FileManager.default.contentsOfDirectory(at: privateDocsDir, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) else { return nil }
-//        var maxNumber = 0
-//
-//        // 2) Get the highest numbered item saved within the database
-//        files.forEach {
-//            if $0.pathExtension == "rtrs" {
-//                let fileName = $0.deletingPathExtension().lastPathComponent
-//                maxNumber = max(maxNumber, Int(fileName) ?? 0)
-//            }
-//        }
-//
-//        // 3) Return a path with the consecutive number
-//        return privateDocsDir.appendingPathComponent("\(maxNumber + 1).rtrs", isDirectory: true)
-//    }
-    
-//    class func loadScaryViewModelDocs() -> [RTRSViewModel] {
-//        guard let files = try? FileManager.default.contentsOfDirectory(at: privateDocsDir, includingPropertiesForKeys: nil, options: .skipsHiddenFiles) else { return [] }
-//
-//        return files
-//            .filter { $0.pathExtension == "rtrs" }
-//    }
-
-    
 }

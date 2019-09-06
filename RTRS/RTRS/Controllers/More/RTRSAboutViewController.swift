@@ -19,7 +19,7 @@ class RTRSAboutViewController: UIViewController {
         
         self.viewModel = RTRSNavigation.shared.viewModel(for: .about) as? RTRSAboutViewModel
         self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
-        self.imageView.image = self.viewModel?.image
+        self.imageView.pin_setImage(from: viewModel?.imageUrl)
         
     }
     

@@ -15,7 +15,6 @@ class RTRSOperationCoordinator {
     var operationCount: Int = 0
     var processedOperations: Int = 0
     @objc var finishedOperations = [RTRSOperation]()
-    var viewModels = [RTRSViewModel]()
     
     func beginStartupProcess(completionHandler: @escaping (Bool) -> ()) {
         self.operationQueue.maxConcurrentOperationCount = 100
@@ -34,15 +33,9 @@ class RTRSOperationCoordinator {
                         return
                     }
                     
-                    if let theViewModel = viewModel {
-                        self?.viewModels.append(theViewModel)
-                    }
-                    
-                    print("HERE")
-                    
                     weakSelf.processedOperations = weakSelf.processedOperations + 1
                     if weakSelf.processedOperations == weakSelf.operationCount {
-                        
+                        print("LOADING COMPLETE")
                         if let moreItems = configDict["moreItems"] as? [String] {
                             var viewModels = [RTRSViewModel]()
                             for item in moreItems {

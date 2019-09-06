@@ -26,13 +26,13 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
     }
 
     var name: String?
-    var image: UIImage?
+    var imageUrl: URL?
     var body: NSAttributedString?
     
-    init(doc: Document?, name: String?, image: UIImage?, body: NSAttributedString?) {
+    init(doc: Document?, name: String?, imageUrl: URL?, body: NSAttributedString?) {
         super.init()
         self.name = name
-        self.image = image
+        self.imageUrl = imageUrl
         self.body = body
         
         if let theDoc = doc {
@@ -42,15 +42,15 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
     
     required convenience init?(coder aDecoder: NSCoder) {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
-        let image = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? UIImage
+        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? URL
         let body = aDecoder.decodeObject(forKey: CodingKeys.body.rawValue) as? NSAttributedString
         
-        self.init(doc: nil, name: name, image: image, body: body)
+        self.init(doc: nil, name: name, imageUrl: imageUrl, body: body)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: CodingKeys.name.rawValue)
-        aCoder.encode(self.image, forKey: CodingKeys.image.rawValue)
+        aCoder.encode(self.imageUrl, forKey: CodingKeys.image.rawValue)
         aCoder.encode(self.body, forKey: CodingKeys.body.rawValue)
     }
     
@@ -75,12 +75,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                 let imgElement = try divElement.getElementsByTag("img").first() {
                 let src = try imgElement.attr("src")
                 if let imageUrl = URL(string: src) {
-                    URLSession.shared.dataTask(with: imageUrl) { [weak self] (data, response, error) in
-                        guard let weakSelf = self else { return }
-                        if let theData = data {
-                            weakSelf.image = UIImage(data: theData)
-                        }
-                    }.resume()
+                    self.imageUrl = imageUrl
                 }
             }
         } catch {

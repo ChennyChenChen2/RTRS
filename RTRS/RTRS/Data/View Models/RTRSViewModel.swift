@@ -8,7 +8,7 @@
 
 import SwiftSoup
 
-protocol RTRSViewModel: NSObject, NSCoding {
+protocol RTRSViewModel: NSCoding {
     func extractDataFromDoc(doc: Document)
     func pageName() -> String
     func pageImage() -> UIImage

@@ -9,38 +9,68 @@
 import UIKit
 import SwiftSoup
 
-struct HomeItem: Codable {
+class HomeItem: NSObject, NSCoding {
+    
     var imageUrl: URL?
     var text: String?
     var actionText: String?
     var actionUrl: URL?
     
-    init(imageUrl: URL, text: String?, actionText: String?, actionUrl: URL?) {
+    enum CodingKeys: String {
+        case imageUrl = "imageUrl"
+        case text = "text"
+        case actionText = "actionText"
+        case actionUrl = "actionUrl"
+    }
+    
+    required init(imageUrl: URL?, text: String?, actionText: String?, actionUrl: URL?) {
         self.imageUrl = imageUrl
         self.text = text
         self.actionText = actionText
         self.actionUrl = actionUrl
     }
     
-    init(from decoder: Decoder) throws {
-        
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.imageUrl, forKey: CodingKeys.imageUrl.rawValue)
+        aCoder.encode(self.text, forKey: CodingKeys.text.rawValue)
+        aCoder.encode(self.actionText, forKey: CodingKeys.actionText.rawValue)
+        aCoder.encode(self.actionUrl, forKey: CodingKeys.actionUrl.rawValue)
     }
     
-    func encode(to encoder: Encoder) throws {
+    required convenience init?(coder aDecoder: NSCoder) {
+        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? URL
+        let text = aDecoder.decodeObject(forKey: CodingKeys.text.rawValue) as? String
+        let actionText = aDecoder.decodeObject(forKey: CodingKeys.actionText.rawValue) as? String
+        let actionUrl = aDecoder.decodeObject(forKey: CodingKeys.actionUrl.rawValue) as? URL
         
+        self.init(imageUrl: imageUrl, text: text, actionText: actionText, actionUrl: actionUrl)
     }
 }
 
-struct Announcement: Codable {
+class Announcement: NSObject, NSCoding {
     var text: String?
     var actionUrl: URL?
     
-    init(from decoder: Decoder) throws {
-        
+    enum CodingKeys: String {
+        case text = "text"
+        case actionUrl = "actionUrl"
     }
     
-    func encode(to encoder: Encoder) throws {
+    required init(text: String?, actionUrl: URL?) {
+        self.text = text
+        self.actionUrl = actionUrl
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.text, forKey: CodingKeys.text.rawValue)
+        aCoder.encode(self.actionUrl, forKey: CodingKeys.actionUrl.rawValue)
+    }
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        let text = aDecoder.decodeObject(forKey: CodingKeys.text.rawValue) as? String
+        let actionUrl = aDecoder.decodeObject(forKey: CodingKeys.actionUrl.rawValue) as? URL
         
+        self.init(text: text, actionUrl: actionUrl)
     }
 }
 

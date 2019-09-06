@@ -16,6 +16,10 @@ class RTRSNavigationController: UINavigationController {
         // Do any additional setup after loading the view.
     }
     
+//    override var navigationBar: UINavigationBar {
+//        return RTRSNavigationBar()
+//    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setNeedsStatusBarAppearanceUpdate()

@@ -41,6 +41,7 @@
 		87C3B5AC22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AB22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift */; };
 		87C3B5AE22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */; };
 		87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */; };
+		87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		87C3B5AB22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerMultiArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerSingleArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSViewModel.swift; sourceTree = "<group>"; };
+		87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationBar.swift; sourceTree = "<group>"; };
 		AF1DB3465F792B361E3E82F6 /* Pods_RTRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RTRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ACBB0ECF34B42056B0084 /* Pods-RTRS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.release.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.release.xcconfig"; sourceTree = "<group>"; };
 		FB2E3E34293CDA6B7B1DD506 /* Pods-RTRS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				8785EF422264120B0011CF6C /* RTRSNavigation.swift */,
 				879CE1D022E1381B002F58CB /* RTRSPage.swift */,
+				87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				87C3B5AC22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift in Sources */,
 				87364F6322DFD11E00EDAB17 /* RTRSHomeViewController.swift in Sources */,
 				877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */,
+				87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */,
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
 				879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */,
 				875566CB22FB8B6100C8070A /* AUCornerTableViewCell.swift in Sources */,

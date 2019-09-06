@@ -49,11 +49,6 @@
                                             <constraint firstItem="R9H-bG-Ke8" firstAttribute="centerX" secondItem="eP0-Hu-8ez" secondAttribute="centerX" id="6tl-y2-Vne"/>
                                             <constraint firstAttribute="height" constant="243" id="wYj-tP-F0h"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wc-G4-0ch">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="112"/>
