@@ -12,21 +12,22 @@ import SwiftSoup
 
 class RTRSOperation: Operation {
     
-    let url: URL!
+    let urls: [URL]!
     let pageName: String!
     let type: String!
     var customCompletion: ((RTRSViewModel?) -> ())?
     
-    required init(url: URL, pageName: String, type: String) {
-        self.url = url
+    required init(urls: [URL], pageName: String, type: String) {
+        self.urls = urls
         self.pageName = pageName
         self.type = type
         super.init()
     }
     
     override func start() {
+        guard let firstUrl = self.urls.first else { return }
         let urlSession = URLSession(configuration: URLSessionConfiguration.default)
-        let request = URLRequest(url: URL(string: "\(self.url.absoluteString)?format=json-pretty")!)
+        let request = URLRequest(url: URL(string: "\(firstUrl.absoluteString)?format=json-pretty")!)
         let task = urlSession.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 print(error.localizedDescription)
@@ -38,21 +39,34 @@ class RTRSOperation: Operation {
                 
                 let keyName = "\(self.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
                 let lastUpdate = UserDefaults.standard.integer(forKey: keyName)
-//                if updated > lastUpdate {
-                if false {
+                if updated > lastUpdate {
+//                if true {
                     UserDefaults.standard.set(updated, forKey: keyName)
                     do {
-                        let htmlString = try String.init(contentsOf: self.url)
-                        let doc = try SwiftSoup.parse(htmlString)
-                        if let viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc),
-                            let type = RTRSScreenType(rawValue: self.pageName) {
-                            DispatchQueue.main.async {
-                                RTRSNavigation.shared.registerViewModel(viewModel: viewModel, for: type)
-                                RTRSPersistentStorage.save(viewModel: viewModel, type: type)
+                        if let url = self.urls.first {
+                            let htmlString = try String.init(contentsOf: url)
+                            let doc = try SwiftSoup.parse(htmlString)
+                            if let type = RTRSScreenType(rawValue: self.pageName) {
+                                var viewModel: RTRSViewModel?
+                                
+                                if type == .au {
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls)
+                                } else {
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc)
+                                }
+                                
+                                if let theViewModel = viewModel {
+                                    DispatchQueue.main.async {
+                                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                                        RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
+                                    }
+                                    self.customCompletion?(viewModel)
+                                } else {
+                                    self.customCompletion?(nil)
+                                }
+                            } else {
+                                self.customCompletion?(nil)
                             }
-                            self.customCompletion?(viewModel)
-                        } else {
-                            self.customCompletion?(nil)
                         }
                     } catch {
                         print("Error?")
@@ -86,21 +100,18 @@ class RTRSOperation: Operation {
 
 fileprivate class RTRSViewModelFactory {
     
-    class func viewModelForType(name: String, doc: Document) -> RTRSViewModel? {
+    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil) -> RTRSViewModel? {
         
         switch name {
         case "Home":
             return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
         case "If Not, Pick Will Convey As Two Second-Rounders":
-            return AUCornerMultiArticleViewModel(doc: doc, name: name, articles: nil)
+            return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil)
         case "About":
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         default:
             break
         }
-        
-        
-        
         
         return nil
     }

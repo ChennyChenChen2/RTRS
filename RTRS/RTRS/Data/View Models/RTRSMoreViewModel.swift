@@ -38,7 +38,7 @@ class RTRSMoreViewModel: NSObject, RTRSViewModel {
         self.pages = pages
     }
     
-    func extractDataFromDoc(doc: Document) {
+    func extractDataFromDoc(doc: Document?, urls: [URL]?) {
         print("MoreViewModel doesn't need HTML extraction")
     }
 }

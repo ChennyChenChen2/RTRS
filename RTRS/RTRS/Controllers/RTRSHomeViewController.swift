@@ -35,6 +35,11 @@ class RTRSHomeViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let viewModelItems = self.viewModel.items else { return }
+        
+        let homeItem = viewModelItems[indexPath.row] 
+        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

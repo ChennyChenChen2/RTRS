@@ -68,7 +68,7 @@ class RTRSPersistentStorage: NSObject {
                 return viewModel
             }
         } catch {
-            print("Could not fetch view model for type: \(type.rawValue()) and specificName: \(specificName ?? "EMPTY")")
+            print("Could not fetch view model for type: \(type.rawValue) and specificName: \(specificName ?? "EMPTY")")
         }
         
         return nil
@@ -78,7 +78,7 @@ class RTRSPersistentStorage: NSObject {
         switch type {
         case .about, .advertise, .au, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podcasts, .processPups, .shirts, .subscribe:
             do {
-                let fullPath = storageDir.appendingPathComponent("\(type.rawValue()).rtrs")
+                let fullPath = storageDir.appendingPathComponent("\(type.rawValue).rtrs")
                 if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                     FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                 }
@@ -101,7 +101,7 @@ class RTRSPersistentStorage: NSObject {
                     return fullPath
                 }
             } catch {
-                print("Couldn't create directory for screen type: \(type.rawValue())")
+                print("Couldn't create directory for screen type: \(type.rawValue)")
             }
             break
         case .pod:
@@ -120,7 +120,7 @@ class RTRSPersistentStorage: NSObject {
                     return fullPath
                 }
             } catch {
-                print("Couldn't create directory for screen type: \(type.rawValue())")
+                print("Couldn't create directory for screen type: \(type.rawValue)")
             }
             break
         }

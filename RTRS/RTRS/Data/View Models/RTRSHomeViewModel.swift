@@ -115,11 +115,12 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
         self.announcement = announcement
         
         if let theDoc = doc {
-            self.extractDataFromDoc(doc: theDoc)
+            self.extractDataFromDoc(doc: theDoc, urls: nil)
         }
     }
     
-    func extractDataFromDoc(doc: Document) {
+    func extractDataFromDoc(doc: Document?, urls: [URL]?) {
+        guard let doc = doc else { return }
         do {
             var homeItems = [HomeItem]()
             

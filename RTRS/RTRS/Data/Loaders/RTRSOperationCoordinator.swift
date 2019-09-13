@@ -53,10 +53,21 @@ class RTRSOperationCoordinator {
                 }
                 
                 for page in pages {
-                    if let name = page["name"] as? String, let urlString = page["link"] as? String, let url = URL(string: urlString), let type = page["type"] as? String {
+                    if let name = page["name"] as? String, let type = page["type"] as? String {
+                        
+                        var urls = [URL]()
+                        if let urlString = page["link"] as? String, let url = URL(string: urlString) {
+                           urls.append(url)
+                        } else if let urlStrings = page["links"] as? [String] {
+                            urlStrings.forEach { (urlString) in
+                                if let url = URL(string: urlString) {
+                                    urls.append(url)
+                                }
+                            }
+                        }
                         
                         if type != "externallink" {
-                            let operation = RTRSOperation(url: url, pageName: name, type: type)
+                            let operation = RTRSOperation(urls: urls, pageName: name, type: type)
                             operation.customCompletion = operationCompletion
                             self.operationQueue.addOperation(operation)
                         } else {

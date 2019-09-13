@@ -35,9 +35,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
         self.imageUrl = imageUrl
         self.body = body
         
-        if let theDoc = doc {
-            self.extractDataFromDoc(doc: theDoc)
-        }
+        self.extractDataFromDoc(doc: doc, urls: nil)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -54,7 +52,8 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
         aCoder.encode(self.body, forKey: CodingKeys.body.rawValue)
     }
     
-    func extractDataFromDoc(doc: Document) {
+    func extractDataFromDoc(doc: Document?, urls: [URL]?) {
+        guard let doc = doc else { return }
         do {
             let bodyText = NSMutableAttributedString(string: "")
             let contentDivElements = try doc.getElementsByClass("sqs-block html-block sqs-block-html")

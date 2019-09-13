@@ -24,44 +24,7 @@ enum RTRSScreenType: String, Hashable {
     case lotteryParty = "Lottery Party"
     case contact = "Contact"
     case advertise = "Advertise"
-    case more = "More"
-    
-    func rawValue() -> String {
-        switch self {
-        case .home:
-            return "Home"
-        case .about:
-            return "About"
-        case .podcasts:
-            return "The Pod"
-        case .pod:
-            return "A Pod"
-        case .au:
-            return "If Not, Pick Will Convey As Two Second-Rounders"
-        case .auArticle:
-            return "AU Article"
-        case .newsletter:
-            return "Newsletter"
-        case .subscribe:
-            return "Subscribe"
-        case .processPups:
-            return "Process Pups"
-        case .shirts:
-            return "T-Shirt Store"
-        case .events:
-            return "Events"
-        case .lotteryParty:
-            return "Lottery Party"
-        case .contact:
-            return "Contact"
-        case .advertise:
-            return "Advertise"
-        case .more:
-            return "More"
-        default:
-            return ""
-        }
-    }
+    case more = "More"    
 }
 
 class RTRSNavigation: NSObject {

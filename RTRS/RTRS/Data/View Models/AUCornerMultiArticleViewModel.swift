@@ -18,7 +18,6 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel {
         return #imageLiteral(resourceName: "RickyLogo")
     }
     
-    
     enum CodingKeys: String {
         case name = "Name"
         case articles = "Articles"
@@ -33,49 +32,59 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [AUCornerSingleArticleViewModel]
         
-        self.init(doc: nil, name: name, articles: articles)
+        self.init(urls: nil, name: name, articles: articles)
     }
 
     let name: String?
     var articles = [AUCornerSingleArticleViewModel]()
 
-    required init(doc: Document?, name: String?, articles: [AUCornerSingleArticleViewModel]?) {
+    required init(urls: [URL]?, name: String?, articles: [AUCornerSingleArticleViewModel]?) {
         self.name = name
         self.articles = articles ?? []
         super.init()
-        if let theDoc = doc {
-            extractDataFromDoc(doc: theDoc)
-        }
+        extractDataFromDoc(doc: nil, urls: urls)
     }
     
-    func extractDataFromDoc(doc: Document) {
-        do {
-            let postElements = try doc.getElementsByClass("post")
-            let imageElements = try doc.getElementsByClass("main-image")
-            for i in 0..<postElements.count {
-                let postElement = postElements[i]
-                let imageElement = imageElements[i]
-                if let titleElement = try? postElement.getElementsByClass("entry-title").first(),
-                    let aElement = try? titleElement.getElementsByTag("a").first(),
-                    let descriptionElement = try? postElement.getElementsByClass("body").first(),
-                    let dateElement = try? postElement.getElementsByClass("published").first(),
-                    let title = try? aElement.text(),
-                    let urlSuffix = try? aElement.attr("href"),
-                    let date = try? dateElement.text(),
-                    let descriptionTextElement = try? descriptionElement.getElementsByTag("p").first(),
-                    let articleDescription = try? descriptionTextElement.text(),
-                    let imageAttribute = try? imageElement.attr("style"),
-                    let openParenIndex = imageAttribute.firstIndex(of: "("),
-                    let imageEndIndex = imageAttribute.lastIndex(of: "?")
-                {
-                    let imageStartIndex = imageAttribute.index(after: openParenIndex)
-                    let substring = imageAttribute[imageStartIndex..<imageEndIndex]
-                    let singleArticleViewModel = AUCornerSingleArticleViewModel(title: title, articleDescription: articleDescription, urlSuffix: urlSuffix, dateString: date, imageUrl: URL(string: String(substring)))
-                    articles.append(singleArticleViewModel)
+    func extractDataFromDoc(doc: Document?, urls: [URL]?) {
+        guard let theURLs = urls, let firstURL = theURLs.first else { return }
+        
+        for url in theURLs {
+            do {
+                let htmlString = try String.init(contentsOf: url)
+                let doc = try SwiftSoup.parse(htmlString)
+                let postElements = try doc.getElementsByClass("post")
+                let imageElements = try doc.getElementsByClass("main-image")
+                for i in 0..<postElements.count {
+                    let postElement = postElements[i]
+                    let imageElement = imageElements[i]
+                    if let titleElement = try? postElement.getElementsByClass("entry-title").first(),
+                        let aElement = try? titleElement.getElementsByTag("a").first(),
+                        let descriptionElement = try? postElement.getElementsByClass("body").first(),
+                        let dateElement = try? postElement.getElementsByClass("published").first(),
+                        let title = try? aElement.text(),
+                        let urlSuffix = try? aElement.attr("href"),
+                        let date = try? dateElement.text(),
+                        let descriptionTextElement = try? descriptionElement.getElementsByTag("p").first(),
+                        let articleDescription = try? descriptionTextElement.text(),
+                        let imageAttribute = try? imageElement.attr("style"),
+                        let openParenIndex = imageAttribute.firstIndex(of: "("),
+                        let imageEndIndex = imageAttribute.lastIndex(of: "?")
+                    {
+                        let imageStartIndex = imageAttribute.index(after: openParenIndex)
+                        let substring = imageAttribute[imageStartIndex..<imageEndIndex]
+                        
+                        guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { return }
+                        
+                        let htmlString = try String.init(contentsOf: articleUrl)
+                        let articleDoc = try SwiftSoup.parse(htmlString)
+                        let singleArticleViewModel = AUCornerSingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: date, imageUrl: URL(string: String(substring)), htmlString: nil)
+                        articles.append(singleArticleViewModel)
+                    }
                 }
+            } catch {
+                print("Error parsing AU's Corner view model")
             }
-        } catch {
-            print("Error parsing AU's Corner view model")
         }
     }
 }

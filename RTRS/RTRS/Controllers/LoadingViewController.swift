@@ -33,7 +33,7 @@ class LoadingViewController: UIViewController {
                 let configDict = try? JSONSerialization.jsonObject(with: configData, options: .allowFragments) as? [String: Any],
                 let messages = configDict["loadingMessages"] as? [String] {
                 self.loadingMessages = messages
-                self.loadingMessageTimer = Timer(timeInterval: 10, repeats: true, block: { [weak self] (timer) in
+                self.loadingMessageTimer = Timer(timeInterval: 5, repeats: true, block: { [weak self] (timer) in
                     guard let weakSelf = self else { return }
                     let index = Int.random(in: 0..<weakSelf.loadingMessages.count)
                     let message = weakSelf.loadingMessages[index]
