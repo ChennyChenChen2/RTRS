@@ -58,6 +58,7 @@
 		8727B8B922D7D2C8001713AF /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewController.swift; sourceTree = "<group>"; };
 		8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSDeepLinkHandler.swift; sourceTree = "<group>"; };
+		8745B748232BEBE6003A2351 /* RTRS-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RTRS-bridging-header.h"; sourceTree = "<group>"; };
 		874613032308487900C57400 /* AUCorner.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCorner.html; sourceTree = "<group>"; };
 		874613042308487900C57400 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = about.html; sourceTree = "<group>"; };
 		8746130723084CF400C57400 /* RTRSMoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSMoreViewModel.swift; sourceTree = "<group>"; };
@@ -153,6 +154,7 @@
 				8785EF41226411D80011CF6C /* Navigation */,
 				87095A502263BC2B0081A540 /* AppDelegate.swift */,
 				87095A542263BC2B0081A540 /* Main.storyboard */,
+				8745B748232BEBE6003A2351 /* RTRS-bridging-header.h */,
 				87095A572263BC2C0081A540 /* Assets.xcassets */,
 				87095A592263BC2C0081A540 /* LaunchScreen.storyboard */,
 				87095A5C2263BC2C0081A540 /* Info.plist */,
@@ -543,6 +545,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "RTRS-bridging-header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -597,6 +600,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "RTRS-bridging-header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -615,8 +619,43 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Atributika\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FLAnimatedImage\"",
+					"-framework",
+					"\"FLEX\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"PINCache\"",
+					"-framework",
+					"\"PINRemoteImage\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SwiftSoup\"",
+					"-framework",
+					"\"UIKit\"",
+					"-weak_framework",
+					"\"UIKit\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.RTRS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -635,8 +674,37 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Atributika\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FLAnimatedImage\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"PINCache\"",
+					"-framework",
+					"\"PINRemoteImage\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SwiftSoup\"",
+					"-weak_framework",
+					"\"UIKit\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.RTRS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

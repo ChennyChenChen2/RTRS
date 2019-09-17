@@ -22,9 +22,36 @@ class RTRSNavigationController: UINavigationController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setNeedsStatusBarAppearanceUpdate()
+        defaultNavBarCustomization()
     }
+    
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
+    }
+    
+    fileprivate func defaultNavBarCustomization() {
+        self.navigationBar.backgroundColor = .black
+        self.navigationBar.barTintColor = .black
+        self.navigationBar.titleTextAttributes = [.font: Utils.defaultFontBold]
+        
+    }
+}
+
+extension UINavigationController {
+
+}
+
+
+extension UINavigationItem {
+    func customizeNavBarForHome() {
+        DispatchQueue.main.async {
+//            let imageView = UIImageView(image: #imageLiteral(resourceName: "Top-Nav-Image"))
+//            imageView.contentMode = .scaleAspectFit
+//            imageView.sizeToFit()
+//            self.titleView = imageView
+//            self.titleView?.sizeToFit()
+//            self.title = nil
+            
+        }
     }
 }

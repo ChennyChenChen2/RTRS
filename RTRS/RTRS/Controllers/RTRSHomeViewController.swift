@@ -17,8 +17,14 @@ class RTRSHomeViewController: UITableViewController {
 
         self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as! RTRSHomeViewModel)
         
-        self.navigationController?.navigationBar.isHidden = true
+        self.navigationItem.customizeNavBarForHome()
         self.view.backgroundColor = .black
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.setNeedsLayout()
+        self.navigationController?.navigationBar.layoutIfNeeded()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -38,7 +44,7 @@ class RTRSHomeViewController: UITableViewController {
         
         guard let viewModelItems = self.viewModel.items else { return }
         
-        let homeItem = viewModelItems[indexPath.row] 
+        let homeItem = viewModelItems[indexPath.row]
         
     }
     
