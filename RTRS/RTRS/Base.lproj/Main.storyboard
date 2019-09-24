@@ -111,9 +111,9 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="D4u-en-144">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="QBW-ud-gQe">
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search by title, description, or date" id="QBW-ud-gQe">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -127,11 +127,12 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="152.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s4z-kF-mig">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="s4z-kF-mig">
                                             <rect key="frame" x="15" y="11" width="150" height="131"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="s4z-kF-mig" secondAttribute="height" multiplier="150:131" id="Q7a-ik-ioK"/>
                                                 <constraint firstAttribute="height" constant="131" id="cJ8-Lu-9QT"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="oBH-IM-MFC"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="avi-NX-hBV">
@@ -166,17 +167,18 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="s4z-kF-mig" firstAttribute="leading" secondItem="o5t-24-axi" secondAttribute="leading" constant="15" id="0s2-Cf-XpJ"/>
-                                        <constraint firstAttribute="trailing" secondItem="MMc-Kn-fAX" secondAttribute="trailing" constant="14" id="BOm-Kq-FxG"/>
-                                        <constraint firstAttribute="trailing" secondItem="ZBP-Dp-d4Y" secondAttribute="trailing" constant="14" id="EoX-Af-J6x"/>
-                                        <constraint firstItem="MMc-Kn-fAX" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="IEl-aD-cIy"/>
-                                        <constraint firstItem="ZBP-Dp-d4Y" firstAttribute="bottom" secondItem="s4z-kF-mig" secondAttribute="bottom" id="VEh-Iy-iPl"/>
-                                        <constraint firstItem="s4z-kF-mig" firstAttribute="centerY" secondItem="o5t-24-axi" secondAttribute="centerY" id="hMJ-xN-Rks"/>
-                                        <constraint firstItem="MMc-Kn-fAX" firstAttribute="top" secondItem="avi-NX-hBV" secondAttribute="bottom" constant="10" id="hP2-nT-vcG"/>
-                                        <constraint firstItem="avi-NX-hBV" firstAttribute="top" secondItem="s4z-kF-mig" secondAttribute="top" id="oya-FI-n6Q"/>
-                                        <constraint firstItem="ZBP-Dp-d4Y" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="w4Y-qD-Nqy"/>
-                                        <constraint firstItem="avi-NX-hBV" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="xOE-i3-2pV"/>
-                                        <constraint firstAttribute="trailing" secondItem="avi-NX-hBV" secondAttribute="trailing" constant="14" id="xkf-oU-wK2"/>
+                                        <constraint firstItem="MMc-Kn-fAX" firstAttribute="top" secondItem="avi-NX-hBV" secondAttribute="bottom" constant="10" id="0Ux-7q-r6M"/>
+                                        <constraint firstItem="s4z-kF-mig" firstAttribute="leading" secondItem="o5t-24-axi" secondAttribute="leading" constant="15" id="7Ny-Ef-EyV"/>
+                                        <constraint firstItem="avi-NX-hBV" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="7Rm-1d-Xce"/>
+                                        <constraint firstItem="MMc-Kn-fAX" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="HPH-Vc-QZB"/>
+                                        <constraint firstItem="ZBP-Dp-d4Y" firstAttribute="leading" secondItem="s4z-kF-mig" secondAttribute="trailing" constant="21" id="HZy-DO-CHc"/>
+                                        <constraint firstAttribute="trailing" secondItem="ZBP-Dp-d4Y" secondAttribute="trailing" constant="14" id="KRC-vd-IKa"/>
+                                        <constraint firstAttribute="bottom" secondItem="ZBP-Dp-d4Y" secondAttribute="bottom" constant="10.5" id="Kal-Zu-Qxz"/>
+                                        <constraint firstItem="s4z-kF-mig" firstAttribute="top" secondItem="o5t-24-axi" secondAttribute="top" constant="11" id="Qs4-fg-U7T"/>
+                                        <constraint firstItem="ZBP-Dp-d4Y" firstAttribute="top" relation="greaterThanOrEqual" secondItem="MMc-Kn-fAX" secondAttribute="bottom" constant="10" id="Tpu-FI-M7O"/>
+                                        <constraint firstItem="avi-NX-hBV" firstAttribute="top" secondItem="s4z-kF-mig" secondAttribute="top" id="Ubm-ze-92R"/>
+                                        <constraint firstAttribute="trailing" secondItem="MMc-Kn-fAX" secondAttribute="trailing" constant="14" id="cTA-s9-pQO"/>
+                                        <constraint firstAttribute="trailing" secondItem="avi-NX-hBV" secondAttribute="trailing" constant="14" id="xfi-6L-wnP"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -194,6 +196,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="searchBar" destination="QBW-ud-gQe" id="Zc6-GL-HHr"/>
                         <segue destination="TLI-CJ-GAl" kind="show" identifier="AUArticleSegue" id="ada-qY-ZrK"/>
                     </connections>
                 </tableViewController>
@@ -381,13 +384,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="199" y="445" width="16" height="16"/>
+                                <rect key="frame" x="-5.5" y="188" width="425.00000000000011" height="530"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="481" width="20" height="20"/>
+                                <rect key="frame" x="197" y="738" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="23" y="516" width="368" height="21"/>
+                                <rect key="frame" x="23" y="773" width="368" height="21"/>
                                 <attributedString key="attributedText">
                                     <fragment content="PROCESSING.......................">
                                         <attributes>

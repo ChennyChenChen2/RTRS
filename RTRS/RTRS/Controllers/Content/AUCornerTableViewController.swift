@@ -8,17 +8,24 @@
 
 import UIKit
 
-class AUCornerTableViewController: UITableViewController {
-
+class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     var viewModel: AUCornerMultiArticleViewModel!
     fileprivate let cellReuseId = "AUCell"
     fileprivate let articleSegueId = "AUArticleSegue"
+    fileprivate var filteredResults = [AUCornerSingleArticleViewModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
         self.viewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel
+        
+        if let articles = self.viewModel?.articles {
+            self.filteredResults = articles
+        }
     }
 
     // MARK: - Table view data source
@@ -28,17 +35,21 @@ class AUCornerTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.articles.count
+        return self.filteredResults.count
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as! AUCornerTableViewCell
         
-        let viewModel = self.viewModel.articles[indexPath.row]
+        let viewModel = self.filteredResults[indexPath.row]
         cell.applyViewModel(viewModel: viewModel)
 
         return cell
@@ -55,5 +66,29 @@ class AUCornerTableViewController: UITableViewController {
         if indexPath.row < self.viewModel.articles.count {
             vc.viewModel = self.viewModel.articles[indexPath.row]
         }
+    }
+    
+    // MARK - UISearchBarDelegate
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let articles = self.viewModel?.articles else { return }
+        
+        if searchText == "" {
+            self.filteredResults = articles
+            return
+        }
+        
+        self.filteredResults = articles.filter { (viewModel) -> Bool in
+            
+            if let title = viewModel.title, title.contains(searchText) {
+                return true
+            } else if let description = viewModel.articleDescription, description.contains(searchText) {
+                return true
+            } else if let dateString = viewModel.dateString, dateString.contains(searchText) {
+                return true
+            }
+            
+            return false
+        }
+        self.tableView.reloadData()
     }
 }

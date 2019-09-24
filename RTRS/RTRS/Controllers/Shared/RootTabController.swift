@@ -13,9 +13,16 @@ class RootTabController: UITabBarController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    
     }
 
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+//        let viewHeight: CGFloat = 50.0
+//        let view = UIView(frame: CGRect(x: 0, y: self.tabBar.frame.origin.y - viewHeight, width: self.view.frame.size.width, height: viewHeight))
+//        view.backgroundColor = .red
+//        self.view.addSubview(view)
+//        print("HMmmmm")
+    }
 }
 
