@@ -63,17 +63,29 @@ class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath else { return }
         let vc = segue.destination as! AUCornerArticleViewController
-        if indexPath.row < self.viewModel.articles.count {
-            vc.viewModel = self.viewModel.articles[indexPath.row]
+        if indexPath.row < self.filteredResults.count {
+            vc.viewModel = self.filteredResults[indexPath.row]
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        if let searchText = searchBar.text {
+            filter(searchText: searchText)
         }
     }
     
     // MARK - UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filter(searchText: searchText)
+    }
+    
+    fileprivate func filter(searchText: String) {
         guard let articles = self.viewModel?.articles else { return }
         
         if searchText == "" {
             self.filteredResults = articles
+            self.tableView.reloadData()
             return
         }
         

@@ -68,7 +68,7 @@ class RTRSOperation: Operation {
                 let keyName = "\(weakSelf.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
                 let lastUpdate = UserDefaults.standard.integer(forKey: keyName)
 //                if updated > lastUpdate {
-                if false {
+                if true {
                     UserDefaults.standard.set(updated, forKey: keyName)
                     do {
                         if let url = weakSelf.urls.first {

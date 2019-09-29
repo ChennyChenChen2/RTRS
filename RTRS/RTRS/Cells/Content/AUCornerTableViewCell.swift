@@ -25,4 +25,8 @@ class AUCornerTableViewCell: UITableViewCell {
             self.previewImageView.pin_setImage(from: imageUrl)
         }
     }
+    
+    override func prepareForReuse() {
+        self.previewImageView.image = nil
+    }
 }

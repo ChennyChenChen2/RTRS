@@ -8,16 +8,49 @@
 
 import UIKit
 import WebKit
+import Firebase
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
+    
+    let firstLaunchFinishedKey = "kRTRSFirstLaunchFinishedKey"
 
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        setRootViewController()
+        FirebaseApp.configure()
+        Messaging.messaging().delegate = self
         
+        setRootViewController()
         return true
+    }
+    
+    fileprivate func registerForPushNotifications(vc: UIViewController) {
+        let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
+        if !firstLaunchFinished {
+            UserDefaults.standard.set(true, forKey: firstLaunchFinishedKey)
+            let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Would you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+                if #available(iOS 10.0, *) {
+                    // For iOS 10 display notification (sent via APNS)
+                    UNUserNotificationCenter.current().delegate = self
+                    UIApplication.shared.registerForRemoteNotifications()
+                } else {
+                    let settings: UIUserNotificationSettings =
+                    UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+                    UIApplication.shared.registerUserNotificationSettings(settings)
+                }
+            }))
+            
+            DispatchQueue.main.async {
+                vc.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("**** FCM TOKEN: \(fcmToken)")
     }
     
     fileprivate func setRootViewController() {
@@ -27,28 +60,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = storyboard.instantiateViewController(withIdentifier: LoadingViewController.storyboardId)
         let navController = RTRSNavigationController(rootViewController: vc)
         self.window?.rootViewController = navController
+        
+        registerForPushNotifications(vc: navController)
     }
-
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
+            
+        }
     }
 }
 

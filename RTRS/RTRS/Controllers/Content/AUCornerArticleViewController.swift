@@ -41,6 +41,7 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
         
         self.webView = WKWebView(frame: self.webViewContainer.frame)
         self.webView?.scrollView.isScrollEnabled = false
+        self.webView?.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0.0, bottom: 5.0, right: 5.0)
         
         self.webView?.translatesAutoresizingMaskIntoConstraints = false
         self.webView?.navigationDelegate = self
@@ -66,9 +67,9 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     }
     
     override func viewWillLayoutSubviews() {
-        self.webView?.leftAnchor.constraint(equalTo: self.webViewContainer.leftAnchor).isActive = true
-        self.webView?.rightAnchor.constraint(equalTo: self.webViewContainer.rightAnchor).isActive = true
-        self.webView?.topAnchor.constraint(equalTo: self.webViewContainer.topAnchor).isActive = true
+        self.webView?.leftAnchor.constraint(equalTo: self.webViewContainer.leftAnchor, constant:2.5).isActive = true
+        self.webView?.rightAnchor.constraint(equalTo: self.webViewContainer.rightAnchor, constant: 2.5).isActive = true
+        self.webView?.topAnchor.constraint(equalTo: self.webViewContainer.topAnchor, constant: 5.0).isActive = true
         self.webView?.bottomAnchor.constraint(equalTo: self.webViewContainer.bottomAnchor).isActive = true
     }
     

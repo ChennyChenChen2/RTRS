@@ -15,6 +15,7 @@
 		87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87095A592263BC2C0081A540 /* LaunchScreen.storyboard */; };
 		8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727B8B922D7D2C8001713AF /* LoadingViewController.swift */; };
 		87364F6322DFD11E00EDAB17 /* RTRSHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */; };
+		8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8736B195233FE8C8008DA87A /* GoogleService-Info.plist */; };
 		8745B745232A8B93003A2351 /* RTRSDeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */; };
 		874613052308487900C57400 /* AUCorner.html in Resources */ = {isa = PBXBuildFile; fileRef = 874613032308487900C57400 /* AUCorner.html */; };
 		874613062308487900C57400 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 874613042308487900C57400 /* about.html */; };
@@ -57,6 +58,8 @@
 		87095A5C2263BC2C0081A540 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8727B8B922D7D2C8001713AF /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewController.swift; sourceTree = "<group>"; };
+		8736B192233FE1CB008DA87A /* RTRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RTRS.entitlements; sourceTree = "<group>"; };
+		8736B195233FE8C8008DA87A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSDeepLinkHandler.swift; sourceTree = "<group>"; };
 		8745B748232BEBE6003A2351 /* RTRS-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RTRS-bridging-header.h"; sourceTree = "<group>"; };
 		874613032308487900C57400 /* AUCorner.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCorner.html; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 		87095A4F2263BC2B0081A540 /* RTRS */ = {
 			isa = PBXGroup;
 			children = (
+				8736B192233FE1CB008DA87A /* RTRS.entitlements */,
 				8795C9B42329995200D34C99 /* HTML Templates */,
 				874612FE230847F300C57400 /* Sample HTML */,
 				875566C922FB8B4500C8070A /* Cells */,
@@ -159,6 +163,7 @@
 				87095A592263BC2C0081A540 /* LaunchScreen.storyboard */,
 				87095A5C2263BC2C0081A540 /* Info.plist */,
 				877B3A0E226A932800F061FA /* RTRSConfig.json */,
+				8736B195233FE8C8008DA87A /* GoogleService-Info.plist */,
 			);
 			path = RTRS;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 				87095A582263BC2C0081A540 /* Assets.xcassets in Resources */,
 				8748DDCA2318B390008630FB /* RTRSHome.html in Resources */,
 				8748DDC92318B390008630FB /* RTRS.html in Resources */,
+				8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */,
 				874613052308487900C57400 /* AUCorner.html in Resources */,
 				87095A562263BC2B0081A540 /* Main.storyboard in Resources */,
 			);
@@ -611,6 +617,7 @@
 			baseConfigurationReference = FB2E3E34293CDA6B7B1DD506 /* Pods-RTRS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RTRS/RTRS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 64898FFM79;
 				INFOPLIST_FILE = RTRS/Info.plist;
@@ -653,7 +660,7 @@
 					"\"UIKit\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.RTRS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.ricky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
@@ -666,6 +673,7 @@
 			baseConfigurationReference = E75ACBB0ECF34B42056B0084 /* Pods-RTRS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RTRS/RTRS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 64898FFM79;
 				INFOPLIST_FILE = RTRS/Info.plist;
@@ -702,7 +710,7 @@
 					"\"UIKit\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.RTRS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chennychenchen.ricky;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
