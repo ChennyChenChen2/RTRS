@@ -57,10 +57,17 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
         do {
             let bodyText = NSMutableAttributedString(string: "")
             let contentDivElements = try doc.getElementsByClass("sqs-block html-block sqs-block-html")
+            
             for element in contentDivElements {
+                
+                if try element.getElementsByTag("h3").count > 0 {
+                    try element.remove()
+                    continue
+                }
+                
                 let pElems = try element.getElementsByTag("p")
                 for pElem in pElems {
-                    if !pElem.description.contains("Squarespace") {
+                    if !pElem.description.contains("Squarespace") && !pElem.description.contains("contact us") {
                         let attrString = NSAttributedString.attributedStringFrom(element: pElem)
                         bodyText.append(attrString)
                         bodyText.append(NSAttributedString(string: "\n"))

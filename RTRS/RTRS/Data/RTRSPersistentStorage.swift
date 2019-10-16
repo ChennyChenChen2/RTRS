@@ -76,7 +76,7 @@ class RTRSPersistentStorage: NSObject {
     
     private class func getPathForType(type: RTRSScreenType, specificName: String? = nil) -> URL? {
         switch type {
-        case .about, .advertise, .au, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podcasts, .processPups, .shirts, .subscribe:
+        case .about, .advertise, .au, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .shirts, .subscribe:
             do {
                 let fullPath = storageDir.appendingPathComponent("\(type.rawValue).rtrs")
                 if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {

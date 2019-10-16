@@ -125,7 +125,15 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
             var homeItems = [HomeItem]()
             
             let imgElems = try doc.getElementsByClass("thumb-image")
-            let titleElems = try doc.getElementsByClass("sqs-block html-block sqs-block-html")
+            let titleElems = try doc.getElementsByClass("sqs-block html-block sqs-block-html").filter({ (elem) -> Bool in
+                do {
+                    let hasH1 = try elem.getElementsByTag("h1").count > 0
+                    let hasH2 = try elem.getElementsByTag("h2").count > 0
+                    return hasH1 || hasH2
+                } catch {
+                    return false
+                }
+            })
             let actionElems = try doc.getElementsByClass("sqs-block-button-element--large sqs-block-button-element")
             
             for i in 0..<actionElems.count {
@@ -134,13 +142,21 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                     let titleElem = titleElems[i]
                     let imgElem = imgElems[i]
                     if let imgURL = URL(string: try imgElem.attr("data-src")),
-                    let h1Elem = try titleElem.getElementsByTag("h1").first(),
                     let actionText = try? actionElem.text(),
                     let actionURL = URL(string: try actionElem.attr("href")) {
-                        let title = NSAttributedString.attributedStringFrom(element: h1Elem)
-                        if !title.string.contains("Squarespace") {
-                            let homeItem = HomeItem(imageUrl: imgURL, text: title.string, actionText: actionText, actionUrl: actionURL)
-                            homeItems.append(homeItem)
+                        var titleElemPlaceholder: Element? = nil
+                        if let h2Elem = try titleElem.getElementsByTag("h2").first() {
+                            titleElemPlaceholder = h2Elem
+                        } else if let h1Elem = try titleElem.getElementsByTag("h1").first() {
+                            titleElemPlaceholder = h1Elem
+                        }
+                        
+                        if let theTitleElem = titleElemPlaceholder {
+                            let title = NSAttributedString.attributedStringFrom(element: theTitleElem)
+                            if !title.string.contains("Squarespace") {
+                                let homeItem = HomeItem(imageUrl: imgURL, text: title.string, actionText: actionText, actionUrl: actionURL)
+                                homeItems.append(homeItem)
+                            }
                         }
                     }
                 }

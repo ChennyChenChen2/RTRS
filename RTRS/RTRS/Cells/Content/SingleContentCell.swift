@@ -9,16 +9,16 @@
 import UIKit
 import PINRemoteImage
 
-class AUCornerTableViewCell: UITableViewCell {
+class SingleContentCell: UITableViewCell {
 
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var auTitleLabel: UILabel!
     @IBOutlet weak var auDescriptionLabel: UILabel!
     @IBOutlet weak var auTimestampLabel: UILabel!
     
-    func applyViewModel(viewModel: AUCornerSingleArticleViewModel) {
+    func applyViewModel(viewModel: SingleContentViewModel) {
         self.auTitleLabel.text = viewModel.title
-        self.auDescriptionLabel.text = viewModel.articleDescription
+        self.auDescriptionLabel.text = viewModel.contentDescription
         self.auTimestampLabel.text = viewModel.dateString
         
         if let imageUrl = viewModel.imageUrl {

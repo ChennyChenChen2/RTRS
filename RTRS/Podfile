@@ -9,6 +9,8 @@ def all_pods
   pod 'PINRemoteImage'
   pod 'Firebase'
   pod 'Firebase/Messaging'
+  pod 'FirebaseInstanceID', '2.0.0'
+  pod 'MarqueeLabel'
 
 end
 

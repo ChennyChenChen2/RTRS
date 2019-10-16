@@ -21,6 +21,12 @@ class LoadingViewController: UIViewController {
         return .portrait
     }
     
+    static var cachedConfigPath: URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return URL(string: "\(documentsDirectory.absoluteString)RTRSConfig.json")!
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,8 +39,17 @@ class LoadingViewController: UIViewController {
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
             guard let data = data, let weakSelf = self else { return }
             
+            var dict: [String: Any]?
             if let configDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
                 let messages = configDict["loadingMessages"] as? [String] {
+//                dict = configDict
+                
+                do {
+                    try data.write(to: LoadingViewController.cachedConfigPath)
+                } catch {
+                    print("Error saving cached config")
+                }
+                
                 weakSelf.loadingMessages = messages
                 weakSelf.loadingMessageTimer = Timer(timeInterval: 5, repeats: true, block: { (timer) in
                     let index = Int.random(in: 0..<weakSelf.loadingMessages.count)
@@ -49,7 +64,6 @@ class LoadingViewController: UIViewController {
                 }
             }
 
-            // Do any additional setup after loading the view.
             let urlSession = URLSession(configuration: URLSessionConfiguration.default)
             let request = URLRequest(url: URL(string: "https://www.rightstorickysanchez.com/?format=json-pretty")!)
             let task = urlSession.dataTask(with: request) { (data, response, error) in
@@ -70,7 +84,7 @@ class LoadingViewController: UIViewController {
             
             task.resume()
             
-            weakSelf.operationCoordinator.beginStartupProcess { (success) in
+            weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
                 print("\(success)")
                 DispatchQueue.main.async {
                     weakSelf.activityIndicator.stopAnimating()

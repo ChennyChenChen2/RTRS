@@ -8,23 +8,30 @@
 
 import UIKit
 
-class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
+class ContentTableViewController: UITableViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
-    var viewModel: AUCornerMultiArticleViewModel!
-    fileprivate let cellReuseId = "AUCell"
+    var viewModel: MultiContentViewModel?
+    var contentType: RTRSScreenType!
+    fileprivate let cellReuseId = "ContentCell"
     fileprivate let articleSegueId = "AUArticleSegue"
-    fileprivate var filteredResults = [AUCornerSingleArticleViewModel]()
+    fileprivate let playerId = "PodcastPlayer"
+    fileprivate var filteredResults = [SingleContentViewModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
-        self.viewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel
         
-        if let articles = self.viewModel?.articles {
-            self.filteredResults = articles
+        if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
+            self.viewModel = theViewModel
+        } else if self.contentType == .podcasts, let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
+            self.viewModel = theViewModel
+        }
+        
+        if let content = self.viewModel?.content {
+            self.filteredResults = content
         }
     }
 
@@ -47,7 +54,7 @@ class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as! AUCornerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as! SingleContentCell
         
         let viewModel = self.filteredResults[indexPath.row]
         cell.applyViewModel(viewModel: viewModel)
@@ -57,14 +64,22 @@ class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        self.performSegue(withIdentifier: self.articleSegueId, sender: indexPath)
+        
+        if self.contentType == .au {
+            self.performSegue(withIdentifier: self.articleSegueId, sender: indexPath)
+        } else {
+            let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+            let vc = storyboard.instantiateViewController(withIdentifier: self.playerId)
+            
+            self.present(vc, animated: true, completion: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath else { return }
         let vc = segue.destination as! AUCornerArticleViewController
         if indexPath.row < self.filteredResults.count {
-            vc.viewModel = self.filteredResults[indexPath.row]
+            vc.viewModel = self.filteredResults[indexPath.row] as? AUCornerSingleArticleViewModel
         }
     }
     
@@ -81,7 +96,7 @@ class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     fileprivate func filter(searchText: String) {
-        guard let articles = self.viewModel?.articles else { return }
+        guard let articles = self.viewModel?.content else { return }
         
         if searchText == "" {
             self.filteredResults = articles
@@ -93,7 +108,7 @@ class AUCornerTableViewController: UITableViewController, UISearchBarDelegate {
             
             if let title = viewModel.title, title.contains(searchText) {
                 return true
-            } else if let description = viewModel.articleDescription, description.contains(searchText) {
+            } else if let description = viewModel.contentDescription, description.contains(searchText) {
                 return true
             } else if let dateString = viewModel.dateString, dateString.contains(searchText) {
                 return true

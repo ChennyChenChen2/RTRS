@@ -16,17 +16,14 @@
 		8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727B8B922D7D2C8001713AF /* LoadingViewController.swift */; };
 		87364F6322DFD11E00EDAB17 /* RTRSHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */; };
 		8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8736B195233FE8C8008DA87A /* GoogleService-Info.plist */; };
+		8739E8882356C4D7004CE6D8 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 8739E8872356C4D7004CE6D8 /* Podfile */; };
+		8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8739E8892356C59A004CE6D8 /* PodcastPlayerViewController.swift */; };
 		8745B745232A8B93003A2351 /* RTRSDeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */; };
-		874613052308487900C57400 /* AUCorner.html in Resources */ = {isa = PBXBuildFile; fileRef = 874613032308487900C57400 /* AUCorner.html */; };
-		874613062308487900C57400 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = 874613042308487900C57400 /* about.html */; };
 		8746130823084CF400C57400 /* RTRSMoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130723084CF400C57400 /* RTRSMoreViewModel.swift */; };
 		8746130D230877CC00C57400 /* RTRSMoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */; };
 		8746130F2308818C00C57400 /* RTRSAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130E2308818C00C57400 /* RTRSAboutViewController.swift */; };
 		874613112308E15800C57400 /* RTRSHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874613102308E15800C57400 /* RTRSHomeViewModel.swift */; };
-		8748DDC92318B390008630FB /* RTRS.html in Resources */ = {isa = PBXBuildFile; fileRef = 8748DDC42318B390008630FB /* RTRS.html */; };
-		8748DDCA2318B390008630FB /* RTRSHome.html in Resources */ = {isa = PBXBuildFile; fileRef = 8748DDC52318B390008630FB /* RTRSHome.html */; };
-		8748DDCC2318B390008630FB /* RTRSHome2.html in Resources */ = {isa = PBXBuildFile; fileRef = 8748DDC72318B390008630FB /* RTRSHome2.html */; };
-		875566CB22FB8B6100C8070A /* AUCornerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CA22FB8B6100C8070A /* AUCornerTableViewCell.swift */; };
+		875566CB22FB8B6100C8070A /* SingleContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CA22FB8B6100C8070A /* SingleContentCell.swift */; };
 		875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */; };
 		877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0A226A90BE00F061FA /* RTRSOperation.swift */; };
 		877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */; };
@@ -39,8 +36,12 @@
 		879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D222E13EFE002F58CB /* ContentViewController.swift */; };
 		879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D522E1490F002F58CB /* RTRSTransittionCoordinator.swift */; };
 		879CE1D822E14A93002F58CB /* RTRSAuCornerTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D722E14A93002F58CB /* RTRSAuCornerTransition.swift */; };
+		87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A53C8323555A8D006822F2 /* PodcastManager.swift */; };
+		87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */; };
+		87AA241C23483E49008C5907 /* RTRSSinglePodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA241B23483E49008C5907 /* RTRSSinglePodViewModel.swift */; };
+		87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA241D2349403F008C5907 /* RTRSPodSourceViewModel.swift */; };
 		87B95F5F2267FEFC008AC7C9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B95F5E2267FEFC008AC7C9 /* Utils.swift */; };
-		87C3B5A922EBC76F00560958 /* AUCornerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5A822EBC76F00560958 /* AUCornerTableViewController.swift */; };
+		87C3B5A922EBC76F00560958 /* ContentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5A822EBC76F00560958 /* ContentTableViewController.swift */; };
 		87C3B5AC22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AB22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift */; };
 		87C3B5AE22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */; };
 		87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */; };
@@ -60,6 +61,8 @@
 		87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewController.swift; sourceTree = "<group>"; };
 		8736B192233FE1CB008DA87A /* RTRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RTRS.entitlements; sourceTree = "<group>"; };
 		8736B195233FE8C8008DA87A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8739E8872356C4D7004CE6D8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		8739E8892356C59A004CE6D8 /* PodcastPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayerViewController.swift; sourceTree = "<group>"; };
 		8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSDeepLinkHandler.swift; sourceTree = "<group>"; };
 		8745B748232BEBE6003A2351 /* RTRS-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RTRS-bridging-header.h"; sourceTree = "<group>"; };
 		874613032308487900C57400 /* AUCorner.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCorner.html; sourceTree = "<group>"; };
@@ -71,7 +74,7 @@
 		8748DDC42318B390008630FB /* RTRS.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRS.html; sourceTree = "<group>"; };
 		8748DDC52318B390008630FB /* RTRSHome.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRSHome.html; sourceTree = "<group>"; };
 		8748DDC72318B390008630FB /* RTRSHome2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRSHome2.html; sourceTree = "<group>"; };
-		875566CA22FB8B6100C8070A /* AUCornerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerTableViewCell.swift; sourceTree = "<group>"; };
+		875566CA22FB8B6100C8070A /* SingleContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleContentCell.swift; sourceTree = "<group>"; };
 		875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAboutViewModel.swift; sourceTree = "<group>"; };
 		877B3A0A226A90BE00F061FA /* RTRSOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperation.swift; sourceTree = "<group>"; };
 		877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperationCoordinator.swift; sourceTree = "<group>"; };
@@ -84,8 +87,13 @@
 		879CE1D222E13EFE002F58CB /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		879CE1D522E1490F002F58CB /* RTRSTransittionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSTransittionCoordinator.swift; sourceTree = "<group>"; };
 		879CE1D722E14A93002F58CB /* RTRSAuCornerTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAuCornerTransition.swift; sourceTree = "<group>"; };
+		87A53C8023516D9E006822F2 /* AUCornerArticle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCornerArticle.html; sourceTree = "<group>"; };
+		87A53C8323555A8D006822F2 /* PodcastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastManager.swift; sourceTree = "<group>"; };
+		87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSMultiPodViewModel.swift; sourceTree = "<group>"; };
+		87AA241B23483E49008C5907 /* RTRSSinglePodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSSinglePodViewModel.swift; sourceTree = "<group>"; };
+		87AA241D2349403F008C5907 /* RTRSPodSourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPodSourceViewModel.swift; sourceTree = "<group>"; };
 		87B95F5E2267FEFC008AC7C9 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		87C3B5A822EBC76F00560958 /* AUCornerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerTableViewController.swift; sourceTree = "<group>"; };
+		87C3B5A822EBC76F00560958 /* ContentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTableViewController.swift; sourceTree = "<group>"; };
 		87C3B5AB22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerMultiArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerSingleArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSViewModel.swift; sourceTree = "<group>"; };
@@ -147,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				8736B192233FE1CB008DA87A /* RTRS.entitlements */,
+				87A53C8223555A67006822F2 /* Audio */,
 				8795C9B42329995200D34C99 /* HTML Templates */,
 				874612FE230847F300C57400 /* Sample HTML */,
 				875566C922FB8B4500C8070A /* Cells */,
@@ -162,6 +171,7 @@
 				87095A572263BC2C0081A540 /* Assets.xcassets */,
 				87095A592263BC2C0081A540 /* LaunchScreen.storyboard */,
 				87095A5C2263BC2C0081A540 /* Info.plist */,
+				8739E8872356C4D7004CE6D8 /* Podfile */,
 				877B3A0E226A932800F061FA /* RTRSConfig.json */,
 				8736B195233FE8C8008DA87A /* GoogleService-Info.plist */,
 			);
@@ -188,6 +198,7 @@
 				8748DDC72318B390008630FB /* RTRSHome2.html */,
 				874613042308487900C57400 /* about.html */,
 				874613032308487900C57400 /* AUCorner.html */,
+				87A53C8023516D9E006822F2 /* AUCornerArticle.html */,
 			);
 			path = "Sample HTML";
 			sourceTree = "<group>";
@@ -213,7 +224,7 @@
 		875566CC22FB8B6B00C8070A /* Content */ = {
 			isa = PBXGroup;
 			children = (
-				875566CA22FB8B6100C8070A /* AUCornerTableViewCell.swift */,
+				875566CA22FB8B6100C8070A /* SingleContentCell.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -272,6 +283,15 @@
 			path = Animations;
 			sourceTree = "<group>";
 		};
+		87A53C8223555A67006822F2 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				87A53C8323555A8D006822F2 /* PodcastManager.swift */,
+				8739E8892356C59A004CE6D8 /* PodcastPlayerViewController.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		87B95F5D2267FEEC008AC7C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,7 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				879CE1D222E13EFE002F58CB /* ContentViewController.swift */,
-				87C3B5A822EBC76F00560958 /* AUCornerTableViewController.swift */,
+				87C3B5A822EBC76F00560958 /* ContentTableViewController.swift */,
 				87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */,
 			);
 			path = Content;
@@ -308,6 +328,9 @@
 				875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */,
 				8746130723084CF400C57400 /* RTRSMoreViewModel.swift */,
 				874613102308E15800C57400 /* RTRSHomeViewModel.swift */,
+				87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */,
+				87AA241B23483E49008C5907 /* RTRSSinglePodViewModel.swift */,
+				87AA241D2349403F008C5907 /* RTRSPodSourceViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -379,16 +402,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				874613062308487900C57400 /* about.html in Resources */,
-				8748DDCC2318B390008630FB /* RTRSHome2.html in Resources */,
 				8795C9B623299DD500D34C99 /* RTRS.css in Resources */,
 				877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */,
 				87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */,
 				87095A582263BC2C0081A540 /* Assets.xcassets in Resources */,
-				8748DDCA2318B390008630FB /* RTRSHome.html in Resources */,
-				8748DDC92318B390008630FB /* RTRS.html in Resources */,
 				8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */,
-				874613052308487900C57400 /* AUCorner.html in Resources */,
+				8739E8882356C4D7004CE6D8 /* Podfile in Resources */,
 				87095A562263BC2B0081A540 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,13 +463,17 @@
 			files = (
 				87FA15712325BEF200EA8374 /* AUCornerArticleViewController.swift in Sources */,
 				8790C78D22DCF70800E8AE5C /* RTRSNavigationController.swift in Sources */,
+				8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */,
+				87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */,
 				8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */,
+				87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */,
 				875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */,
 				879CE1D822E14A93002F58CB /* RTRSAuCornerTransition.swift in Sources */,
 				87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */,
 				8746130D230877CC00C57400 /* RTRSMoreTableViewController.swift in Sources */,
 				8745B745232A8B93003A2351 /* RTRSDeepLinkHandler.swift in Sources */,
 				8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */,
+				87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */,
 				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
 				879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */,
 				87095A532263BC2B0081A540 /* RootTabController.swift in Sources */,
@@ -458,15 +481,16 @@
 				879CE1D122E1381B002F58CB /* RTRSPage.swift in Sources */,
 				87C3B5AC22EBCC7000560958 /* AUCornerMultiArticleViewModel.swift in Sources */,
 				87364F6322DFD11E00EDAB17 /* RTRSHomeViewController.swift in Sources */,
+				87AA241C23483E49008C5907 /* RTRSSinglePodViewModel.swift in Sources */,
 				877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */,
 				87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */,
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
 				879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */,
-				875566CB22FB8B6100C8070A /* AUCornerTableViewCell.swift in Sources */,
+				875566CB22FB8B6100C8070A /* SingleContentCell.swift in Sources */,
 				874613112308E15800C57400 /* RTRSHomeViewModel.swift in Sources */,
 				87B95F5F2267FEFC008AC7C9 /* Utils.swift in Sources */,
 				8746130823084CF400C57400 /* RTRSMoreViewModel.swift in Sources */,
-				87C3B5A922EBC76F00560958 /* AUCornerTableViewController.swift in Sources */,
+				87C3B5A922EBC76F00560958 /* ContentTableViewController.swift in Sources */,
 				879CE1CF22E137FA002F58CB /* RTRSPersistentStorage.swift in Sources */,
 				8746130F2308818C00C57400 /* RTRSAboutViewController.swift in Sources */,
 			);

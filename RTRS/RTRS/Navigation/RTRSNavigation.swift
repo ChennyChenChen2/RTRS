@@ -14,6 +14,7 @@ enum RTRSScreenType: String, Hashable {
     case about = "About"
     case podcasts = "The Pod"
     case pod = "A Pod"
+    case podSource = "Pod Source"
     case au = "If Not, Pick Will Convey As Two Second-Rounders"
     case auArticle = "AU Article"
     case newsletter = "Newsletter"
@@ -24,7 +25,44 @@ enum RTRSScreenType: String, Hashable {
     case lotteryParty = "Lottery Party"
     case contact = "Contact"
     case advertise = "Advertise"
-    case more = "More"    
+    case more = "More"
+    
+    var rawValue: String {
+        switch self {
+        case .home:
+            return "Home"
+        case .about:
+            return "About"
+        case .podcasts:
+            return "The Pod"
+        case .pod:
+            return "A Pod"
+        case .podSource:
+            return "Pod Source"
+        case .au:
+            return "If Not, Pick Will Convey As Two Second-Rounders"
+        case .auArticle:
+            return "AU Article"
+        case .newsletter:
+            return "Newsletter"
+        case .subscribe:
+            return "Subscribe"
+        case .processPups:
+            return "Process Pups"
+        case .shirts:
+            return "T-Shirt Store"
+        case .events:
+            return "Events"
+        case .lotteryParty:
+            return "Lottery Party"
+        case .contact:
+            return "Contact"
+        case .advertise:
+            return "Advertise"
+        case .more:
+            return "More"
+        }
+    }
 }
 
 class RTRSNavigation: NSObject {

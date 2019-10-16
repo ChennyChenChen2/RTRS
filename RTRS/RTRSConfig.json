@@ -28,9 +28,22 @@
 			"type": "descriptionPage"
 		},
 		{
-            "name": "Podcasts",
-            "link": "https://www.rightstorickysanchez.com/podcast",
-            "type": "multimedia"
+            "name": "The Pod",
+            "type": "multimedia",
+            "links": ["https://www.rightstorickysanchez.com/podcast",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1563022800515",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1557717089396",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1552448153380",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1546799406773",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1541259108716",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1535217344820",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1528338738258",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1523121303713",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1513184669957",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1504905649264",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1496508381161",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1487005942529",
+                    "https://www.rightstorickysanchez.com/podcast?offset=1475945797103"]
 		},
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
@@ -62,8 +75,9 @@
             "type": "externallink"
         }
 	],
+    "podSource": "https://spikeeskin.libsyn.com/rss",
     "moreItems": [
         "About",
         "Newsletter",
-        "T-Shirt Store",]
+        "T-Shirt Store"]
 }

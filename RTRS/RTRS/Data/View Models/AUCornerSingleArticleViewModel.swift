@@ -9,7 +9,15 @@
 import UIKit
 import SwiftSoup
 
-class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
+protocol SingleContentViewModel {
+    var title: String? { get }
+    var contentDescription: String? { get }
+    var dateString: String? { get }
+    var imageUrl: URL? { get }
+}
+
+class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+    
     func pageName() -> String {
         return self.title ?? ""
     }
@@ -28,7 +36,7 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     }
     
     let title: String?
-    let articleDescription: String?
+    let contentDescription: String?
     let baseURL: URL?
     let dateString: String?
     let imageUrl: URL?
@@ -36,7 +44,7 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     
     init(doc: Document?, title: String?, articleDescription: String?, baseURL: URL?, dateString: String?, imageUrl: URL?, htmlString: String?) {
         self.title = title
-        self.articleDescription = articleDescription
+        self.contentDescription = articleDescription
         self.baseURL = baseURL
         self.dateString = dateString
         self.imageUrl = imageUrl
@@ -48,7 +56,7 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.title, forKey: CodingKeys.title.rawValue)
-        aCoder.encode(self.articleDescription, forKey: CodingKeys.articleDescription.rawValue)
+        aCoder.encode(self.contentDescription, forKey: CodingKeys.articleDescription.rawValue)
         aCoder.encode(self.baseURL, forKey: CodingKeys.baseURL.rawValue)
         aCoder.encode(self.dateString, forKey: CodingKeys.dateString.rawValue)
         aCoder.encode(self.imageUrl, forKey: CodingKeys.imageUrl.rawValue)
@@ -69,22 +77,26 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel {
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
         guard let theDoc = doc else { return }
         do {
-            if let divElem = try theDoc.getElementById("pageWrapper") {
+            if let divElem = try theDoc.getElementsByClass("main-content-wrapper").first() {
                 
-                if let headerElem = try divElem.select("header").first() {
-                    try headerElem.remove()
+                if let titleElem = try divElem.getElementsByClass("title").first() {
+                    try titleElem.remove()
+                }
+
+                if let dateAuthorElem = try divElem.getElementsByClass("date-author").first() {
+                    try dateAuthorElem.remove()
+                }
+
+                if let imageElem = try divElem.getElementsByClass("sqs-block-content").first() {
+                    try imageElem.remove()
                 }
                 
-                if let footerElem = try divElem.select("footer").first() {
-                    try footerElem.remove()
+                if let tagElem = try divElem.getElementsByClass("tags-cats").first() {
+                    try tagElem.remove()
                 }
                 
-                if let navElem = try divElem.select("nav").first() {
-                    try navElem.remove()
-                }
-                
-                if let specialElem = try divElem.select("div.special-content").first() {
-                    try specialElem.remove()
+                if let paginationElem = try divElem.getElementsByClass("pagination").first() {
+                    try paginationElem.remove()
                 }
                 
                 let imgElems = try divElem.select("img")

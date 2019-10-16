@@ -1,53 +1,48 @@
 //
-//  AUCornerMultiArticleViewModel.swift
+//  RTRSMultiPodViewModel.swift
 //  RTRS
 //
-//  Created by Jonathan Chen on 7/26/19.
+//  Created by Jonathan Chen on 10/4/19.
 //  Copyright © 2019 Jonathan Chen. All rights reserved.
 //
 
 import UIKit
 import SwiftSoup
 
-protocol MultiContentViewModel {
-    var content: [SingleContentViewModel] { get }
-}
-
-class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
+class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     func pageName() -> String {
-        return self.name ?? "AU's Corner"
+        return self.name ?? "The Pod"
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "RickyLogo")
+        return #imageLiteral(resourceName: "Top-Nav-Image")
     }
     
     enum CodingKeys: String {
         case name = "Name"
-        case articles = "Articles"
+        case pods = "Pods"
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: CodingKeys.name.rawValue)
-        aCoder.encode(self.content, forKey: CodingKeys.articles.rawValue)
+        aCoder.encode(self.content, forKey: CodingKeys.pods.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
-        let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [AUCornerSingleArticleViewModel]
+        let pods = aDecoder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [RTRSSinglePodViewModel]
         
-        self.init(urls: nil, name: name, articles: articles, completionHandler: nil)
+        self.init(urls: nil, name: name, pods: pods, completionHandler: nil)
     }
 
     let name: String?
-    var content: [SingleContentViewModel]  = [AUCornerSingleArticleViewModel]()
+    var content: [SingleContentViewModel] = [RTRSSinglePodViewModel]()
     var completion: ((RTRSViewModel?) -> ())?
 
-    required init(urls: [URL]?, name: String?, articles: [AUCornerSingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
+    required init(urls: [URL]?, name: String?, pods: [RTRSSinglePodViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
         self.name = name
-        self.content = articles ?? []
+        self.content = pods ?? []
         self.completion = completionHandler
-        
         super.init()
         extractDataFromDoc(doc: nil, urls: urls)
     }
@@ -69,10 +64,9 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                         let title = try? aElement.text(),
                         let urlSuffix = try? aElement.attr("href"),
                         let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
-                        let articleDescription = try? descriptionTextElement.text(),
+                        let podDescription = try? descriptionTextElement.text(),
                         let imageAttribute = try? imageElement.attr("data-asset-url")
                     {
-                        
                         guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
                         let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { continue }
                         
@@ -85,18 +79,14 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                             dateString = newDate
                         }
                         
-                        let htmlString = try String.init(contentsOf: articleUrl)
-                        let articleDoc = try SwiftSoup.parse(htmlString)
-                        let singleArticleViewModel = AUCornerSingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
-                        content.append(singleArticleViewModel)
+                        let singleViewModel = RTRSSinglePodViewModel(title: title, date: dateString, description: podDescription, imageURL: URL(string: imageAttribute))
+                        self.content.append(singleViewModel)
                     }
                 }
+                self.completion?(self)
             } catch {
                 print("Error parsing AU's Corner view model")
             }
         }
-        
-        print("FINISHED LOADING AU CORNER MULTI-ARTICLE")
-        self.completion?(self)
     }
 }

@@ -26,100 +26,99 @@ class RTRSOperation: Operation {
     
     override func start() {
         guard let firstUrl = self.urls.first else { return }
-        let urlSession = URLSession(configuration: URLSessionConfiguration.default)
-        let request = URLRequest(url: URL(string: "\(firstUrl.absoluteString)?format=json-pretty")!)
-        let task = urlSession.dataTask(with: request) { [weak self] (data, response, error) in
             
-            guard let weakSelf = self else { return }
-            
-            func retrieveSavedDataIfAvailable() {
-                if let type = RTRSScreenType(rawValue: weakSelf.pageName) {
-                    var viewModel: RTRSViewModel?
-                    if type == .pod || type == .auArticle {
-                        viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: weakSelf.pageName)
-                    } else {
-                        viewModel = RTRSPersistentStorage.getViewModel(type: type)
-                    }
-                    if let theViewModel = viewModel {
-                        DispatchQueue.main.async {
-                            RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                        }
-                        weakSelf.customCompletion?(theViewModel)
-                        return
-                    }
-                }
-                
-                weakSelf.customCompletion?(nil)
-            }
-            
-            
-            if let error = error {
-                print(error.localizedDescription)
-                // TODO: create error VC to kill app/tell user to reopen app if all else fails
-                if error.localizedDescription.contains("The Internet connection appears to be offline") {
-                    retrieveSavedDataIfAvailable()
-                }
-            }
-            
-            if let data = data,
-                let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
-                let collectionDict = dict["collection"] as? [String: Any], let updated = collectionDict["updatedOn"] as? Int {
-                
-                let keyName = "\(weakSelf.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
-                let lastUpdate = UserDefaults.standard.integer(forKey: keyName)
-//                if updated > lastUpdate {
-                if true {
-                    UserDefaults.standard.set(updated, forKey: keyName)
-                    do {
-                        if let url = weakSelf.urls.first {
-                            let htmlString = try String.init(contentsOf: url)
-                            let doc = try SwiftSoup.parse(htmlString)
-                            if let type = RTRSScreenType(rawValue: weakSelf.pageName) {
-                                var viewModel: RTRSViewModel?
-                                
-                                if type == .au {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name: weakSelf.pageName, doc: doc, urls: weakSelf.urls)
-                                } else {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name: weakSelf.pageName, doc: doc)
-                                }
-                                
-                                if let theViewModel = viewModel {
-                                    DispatchQueue.main.async {
-                                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                                        RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
-                                    }
-                                    weakSelf.customCompletion?(viewModel)
-                                } else {
-                                    weakSelf.customCompletion?(nil)
-                                }
-                            } else {
-                                weakSelf.customCompletion?(nil)
-                            }
-                        }
-                    } catch {
-                        print("Error?")
-                        weakSelf.customCompletion?(nil)
-                    }
+        func retrieveSavedDataIfAvailable() {
+            if let type = RTRSScreenType(rawValue: self.pageName) {
+                var viewModel: RTRSViewModel?
+                if type == .pod || type == .auArticle {
+                    viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
                 } else {
-                    retrieveSavedDataIfAvailable()
+                    viewModel = RTRSPersistentStorage.getViewModel(type: type)
+                }
+                if let theViewModel = viewModel {
+                    DispatchQueue.main.async {
+                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                    }
+                    self.customCompletion?(theViewModel)
+                    return
                 }
             }
+            
+            self.customCompletion?(nil)
         }
-        task.resume()
+            
+        let shouldCheckLastUpdate = self.pageName != RTRSScreenType.podSource.rawValue
+        
+        var lastUpdate: Int?
+        if shouldCheckLastUpdate {
+            
+            
+        }
+     
+        let keyName = "\(self.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
+//                if updated > lastUpdate {
+        if true {
+//                    UserDefaults.standard.set(updated, forKey: keyName)
+            do {
+                if let url = self.urls.first {
+                    let htmlString = try String.init(contentsOf: url)
+                    var doc: Document
+                    if self.pageName == "Pod Source" {
+                        doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
+                    } else {
+                        doc = try SwiftSoup.parse(htmlString)
+                    }
+                    if let type = RTRSScreenType(rawValue: self.pageName) {
+                        var viewModel: RTRSViewModel?
+                        var deferredCompletion = false
+                        
+                        if type == .au || type == .podcasts {
+                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, completionHandler: self.customCompletion)
+                            deferredCompletion = true
+                        } else {
+                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc)
+                        }
+                        
+                        if let theViewModel = viewModel {
+                            DispatchQueue.main.async {
+                                RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                                RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
+                            }
+                            
+                            if !deferredCompletion {
+                                self.customCompletion?(viewModel)
+                            }
+                        } else {
+                            self.customCompletion?(nil)
+                        }
+                    } else {
+                        self.customCompletion?(nil)
+                    }
+                }
+            } catch {
+                print("Error?")
+                self.customCompletion?(nil)
+            }
+        } else {
+            retrieveSavedDataIfAvailable()
+        }
     }
 }
 
-
 fileprivate class RTRSViewModelFactory {
     
-    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil) -> RTRSViewModel? {
+    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil) -> RTRSViewModel? {
         
         switch name {
-        case "Home":
+        case RTRSScreenType.home.rawValue:
             return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
-        case "If Not, Pick Will Convey As Two Second-Rounders":
-            return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil)
-        case "About":
+        case RTRSScreenType.podSource.rawValue:
+            return RTRSPodSourceViewModel(doc: doc, name: name)
+        case RTRSScreenType.podcasts.rawValue:
+            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, completionHandler: completionHandler)
+        case RTRSScreenType.au.rawValue:
+            return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+        case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         default:
             break
