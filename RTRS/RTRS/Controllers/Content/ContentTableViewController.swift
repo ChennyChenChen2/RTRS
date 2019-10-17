@@ -69,7 +69,8 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
             self.performSegue(withIdentifier: self.articleSegueId, sender: indexPath)
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-            let vc = storyboard.instantiateViewController(withIdentifier: self.playerId)
+            let vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
+            vc.currentIndex = indexPath
             
             self.present(vc, animated: true, completion: nil)
         }
