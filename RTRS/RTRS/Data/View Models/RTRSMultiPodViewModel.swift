@@ -74,12 +74,18 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                             try dateAElem.remove()
                         }
                         
+                        var theTitle = title
+                        if let openBracketIndex = title.firstIndex(of: "["), let closeBracketIndex = title.firstIndex(of: "]") {
+                            theTitle.removeSubrange(openBracketIndex...closeBracketIndex)
+                            theTitle = theTitle.trimmingCharacters(in: .whitespaces)
+                        }
+                        
                         var dateString = ""
                         if let newDate = try? dateElement.text() {
                             dateString = newDate
                         }
                         
-                        let singleViewModel = RTRSSinglePodViewModel(title: title, date: dateString, description: podDescription, imageURL: URL(string: imageAttribute))
+                        let singleViewModel = RTRSSinglePodViewModel(title: theTitle, date: dateString, description: podDescription, imageURL: URL(string: imageAttribute))
                         self.content.append(singleViewModel)
                     }
                 }

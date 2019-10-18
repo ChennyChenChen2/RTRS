@@ -22,6 +22,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
 
         self.searchBar.delegate = self
+        self.searchBar.searchTextField.textColor = .white
         self.navigationController?.navigationBar.isHidden = false
         
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
@@ -68,11 +69,21 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         if self.contentType == .au {
             self.performSegue(withIdentifier: self.articleSegueId, sender: indexPath)
         } else {
-            let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-            let vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
-            vc.currentIndex = indexPath
-            
-            self.present(vc, animated: true, completion: nil)
+            if let cell = tableView.cellForRow(at: indexPath) as? SingleContentCell, let title = cell.auTitleLabel.text {
+
+                if let viewModel = self.viewModel?.content.first(where: { (vm) -> Bool in
+                    return vm.title == title
+                }) as? RTRSSinglePodViewModel {
+                    let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+                    let vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
+                    
+
+                    vc.currentIndex = indexPath
+                    vc.viewModel = viewModel
+                    
+                    self.present(vc, animated: true, completion: nil)
+                }
+            }
         }
     }
     

@@ -9,14 +9,19 @@
 import UIKit
 import PINRemoteImage
 import MarqueeLabel
+import AVFoundation
 
 class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     let cellReuseId = "PodcastCell"
+    var player: AVPlayer?
+    
     @IBOutlet weak var collectionView: UICollectionView!
-    var viewModel: RTRSMultiPodViewModel?
+    var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
+    var multiPodViewModel: RTRSMultiPodViewModel?
     var currentIndex: IndexPath?
+    var didScroll = false
     @IBOutlet weak var titleLabel: MarqueeLabel!
     @IBOutlet weak var dateLabel: UILabel!
     
@@ -26,15 +31,18 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
-        self.viewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel
+        self.multiPodViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel
         self.sourceViewModel = RTRSNavigation.shared.viewModel(for: .podSource) as? RTRSPodSourceViewModel
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let index = currentIndex {
-            self.collectionView.scrollToItem(at: index, at: .centeredHorizontally, animated: false)
+        if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
+            return vm.title == self.viewModel.title
+        }) {
+            self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .centeredHorizontally, animated: false)
         }
+        didScroll = true
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
@@ -42,21 +50,25 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel?.content.count ?? 0
+        return self.multiPodViewModel?.content.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let content = self.viewModel?.content[indexPath.row] as? RTRSSinglePodViewModel {
-            self.titleLabel.text = content.title
-            self.dateLabel.text = content.dateString
+        if let podTitle = self.viewModel.title, let podUrl = self.sourceViewModel?.pods[podTitle], let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
+            self.titleLabel.text = podTitle
+            self.dateLabel.text = self.viewModel.dateString
+            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
         }
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
         
-        if let content = self.viewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
+        if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
+//            self.viewModel = content
             cell.imageView.pin_setImage(from: imageUrl)
         }
         
@@ -79,7 +91,6 @@ class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         self.minimumInteritemSpacing = 0.0;
         self.minimumLineSpacing = 0.0;
         self.scrollDirection = .horizontal;
-        self.sectionInset = UIEdgeInsets(top: 10.0, left: 0.0, bottom: 10.0, right: 0.0)
     }
     
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {

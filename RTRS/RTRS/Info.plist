@@ -48,6 +48,7 @@
 	<string>https://firebasestorage.googleapis.com/v0/b/rights-to-ricky-sanchez.appspot.com/o/RTRSConfig.json?alt=media&amp;token=6e93faa7-4165-4d15-92ab-0c2c26128087</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -1,3 +1,5 @@
 Pods/
 RTRS.xcworkspace*
 *.gitignore
+.DS_Store
+RTRS/.DS_Store

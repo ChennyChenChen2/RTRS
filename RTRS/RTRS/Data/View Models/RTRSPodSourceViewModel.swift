@@ -45,14 +45,13 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
         do {
             let items = try theDoc.getElementsByTag("item")
             for item in items {
-                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("link").first(), let link = URL(string: try linkElem.text()) {
+                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let link = URL(string: try linkElem.attr("url")) {
                     let title = try titleElem.text()
                     pods[title] = link
                 }
             }
             
             print("Loaded pod URLs")
-            PodcastManager.shared.preparePlayer()
         } catch {
             print("Error parsing pod source")
         }
