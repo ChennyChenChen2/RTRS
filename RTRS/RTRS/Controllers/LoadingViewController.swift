@@ -85,7 +85,6 @@ class LoadingViewController: UIViewController {
             task.resume()
             
             weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
-                print("\(success)")
                 DispatchQueue.main.async {
                     weakSelf.activityIndicator.stopAnimating()
                     let storyboard = UIStoryboard.init(name: "Main", bundle: nil)

@@ -30,11 +30,14 @@ class RTRSOperation: Operation {
         func retrieveSavedDataIfAvailable() {
             if let type = RTRSScreenType(rawValue: self.pageName) {
                 var viewModel: RTRSViewModel?
+                
+                print("Retrieving \(type.rawValue) from saved data")
                 if type == .pod || type == .auArticle {
                     viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
                 } else {
                     viewModel = RTRSPersistentStorage.getViewModel(type: type)
                 }
+                
                 if let theViewModel = viewModel {
                     DispatchQueue.main.async {
                         RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
@@ -57,7 +60,7 @@ class RTRSOperation: Operation {
      
         let keyName = "\(self.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
 //                if updated > lastUpdate {
-        if true {
+        if false {
 //                    UserDefaults.standard.set(updated, forKey: keyName)
             do {
                 if let url = self.urls.first {
@@ -89,14 +92,17 @@ class RTRSOperation: Operation {
                                 self.customCompletion?(viewModel)
                             }
                         } else {
+                            retrieveSavedDataIfAvailable()
                             self.customCompletion?(nil)
                         }
                     } else {
+                        retrieveSavedDataIfAvailable()
                         self.customCompletion?(nil)
                     }
                 }
             } catch {
                 print("Error?")
+                retrieveSavedDataIfAvailable()
                 self.customCompletion?(nil)
             }
         } else {
@@ -113,7 +119,7 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.home.rawValue:
             return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
         case RTRSScreenType.podSource.rawValue:
-            return RTRSPodSourceViewModel(doc: doc, name: name)
+            return RTRSPodSourceViewModel(doc: doc, pods: nil)
         case RTRSScreenType.podcasts.rawValue:
             return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, completionHandler: completionHandler)
         case RTRSScreenType.au.rawValue:

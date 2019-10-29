@@ -77,7 +77,6 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
                     let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
                     let vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
                     
-
                     vc.currentIndex = indexPath
                     vc.viewModel = viewModel
                     

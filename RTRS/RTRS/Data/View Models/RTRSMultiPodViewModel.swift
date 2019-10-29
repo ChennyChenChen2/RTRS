@@ -91,7 +91,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                 }
                 self.completion?(self)
             } catch {
-                print("Error parsing AU's Corner view model")
+                print("Error parsing multi pod view model")
             }
         }
     }

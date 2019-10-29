@@ -11,17 +11,21 @@ import PINRemoteImage
 import MarqueeLabel
 import AVFoundation
 
-class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PodcastManagerDelegate {
     
     let cellReuseId = "PodcastCell"
     var player: AVPlayer?
     
+    @IBOutlet weak var loadingSpinner: UIActivityIndicatorView!
+    @IBOutlet weak var seekBar: UIProgressView!
+    @IBOutlet weak var forwardButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
     var multiPodViewModel: RTRSMultiPodViewModel?
     var currentIndex: IndexPath?
-    var didScroll = false
     @IBOutlet weak var titleLabel: MarqueeLabel!
     @IBOutlet weak var dateLabel: UILabel!
     
@@ -33,6 +37,10 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
 
         self.multiPodViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel
         self.sourceViewModel = RTRSNavigation.shared.viewModel(for: .podSource) as? RTRSPodSourceViewModel
+        
+        PodcastManager.shared.delegate = self
+        self.playButton.isHidden = true
+        self.loadingSpinner.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -42,11 +50,21 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         }) {
             self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .centeredHorizontally, animated: false)
         }
-        didScroll = true
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func playButtonPressed(_ sender: Any) {
+        let manager = PodcastManager.shared
+        if manager.rate > 0 {
+            manager.rate = 0
+            self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        } else {
+            manager.rate = 1 // TODO: have this reflect a 1.5x or 2x speed
+            self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -61,8 +79,6 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         }
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
@@ -74,23 +90,31 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         
         return cell
     }
+    
+    // MARK: PodcastManagerDelegate
+    func podcastReadyToPlay() {
+        self.playButton.isHidden = false
+        self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        
+        self.loadingSpinner.stopAnimating()
+        self.loadingSpinner.isHidden = true
+        PodcastManager.shared.player?.play()
+    }
 }
 
 class PodcastCollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet weak var imageView: UIImageView!
-    
-    
-    
 }
 
 class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func awakeFromNib() {
         guard let collectionView = self.collectionView else { return }
-        self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
         self.minimumInteritemSpacing = 0.0;
         self.minimumLineSpacing = 0.0;
         self.scrollDirection = .horizontal;
+        self.sectionInset = UIEdgeInsets.zero
+        let contentInset = collectionView.contentInset
+        self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height - 1 - contentInset.top - contentInset.bottom)
     }
     
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -114,24 +138,4 @@ class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         
         return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
     }
-    
-//    - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity
-//    {
-//        CGFloat offsetAdjustment = MAXFLOAT;
-//        CGFloat horizontalOffset = proposedContentOffset.x + 5;
-//
-//        CGRect targetRect = CGRectMake(proposedContentOffset.x, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
-//
-//        NSArray *array = [super layoutAttributesForElementsInRect:targetRect];
-//
-//        for (UICollectionViewLayoutAttributes *layoutAttributes in array) {
-//            CGFloat itemOffset = layoutAttributes.frame.origin.x;
-//            if (ABS(itemOffset - horizontalOffset) < ABS(offsetAdjustment)) {
-//                offsetAdjustment = itemOffset - horizontalOffset;
-//            }
-//        }
-//
-//        return CGPointMake(proposedContentOffset.x + offsetAdjustment, proposedContentOffset.y);
-//    }
-    
 }

@@ -93,6 +93,7 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                 }
             } catch {
                 print("Error parsing AU's Corner view model")
+                break
             }
         }
         

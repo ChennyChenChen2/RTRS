@@ -10,24 +10,32 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-class PodcastManager {
+class PodcastManager: NSObject {
 
     static let shared = PodcastManager()
-    private init() {
-        initialize()
-    }
+    override private init() {}
     fileprivate let viewModel = RTRSNavigation.shared.viewModel(for: .podSource)
+    fileprivate var itemObserver: KeyValueObserver<AVPlayerItem>?
+    fileprivate var playerObserver: KeyValueObserver<AVPlayer>?
+    weak var delegate: PodcastManagerDelegate?
     var player: AVPlayer?
-    
-    func initialize() {
-        
+    var rate: Float = 1.0 {
+        didSet {
+            self.setRate(rate: self.rate)
+        }
     }
     
-    func setRate(rate: Float) {
+    func seek(location: Double) {
+        if let player = self.player, let item = player.currentItem {
+            let seekTime = (location / item.duration.seconds) * item.duration.seconds
+            let newTime = CMTime(seconds: seekTime, preferredTimescale: CMTimeScale(1.0))
+            player.seek(to: newTime)
+        }
+    }
+    
+    fileprivate func setRate(rate: Float) {
         if let player = self.player {
-            player.setRate(rate, time: .zero, atHostTime: .positiveInfinity)
-            
-            
+            player.rate = rate
         }
     }
     
@@ -35,6 +43,17 @@ class PodcastManager {
         self.player?.pause()
         let item = AVPlayerItem(url: url)
         self.player = AVPlayer(playerItem: item)
+        self.player?.automaticallyWaitsToMinimizeStalling = false
+        
+        self.itemObserver = KeyValueObserver(observee: item)
+        self.itemObserver?.addObserver(forKeyPath: "status", options: [.old, .new], closure: { [weak self] (item, changes) in
+            if let newStatusInt = changes?[.newKey] as? Int, let newStatus = AVPlayerItem.Status(rawValue: newStatusInt) {
+                if newStatus == .readyToPlay {
+                    self?.delegate?.podcastReadyToPlay()
+                }
+            }
+        })
+        
         var nowPlayingInfo = [String:Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
         nowPlayingInfo[MPMediaItemPropertyArtist] = "The Rights to Ricky Sanchez"
@@ -43,7 +62,10 @@ class PodcastManager {
         })
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        
-        self.player?.play()
     }
+    
+}
+
+protocol PodcastManagerDelegate: NSObject {
+    func podcastReadyToPlay()
 }

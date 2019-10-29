@@ -15,6 +15,10 @@ struct PodInfo {
 }
 
 class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
+    enum CodingKeys: String {
+         case pods = "Pods"
+     }
+    
     func pageName() -> String {
         return "Pod Source"
     }
@@ -24,22 +28,24 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     }
     
     func encode(with coder: NSCoder) {
-        
+        coder.encode(self.pods, forKey: CodingKeys.pods.rawValue)
     }
     
     var pods = [String: URL]()
     
-    required init(doc: Document?, name: String) {
+    required init(doc: Document?, pods: [String: URL]?) {
+        self.pods = pods ?? [String: URL]()
         super.init()
         self.extractDataFromDoc(doc: doc, urls: nil)
     }
     
-    required init?(coder: NSCoder) {
+    required convenience init?(coder: NSCoder) {
+        let pods = coder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [String: URL]
         
+        self.init(doc: nil, pods: pods)
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
-        print("HERE!")
         guard let theDoc = doc, let element = try? theDoc.getElementsByTag("pubDate").first() else { return }
         
         do {
