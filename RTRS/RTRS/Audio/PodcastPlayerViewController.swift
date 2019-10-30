@@ -48,7 +48,7 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
             return vm.title == self.viewModel.title
         }) {
-            self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .centeredHorizontally, animated: false)
+            self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
         }
     }
     
@@ -60,10 +60,43 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         let manager = PodcastManager.shared
         if manager.rate > 0 {
             manager.rate = 0
-            self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+            self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
         } else {
             manager.rate = 1 // TODO: have this reflect a 1.5x or 2x speed
-            self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+            self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        }
+    }
+    
+    @IBAction func rateButtonPressed(_ sender: Any) {
+        if let button = sender as? UIButton, let text = button.titleLabel?.text {
+            let manager = PodcastManager.shared
+            var rate: Float
+            switch text {
+            case "0.5x":
+                rate = 0.8
+                break
+            case "0.8x":
+                rate = 1.0
+            case "1.0x":
+                rate = 1.25
+                break
+            case "1.25x":
+                rate = 1.5
+                break
+            case "1.5x":
+                rate = 2.0
+                break
+            case "2.0x":
+                rate = 3.0
+                break
+            case "3.0x":
+                rate = 0.5
+                break
+            default:
+                return
+            }
+            manager.rate = rate
+            button.setTitle("\(rate)x", for: .normal)
         }
     }
     
@@ -72,9 +105,9 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let podTitle = self.viewModel.title, let podUrl = self.sourceViewModel?.pods[podTitle], let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
+        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row], let podTitle = singlePodViewModel.title, let podUrl = self.sourceViewModel?.pods[podTitle], let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
             self.titleLabel.text = podTitle
-            self.dateLabel.text = self.viewModel.dateString
+            self.dateLabel.text = singlePodViewModel.dateString
             PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
         }
     }

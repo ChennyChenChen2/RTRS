@@ -33,7 +33,7 @@ class KeyValueObserver<ObserveeType: AnyObject>: NSObject {
     
     deinit {
         guard let observeeObject = self.observeeObject else {
-            assertionFailure("failed to remove observers before deinit")
+//            assertionFailure("failed to remove observers before deinit")
             return
         }
         
