@@ -25,10 +25,17 @@ class PodcastManager: NSObject {
         }
     }
     
+    func skip(delta: Double) {
+        guard let player = self.player, let currentItem = player.currentItem else { return }
+        let currentTime = player.currentTime()
+        let newTime = currentTime + CMTimeMake(value: Int64(delta), timescale: 1)
+        player.seek(to: newTime)
+    }
+    
     func seek(location: Double) {
         if let player = self.player, let item = player.currentItem {
             let seekTime = (location / item.duration.seconds) * item.duration.seconds
-            let newTime = CMTime(seconds: seekTime, preferredTimescale: CMTimeScale(1.0))
+            let newTime = CMTimeMake(value: Int64(seekTime), timescale: 1)
             player.seek(to: newTime)
         }
     }

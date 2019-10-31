@@ -67,6 +67,14 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         }
     }
     
+    @IBAction func backButtonPressed(_ sender: Any) {
+        PodcastManager.shared.skip(delta: -15.0)
+    }
+    
+    @IBAction func forwardButtonPressed(_ sender: Any) {
+        PodcastManager.shared.skip(delta: 15.0)
+    }
+    
     @IBAction func rateButtonPressed(_ sender: Any) {
         if let button = sender as? UIButton, let text = button.titleLabel?.text {
             let manager = PodcastManager.shared
