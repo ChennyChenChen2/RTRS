@@ -26,7 +26,7 @@ class PodcastManager: NSObject {
     }
     
     func skip(delta: Double) {
-        guard let player = self.player, let currentItem = player.currentItem else { return }
+        guard let player = self.player else { return }
         let currentTime = player.currentTime()
         let newTime = currentTime + CMTimeMake(value: Int64(delta), timescale: 1)
         player.seek(to: newTime)
@@ -34,8 +34,8 @@ class PodcastManager: NSObject {
     
     func seek(location: Double) {
         if let player = self.player, let item = player.currentItem {
-            let seekTime = (location / item.duration.seconds) * item.duration.seconds
-            let newTime = CMTimeMake(value: Int64(seekTime), timescale: 1)
+//            let seekTime = (location / item.duration.seconds) * item.duration.seconds
+            let newTime = CMTimeMake(value: Int64(location), timescale: 1)
             player.seek(to: newTime)
         }
     }
@@ -54,10 +54,19 @@ class PodcastManager: NSObject {
         
         self.itemObserver = KeyValueObserver(observee: item)
         self.itemObserver?.addObserver(forKeyPath: "status", options: [.old, .new], closure: { [weak self] (item, changes) in
-            if let newStatusInt = changes?[.newKey] as? Int, let newStatus = AVPlayerItem.Status(rawValue: newStatusInt) {
+            if let weakSelf = self, let newStatusInt = changes?[.newKey] as? Int, let newStatus = AVPlayerItem.Status(rawValue: newStatusInt) {
                 if newStatus == .readyToPlay {
-                    self?.delegate?.podcastReadyToPlay()
+                    if let player = weakSelf.player, let item = player.currentItem {
+                        weakSelf.delegate?.podcastReadyToPlay(duration: item.duration)
+                    }
                 }
+            }
+        })
+        
+        self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: nil, using: { [weak self] (time) in
+            if let weakSelf = self, let item = weakSelf.player?.currentItem {
+                let duration = Float(item.duration.seconds)
+                weakSelf.delegate?.podcastTimeDidUpdate(elapsed: time, position: Float(time.seconds) / duration)
             }
         })
         
@@ -74,5 +83,6 @@ class PodcastManager: NSObject {
 }
 
 protocol PodcastManagerDelegate: NSObject {
-    func podcastReadyToPlay()
+    func podcastReadyToPlay(duration: CMTime)
+    func podcastTimeDidUpdate(elapsed: CMTime, position: Float)
 }

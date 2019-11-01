@@ -17,11 +17,16 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     var player: AVPlayer?
     
     @IBOutlet weak var loadingSpinner: UIActivityIndicatorView!
-    @IBOutlet weak var seekBar: UIProgressView!
+    
+    @IBOutlet weak var seekBar: UISlider!
+    
     @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var elapsedLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
+    
     var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
     var multiPodViewModel: RTRSMultiPodViewModel?
@@ -133,13 +138,21 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     // MARK: PodcastManagerDelegate
-    func podcastReadyToPlay() {
+    func podcastReadyToPlay(duration: CMTime) {
         self.playButton.isHidden = false
         self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
         
         self.loadingSpinner.stopAnimating()
         self.loadingSpinner.isHidden = true
+        
+        self.durationLabel.text = "\(duration)"
+        
         PodcastManager.shared.player?.play()
+    }
+    
+    func podcastTimeDidUpdate(elapsed: CMTime, position: Float) {
+        self.seekBar.value = position
+        self.elapsedLabel.text = "\(elapsed.seconds)"
     }
 }
 
