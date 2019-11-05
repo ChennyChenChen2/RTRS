@@ -12,15 +12,18 @@ import SwiftSoup
 
 class RTRSOperation: Operation {
     
-    let urls: [URL]!
-    let pageName: String!
-    let type: String!
+    let urls: [URL]
+    let pageName: String
+    let type: String
+    let lastUpdate: Int
     var customCompletion: ((RTRSViewModel?) -> ())?
     
-    required init(urls: [URL], pageName: String, type: String) {
+    required init(urls: [URL], pageName: String, type: String, lastUpdate: Int) {
         self.urls = urls
         self.pageName = pageName
         self.type = type
+        self.lastUpdate = lastUpdate
+        
         super.init()
     }
     
@@ -50,18 +53,16 @@ class RTRSOperation: Operation {
             self.customCompletion?(nil)
         }
             
-        let shouldCheckLastUpdate = self.pageName != RTRSScreenType.podSource.rawValue
-        
-        var lastUpdate: Int?
-        if shouldCheckLastUpdate {
-            
-            
+        var shouldUpdate = false
+        let keyName = "\(self.pageName)-\(RTRSUserDefaultsKeys.lastUpdated)"
+        let updated = UserDefaults.standard.integer(forKey: keyName)
+        if updated < self.lastUpdate {
+            UserDefaults.standard.set(self.lastUpdate, forKey: keyName)
+            shouldUpdate = true
         }
      
-        let keyName = "\(self.pageName!)-\(RTRSUserDefaultsKeys.lastUpdated)"
-//                if updated > lastUpdate {
+//        if shouldUpdate {
         if false {
-//                    UserDefaults.standard.set(updated, forKey: keyName)
             do {
                 if let url = self.urls.first {
                     let htmlString = try String.init(contentsOf: url)
@@ -79,7 +80,7 @@ class RTRSOperation: Operation {
                             viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, completionHandler: self.customCompletion)
                             deferredCompletion = true
                         } else {
-                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc)
+                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls)
                         }
                         
                         if let theViewModel = viewModel {
@@ -126,6 +127,10 @@ fileprivate class RTRSViewModelFactory {
             return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
         case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
+        case RTRSScreenType.newsletter.rawValue:
+            return RTRSNewsletterViewModel(name: name, url: urls!.first!)
+        case RTRSScreenType.shirts.rawValue:
+            return RTRSTshirtStoreViewModel(name: name, url: urls!.first!)
         default:
             break
         }

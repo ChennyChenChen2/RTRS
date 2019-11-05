@@ -17,6 +17,9 @@ protocol SingleContentViewModel {
 }
 
 class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
     
     func pageName() -> String {
         return self.title ?? ""

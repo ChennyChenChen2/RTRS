@@ -11,6 +11,7 @@ import UIKit
 class RTRSMoreTableViewController: UITableViewController {
 
     fileprivate let cellReuseId = "MoreCell"
+    fileprivate let externalBrowserSegueId = "extternalweb"
     var viewModel: RTRSMoreViewModel?
     
     override func viewDidLoad() {
@@ -19,12 +20,7 @@ class RTRSMoreTableViewController: UITableViewController {
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
         self.navigationController?.navigationBar.backgroundColor = .black
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
     // MARK: - Table view data source
@@ -52,7 +48,20 @@ class RTRSMoreTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let page = self.viewModel?.pages?[indexPath.row] {
-            self.performSegue(withIdentifier: page.pageName(), sender: nil)
+            if let _ = page.pageUrl() {
+                self.performSegue(withIdentifier: self.externalBrowserSegueId, sender: page)
+            } else {
+             self.performSegue(withIdentifier: page.pageName(), sender: nil)
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let page = sender as? RTRSViewModel else { return }
+        if let id = segue.identifier, id == self.externalBrowserSegueId,
+            let pageUrl = page.pageUrl(), let vc = segue.destination as? RTRSExternalWebViewController {
+            vc.url = pageUrl
+            vc.name = page.pageName()
         }
     }
 }

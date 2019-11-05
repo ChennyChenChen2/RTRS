@@ -10,6 +10,10 @@ import UIKit
 import SwiftSoup
 
 class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
+    
     func pageName() -> String {
         return self.name ?? "The Pod"
     }

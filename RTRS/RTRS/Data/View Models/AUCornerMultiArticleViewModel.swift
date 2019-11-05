@@ -14,6 +14,10 @@ protocol MultiContentViewModel {
 }
 
 class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
+    
     func pageName() -> String {
         return self.name ?? "AU's Corner"
     }

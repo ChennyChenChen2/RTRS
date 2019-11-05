@@ -39,10 +39,10 @@ class LoadingViewController: UIViewController {
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
             guard let data = data, let weakSelf = self else { return }
             
-            var dict: [String: Any]?
+            var dict: [String: Any]? // DO NOT DELETE: currently unused bc trying to test locally
             if let configDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
                 let messages = configDict["loadingMessages"] as? [String] {
-//                dict = configDict
+//                dict = configDict // DO NOT DELEETE for same reason above
                 
                 do {
                     try data.write(to: LoadingViewController.cachedConfigPath)
@@ -63,26 +63,6 @@ class LoadingViewController: UIViewController {
                     RunLoop.main.add(timer, forMode: .default)
                 }
             }
-
-            let urlSession = URLSession(configuration: URLSessionConfiguration.default)
-            let request = URLRequest(url: URL(string: "https://www.rightstorickysanchez.com/?format=json-pretty")!)
-            let task = urlSession.dataTask(with: request) { (data, response, error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-                
-                if let data = data,
-                    let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
-                    let collectionDict = dict["collection"] as? [String: Any], let updated = collectionDict["updatedOn"] as? Int {
-                    
-                    let lastUpdate = UserDefaults.standard.integer(forKey: RTRSUserDefaultsKeys.lastUpdated)
-                    if updated > lastUpdate {
-                        UserDefaults.standard.set(updated, forKey: RTRSUserDefaultsKeys.lastUpdated)
-                    }
-                }
-            }
-            
-            task.resume()
             
             weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
                 DispatchQueue.main.async {

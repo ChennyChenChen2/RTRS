@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -112,6 +112,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search by title, description, or date" id="QBW-ud-gQe">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -300,7 +301,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-ej-5Y0">
                                 <rect key="frame" x="0.0" y="114" width="414" height="397.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewLayout key="collectionViewLayout" id="zWJ-RI-WtQ" customClass="RTRSCustomCollectionViewFlowLayout" customModule="RTRS" customModuleProvider="target"/>
+                                <collectionViewLayout key="collectionViewLayout" id="MqT-2N-ksk" customClass="RTRSCustomCollectionViewFlowLayout" customModule="RTRS" customModuleProvider="target"/>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PodcastCell" id="o5p-8Q-ep5" customClass="PodcastCollectionViewCell" customModule="RTRS" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="341"/>
@@ -404,6 +405,11 @@
                             </activityIndicatorView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vgr-rn-PaH">
                                 <rect key="frame" x="18" y="630" width="378" height="31"/>
+                                <connections>
+                                    <action selector="seekBarTouchDown:" destination="z1F-01-woh" eventType="touchDown" id="jV3-ko-WdX"/>
+                                    <action selector="seekBarTouchUp:" destination="z1F-01-woh" eventType="touchUpInside" id="b2g-dj-dsr"/>
+                                    <action selector="seekBarValueChanged:" destination="z1F-01-woh" eventType="valueChanged" id="K1e-S1-5PO"/>
+                                </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFU-De-5aa">
                                 <rect key="frame" x="20" y="668" width="34" height="15"/>
@@ -468,6 +474,7 @@
                         <outlet property="forwardButton" destination="04m-aD-Oy1" id="Wkr-9K-8eU"/>
                         <outlet property="loadingSpinner" destination="5dq-BG-0bN" id="g8R-E9-Pzn"/>
                         <outlet property="playButton" destination="09P-SH-BCb" id="rFj-Jk-eI7"/>
+                        <outlet property="rateButton" destination="BHp-Yv-SzE" id="RaB-2v-bNa"/>
                         <outlet property="seekBar" destination="Vgr-rn-PaH" id="VKJ-8k-1ai"/>
                         <outlet property="titleLabel" destination="1xC-Xt-Boa" id="n4M-bV-3JY"/>
                     </connections>
@@ -526,11 +533,55 @@
                     <navigationItem key="navigationItem" title="MORE" id="qss-6s-tE4"/>
                     <connections>
                         <segue destination="e0p-yq-Sqf" kind="show" identifier="About" id="Bvv-Jk-y72"/>
+                        <segue destination="61u-pN-KfT" kind="show" identifier="extternalweb" id="roz-li-Ohd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZW-Ce-yfS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4421.739130434783" y="862.5"/>
+        </scene>
+        <!--External Web View Controller-->
+        <scene sceneID="W4u-72-FVR">
+            <objects>
+                <viewController id="61u-pN-KfT" customClass="RTRSExternalWebViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1KT-Wt-aGl">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGX-MN-ai2">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eFf-2u-ibE">
+                                        <rect key="frame" x="170" y="352" width="75" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="eFf-2u-ibE" firstAttribute="centerX" secondItem="FGX-MN-ai2" secondAttribute="centerX" id="HSM-2D-6Cb"/>
+                                    <constraint firstItem="eFf-2u-ibE" firstAttribute="centerY" secondItem="FGX-MN-ai2" secondAttribute="centerY" id="TyD-JY-5k9"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="FGX-MN-ai2" firstAttribute="top" secondItem="tB5-Lu-fqO" secondAttribute="top" id="DfG-tG-S7S"/>
+                            <constraint firstItem="FGX-MN-ai2" firstAttribute="centerX" secondItem="1KT-Wt-aGl" secondAttribute="centerX" id="HO0-8e-7qW"/>
+                            <constraint firstItem="FGX-MN-ai2" firstAttribute="bottom" secondItem="tB5-Lu-fqO" secondAttribute="bottom" id="Qfl-yV-sYU"/>
+                            <constraint firstItem="FGX-MN-ai2" firstAttribute="leading" secondItem="tB5-Lu-fqO" secondAttribute="leading" id="jFU-ee-U0z"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="tB5-Lu-fqO"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="nsO-ug-vN0"/>
+                    <connections>
+                        <outlet property="webViewContainer" destination="FGX-MN-ai2" id="sq2-OC-sKX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WB6-sZ-nuB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5169.5652173913049" y="862.5"/>
         </scene>
         <!--More-->
         <scene sceneID="kg5-Of-9I4">
@@ -672,7 +723,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A6w-eK-COk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5234.7826086956529" y="862.5"/>
+            <point key="canvasLocation" x="4422" y="1602"/>
         </scene>
         <!--Home-->
         <scene sceneID="D3Q-0k-rzw">

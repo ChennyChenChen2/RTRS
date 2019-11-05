@@ -37,6 +37,8 @@
 		879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D222E13EFE002F58CB /* ContentViewController.swift */; };
 		879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D522E1490F002F58CB /* RTRSTransittionCoordinator.swift */; };
 		879CE1D822E14A93002F58CB /* RTRSAuCornerTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D722E14A93002F58CB /* RTRSAuCornerTransition.swift */; };
+		879F1E68236CF51500DEE6C7 /* RTRSExternalWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */; };
+		879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879F1E69236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift */; };
 		87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87A53C8323555A8D006822F2 /* PodcastManager.swift */; };
 		87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */; };
 		87AA241C23483E49008C5907 /* RTRSSinglePodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AA241B23483E49008C5907 /* RTRSSinglePodViewModel.swift */; };
@@ -90,6 +92,8 @@
 		879CE1D222E13EFE002F58CB /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		879CE1D522E1490F002F58CB /* RTRSTransittionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSTransittionCoordinator.swift; sourceTree = "<group>"; };
 		879CE1D722E14A93002F58CB /* RTRSAuCornerTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAuCornerTransition.swift; sourceTree = "<group>"; };
+		879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RTRSExternalWebViewController.swift; path = RTRS/Controllers/More/RTRSExternalWebViewController.swift; sourceTree = "<group>"; };
+		879F1E69236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNewsletterViewModel.swift; sourceTree = "<group>"; };
 		87A53C8023516D9E006822F2 /* AUCornerArticle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCornerArticle.html; sourceTree = "<group>"; };
 		87A53C8323555A8D006822F2 /* PodcastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastManager.swift; sourceTree = "<group>"; };
 		87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSMultiPodViewModel.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 		87095A442263BC2B0081A540 = {
 			isa = PBXGroup;
 			children = (
+				879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */,
 				87095A4F2263BC2B0081A540 /* RTRS */,
 				87095A4E2263BC2B0081A540 /* Products */,
 				546E1403B66EE1B96ADF60DC /* Pods */,
@@ -338,6 +343,7 @@
 				87AA241923483E35008C5907 /* RTRSMultiPodViewModel.swift */,
 				87AA241B23483E49008C5907 /* RTRSSinglePodViewModel.swift */,
 				87AA241D2349403F008C5907 /* RTRSPodSourceViewModel.swift */,
+				879F1E69236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -481,6 +487,7 @@
 				8745B745232A8B93003A2351 /* RTRSDeepLinkHandler.swift in Sources */,
 				8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */,
 				87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */,
+				879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */,
 				87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */,
 				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
 				879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */,
@@ -501,6 +508,7 @@
 				87C3B5A922EBC76F00560958 /* ContentTableViewController.swift in Sources */,
 				879CE1CF22E137FA002F58CB /* RTRSPersistentStorage.swift in Sources */,
 				8746130F2308818C00C57400 /* RTRSAboutViewController.swift in Sources */,
+				879F1E68236CF51500DEE6C7 /* RTRSExternalWebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

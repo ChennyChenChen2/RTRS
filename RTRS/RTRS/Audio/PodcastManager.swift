@@ -14,15 +14,25 @@ class PodcastManager: NSObject {
 
     static let shared = PodcastManager()
     override private init() {}
-    fileprivate let viewModel = RTRSNavigation.shared.viewModel(for: .podSource)
     fileprivate var itemObserver: KeyValueObserver<AVPlayerItem>?
     fileprivate var playerObserver: KeyValueObserver<AVPlayer>?
+    fileprivate var player: AVPlayer?
     weak var delegate: PodcastManagerDelegate?
-    var player: AVPlayer?
+    var title: String?
     var rate: Float = 1.0 {
         didSet {
             self.setRate(rate: self.rate)
         }
+    }
+    
+    var duration: CMTime?
+    
+    func play() {
+        self.player?.play()
+    }
+    
+    func pause() {
+        self.player?.pause()
     }
     
     func skip(delta: Double) {
@@ -58,6 +68,7 @@ class PodcastManager: NSObject {
                 if newStatus == .readyToPlay {
                     if let player = weakSelf.player, let item = player.currentItem {
                         weakSelf.delegate?.podcastReadyToPlay(duration: item.duration)
+                        weakSelf.duration = item.duration
                     }
                 }
             }

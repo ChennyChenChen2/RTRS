@@ -10,12 +10,12 @@ import UIKit
 
 class RTRSHomeViewController: UITableViewController {
 
-    private var viewModel: RTRSHomeViewModel!
+    private var viewModel: RTRSHomeViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as! RTRSHomeViewModel)
+        self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
         
         self.navigationItem.customizeNavBarForHome()
         self.view.backgroundColor = .black
@@ -36,13 +36,13 @@ class RTRSHomeViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.items?.count ?? 0
+        return self.viewModel?.items?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let viewModelItems = self.viewModel.items else { return }
+        guard let viewModelItems = self.viewModel?.items else { return }
         
         let homeItem = viewModelItems[indexPath.row]
         
@@ -50,7 +50,7 @@ class RTRSHomeViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RTRSHomeTableViewCell.kReuseId, for: indexPath) as! RTRSHomeTableViewCell
-        if let items = self.viewModel.items {
+        if let items = self.viewModel?.items {
             let homeItem = items[indexPath.row]
             if let text = homeItem.text, let url = homeItem.imageUrl,
                 let actionText = homeItem.actionText {

@@ -10,6 +10,10 @@ import UIKit
 import SwiftSoup
 
 class RTRSAboutViewModel: NSObject, RTRSViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
+    
     func pageName() -> String {
         return self.name ?? "About"
     }

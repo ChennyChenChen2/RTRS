@@ -8,8 +8,9 @@
 
 import SwiftSoup
 
-protocol RTRSViewModel: NSCoding {
+protocol RTRSViewModel: NSObject, NSCoding {
     func extractDataFromDoc(doc: Document?, urls: [URL]?)
     func pageName() -> String
     func pageImage() -> UIImage
+    func pageUrl() -> URL?
 }

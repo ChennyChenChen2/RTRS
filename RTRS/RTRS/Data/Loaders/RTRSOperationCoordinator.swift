@@ -72,16 +72,17 @@ class RTRSOperationCoordinator {
                     }
                 }
             
-                if let podSource = theConfigDict["podSource"] as? String,
-                    let podSourceURL = URL(string: podSource) {
-                    let operation = RTRSOperation(urls: [podSourceURL], pageName: "Pod Source", type: "Pod Source")
+                if let podSource = theConfigDict["podSource"] as? [String: Any],
+                    let podSourceURLString = podSource["url"] as? String,
+                    let podSourceURL = URL(string: podSourceURLString), let lastUpdate = podSource["lastUpdate"] as? Int
+                {
+                    let operation = RTRSOperation(urls: [podSourceURL], pageName: "Pod Source", type: "Pod Source", lastUpdate: lastUpdate)
                     operation.customCompletion = operationCompletion
                     self.operationQueue.addOperation(operation)
                 }
                 
                 for page in pages {
-                    if let name = page["name"] as? String, let type = page["type"] as? String {
-                        
+                    if let name = page["name"] as? String, let type = page["type"] as? String, let lastUpdate = page["lastUpdate"] as? Int {
                         var urls = [URL]()
                         if let urlString = page["link"] as? String, let url = URL(string: urlString) {
                            urls.append(url)
@@ -93,14 +94,9 @@ class RTRSOperationCoordinator {
                             }
                         }
                         
-                        if type != "externallink" {
-                            let operation = RTRSOperation(urls: urls, pageName: name, type: type)
-                            operation.customCompletion = operationCompletion
-                            self.operationQueue.addOperation(operation)
-                        } else {
-                            // TODO: Get persisted viewModel?
-                            operationCompletion(nil)
-                        }
+                        let operation = RTRSOperation(urls: urls, pageName: name, type: type, lastUpdate: lastUpdate)
+                        operation.customCompletion = operationCompletion
+                        self.operationQueue.addOperation(operation)
                     }
                 }
         }

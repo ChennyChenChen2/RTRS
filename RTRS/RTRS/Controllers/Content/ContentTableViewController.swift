@@ -22,13 +22,15 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         super.viewDidLoad()
 
         self.searchBar.delegate = self
-        self.searchBar.searchTextField.textColor = .white
         self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
             self.viewModel = theViewModel
+            self.navigationItem.title = "AU'S CORNER"
         } else if self.contentType == .podcasts, let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
             self.viewModel = theViewModel
+            self.navigationItem.title = "THE POD"
         }
         
         if let content = self.viewModel?.content {

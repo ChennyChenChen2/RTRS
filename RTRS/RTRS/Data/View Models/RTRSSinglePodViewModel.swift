@@ -10,6 +10,9 @@ import UIKit
 import SwiftSoup
 
 class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
 
     let title: String?
     let dateString: String?

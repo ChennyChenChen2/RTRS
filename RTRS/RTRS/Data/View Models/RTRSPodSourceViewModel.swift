@@ -15,6 +15,10 @@ struct PodInfo {
 }
 
 class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
+    func pageUrl() -> URL? {
+        return nil
+    }
+    
     enum CodingKeys: String {
          case pods = "Pods"
      }
@@ -51,9 +55,16 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
         do {
             let items = try theDoc.getElementsByTag("item")
             for item in items {
-                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let link = URL(string: try linkElem.attr("url")) {
-                    let title = try titleElem.text()
-                    pods[title] = link
+                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let dateElem = try item.getElementsByTag("pubDate").first(), let dateString = try? dateElem.text(), let link = URL(string: try linkElem.attr("url")) {
+                    let inputFormatter = DateFormatter()
+                    inputFormatter.dateFormat = "E, dd MMM yyyyy HH:mm:ss Z" // Fri, 28 Dec 2018 18:51:20 +0000
+                    
+                    let outputFormatter = DateFormatter()
+                    outputFormatter.dateFormat = "MMMM dd, yyyy"
+                    if let date = inputFormatter.date(from: dateString) {
+                        let formattedString = outputFormatter.string(from: date)
+                        pods[formattedString] = link
+                    }
                 }
             }
             

@@ -74,8 +74,7 @@ class Announcement: NSObject, NSCoding {
     }
 }
 
-class RTRSHomeViewModel: NSObject, RTRSViewModel {
-    
+class RTRSHomeViewModel: NSObject, RTRSViewModel {    
     enum CodingKeys: String {
         case items = "Items"
         case name = "Name"
@@ -92,6 +91,10 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
     
     func pageImage() -> UIImage {
         return #imageLiteral(resourceName: "RickyLogo")
+    }
+    
+    func pageUrl() -> URL? {
+        return nil
     }
     
     func encode(with aCoder: NSCoder) {
