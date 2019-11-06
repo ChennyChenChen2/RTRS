@@ -29,6 +29,7 @@ class PodcastManager: NSObject {
     
     func play() {
         self.player?.play()
+        self.delegate?.podcastDidBeginPlay()
     }
     
     func pause() {
@@ -44,9 +45,10 @@ class PodcastManager: NSObject {
     
     func seek(location: Double) {
         if let player = self.player, let item = player.currentItem {
-//            let seekTime = (location / item.duration.seconds) * item.duration.seconds
-            let newTime = CMTimeMake(value: Int64(location), timescale: 1)
+            let seekTime = location * item.duration.seconds
+            let newTime = CMTimeMake(value: Int64(seekTime), timescale: 1)
             player.seek(to: newTime)
+            self.delegate?.podcastTimeDidUpdate(elapsed: newTime, position: Float(location))
         }
     }
     
@@ -78,6 +80,9 @@ class PodcastManager: NSObject {
             if let weakSelf = self, let item = weakSelf.player?.currentItem {
                 let duration = Float(item.duration.seconds)
                 weakSelf.delegate?.podcastTimeDidUpdate(elapsed: time, position: Float(time.seconds) / duration)
+                if time.seconds == item.duration.seconds {
+                    weakSelf.delegate?.podcastDidFinish()
+                }
             }
         })
         
@@ -95,5 +100,7 @@ class PodcastManager: NSObject {
 
 protocol PodcastManagerDelegate: NSObject {
     func podcastReadyToPlay(duration: CMTime)
+    func podcastDidFinish()
+    func podcastDidBeginPlay()
     func podcastTimeDidUpdate(elapsed: CMTime, position: Float)
 }

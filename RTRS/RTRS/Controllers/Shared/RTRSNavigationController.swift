@@ -12,6 +12,7 @@ class RTRSNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let appearanceProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [RTRSNavigationController.self])
         
         // Do any additional setup after loading the view.
     }

@@ -20,7 +20,8 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     }
     
     enum CodingKeys: String {
-         case pods = "Pods"
+        case pods = "Pods"
+        case podUrls = "Pod Urls"
      }
     
     func pageName() -> String {
@@ -33,20 +34,24 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     
     func encode(with coder: NSCoder) {
         coder.encode(self.pods, forKey: CodingKeys.pods.rawValue)
+        coder.encode(self.podUrls, forKey: CodingKeys.podUrls.rawValue)
     }
     
-    var pods = [String: URL]()
+    var pods = [String: URL]() // TODO: Guess we don't need this anymore
+    var podUrls = [URL]()
     
-    required init(doc: Document?, pods: [String: URL]?) {
+    required init(doc: Document?, pods: [String: URL]?, podUrls: [URL]? = nil) {
         self.pods = pods ?? [String: URL]()
+        self.podUrls = podUrls ?? [URL]()
         super.init()
         self.extractDataFromDoc(doc: doc, urls: nil)
     }
     
     required convenience init?(coder: NSCoder) {
         let pods = coder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [String: URL]
+        let podUrls = coder.decodeObject(forKey: CodingKeys.podUrls.rawValue) as? [URL]
         
-        self.init(doc: nil, pods: pods)
+        self.init(doc: nil, pods: pods, podUrls: podUrls)
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
@@ -64,6 +69,7 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
                     if let date = inputFormatter.date(from: dateString) {
                         let formattedString = outputFormatter.string(from: date)
                         pods[formattedString] = link
+                        podUrls.append(link)
                     }
                 }
             }

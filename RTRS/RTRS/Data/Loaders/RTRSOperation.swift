@@ -61,8 +61,8 @@ class RTRSOperation: Operation {
             shouldUpdate = true
         }
      
-//        if shouldUpdate {
-        if false {
+        if shouldUpdate {
+//        if true {
             do {
                 if let url = self.urls.first {
                     let htmlString = try String.init(contentsOf: url)

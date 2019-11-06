@@ -45,7 +45,10 @@ class RTRSHomeViewController: UITableViewController {
         guard let viewModelItems = self.viewModel?.items else { return }
         
         let homeItem = viewModelItems[indexPath.row]
-        
+        if let url = homeItem.actionUrl, let title = homeItem.text, let navVC = self.navigationController as? RTRSNavigationController {
+            let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
+            RTRSDeepLinkHandler.route(payload: payload, navController: navVC)
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

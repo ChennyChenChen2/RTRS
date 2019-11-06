@@ -25,6 +25,8 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "AU'S CORNER"

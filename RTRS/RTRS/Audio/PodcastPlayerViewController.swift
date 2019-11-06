@@ -156,7 +156,7 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row], let podDate = singlePodViewModel.dateString, let podUrl = self.sourceViewModel?.pods[podDate], let podTitle = singlePodViewModel.title, let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
+        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row], let podDate = singlePodViewModel.dateString, let podUrl = self.sourceViewModel?.podUrls[indexPath.row], let podTitle = singlePodViewModel.title, let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
             self.titleLabel.text = podTitle
             self.dateLabel.text = podDate
             PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
@@ -190,6 +190,15 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     func podcastTimeDidUpdate(elapsed: CMTime, position: Float) {
         self.seekBar.value = position
         self.elapsedLabel.text = "\(TimestampFormatter.timestamp(for: elapsed))"
+    }
+    
+    func podcastDidFinish() {
+        self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        PodcastManager.shared.pause()
+    }
+    
+    func podcastDidBeginPlay() {
+        self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
     }
 }
 
