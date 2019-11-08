@@ -24,26 +24,29 @@ class RTRSDeepLinkHandler: NSObject {
     static func route(payload: RTRSDeepLinkPayload, navController: RTRSNavigationController) {
         let url = payload.baseURL
         
-            var vc: UIViewController?
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
             
             if url.path.contains("podcast") || url.absoluteString.contains("bit.ly") {
                 do {
-                    let 
                     let document = Document(url.absoluteString)
                     let h1Elems = try document.getElementsByTag("h1")
                     let titleElems = h1Elems.filter { (element) -> Bool in
-                        element.hasClass("title")
+                        return element.hasClass("title")
                     }
                     if let titleElem = titleElems.first {
                         let text = try titleElem.text()
-                        let vm =
+                        let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as! RTRSMultiPodViewModel
+                        let filteredVms = vm.content.filter { (vm) -> Bool in
+                            guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
+                            return title == text
+                        }
                         
-                        
-                        
+                        if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                            let vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
+                            vc.viewModel = podVM
+                            navController.present(vc, animated: true, completion: nil)
+                        }
                     }
-                    
-                
                 } catch {
                     return
                 }

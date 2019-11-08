@@ -29,7 +29,7 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
     var multiPodViewModel: RTRSMultiPodViewModel?
-    var currentIndex: IndexPath?
+
     fileprivate var desiredRate: Float {
         if let rateText = self.rateButton.titleLabel?.text {
             let filteredText = rateText.replacingOccurrences(of: "x", with: "")
