@@ -42,7 +42,7 @@ class LoadingViewController: UIViewController {
             var dict: [String: Any]? // DO NOT DELETE: currently unused bc trying to test locally
             if let configDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
                 let messages = configDict["loadingMessages"] as? [String] {
-//                dict = configDict // DO NOT DELEETE for same reason above
+//                dict = configDict // DO NOT DELETE for same reason above
                 
                 do {
                     try data.write(to: LoadingViewController.cachedConfigPath)

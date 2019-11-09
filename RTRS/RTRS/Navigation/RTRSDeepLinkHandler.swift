@@ -27,28 +27,40 @@ class RTRSDeepLinkHandler: NSObject {
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
             
             if url.path.contains("podcast") || url.absoluteString.contains("bit.ly") {
-                do {
-                    let document = Document(url.absoluteString)
-                    let h1Elems = try document.getElementsByTag("h1")
-                    let titleElems = h1Elems.filter { (element) -> Bool in
-                        return element.hasClass("title")
-                    }
-                    if let titleElem = titleElems.first {
-                        let text = try titleElem.text()
-                        let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as! RTRSMultiPodViewModel
-                        let filteredVms = vm.content.filter { (vm) -> Bool in
-                            guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
-                            return title == text
+                let completion: (URL) -> () = { (url) in
+                    do {
+                        let htmlString = try String.init(contentsOf: url)
+                        let document = try SwiftSoup.parse(htmlString)
+                        let h1Elems = try document.getElementsByTag("h1")
+                        let titleElems = h1Elems.filter { (element) -> Bool in
+                            return element.hasClass("title")
                         }
                         
-                        if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
-                            let vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
-                            vc.viewModel = podVM
-                            navController.present(vc, animated: true, completion: nil)
+                        if let titleElem = titleElems.first,
+                            let text = try? titleElem.text(),
+                            let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
+                            let filteredVms = vm.content.filter { (vm) -> Bool in
+                                guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
+                                return title == text
+                            }
+                            
+                            if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                                DispatchQueue.main.async {
+                                    let vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
+                                    vc.viewModel = podVM
+                                    navController.present(vc, animated: true, completion: nil)
+                                }
+                            }
                         }
+                    } catch {
+                        return
                     }
-                } catch {
-                    return
+                }
+                
+                if url.path.contains("podcast") {
+                    completion(url)
+                } else if url.absoluteString.contains("bit.ly") {
+                    makeBitlyRequest(url, completion: completion)
                 }
             } else if url.path.contains("if-not-will-convey-as-two-second-rounders") {
                 if let vm = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
@@ -72,6 +84,29 @@ class RTRSDeepLinkHandler: NSObject {
                 vc.url = payload.baseURL
                 navController.present(vc, animated: true, completion: nil)
             }
+        
+    }
+    
+    fileprivate static func makeBitlyRequest(_ url: URL, completion: @escaping (URL) -> ()) {
+        let requestUrlString = "https://api-ssl.bitly.com/v3/expand?access_token=f7916216fac500f0cd358971fddb8399330ddb9f&shortUrl=\(url.absoluteString)"
+        if let requestUrl = URL(string: requestUrlString) {
+            URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
+                if error == nil {
+                    if let unwrappedData = data,
+                        let theData = try? JSONSerialization.jsonObject(with: unwrappedData, options: .allowFragments) as?  [String: Any],
+                        let dataDict = theData["data"] as? [String: [Any]],
+                        let expandArray = dataDict["expand"] {
+                        if expandArray.count > 0 {
+                            if let expandDict = expandArray[0] as? [String: Any],
+                            let longUrlString = expandDict["long_url"] as? String,
+                                let longUrl = URL(string: longUrlString) {
+                                completion(longUrl)
+                            }
+                        }
+                    }
+                }
+            }.resume()
+        }
         
     }
     

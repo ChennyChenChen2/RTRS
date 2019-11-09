@@ -11,6 +11,8 @@ import WebKit
 
 class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
 
+    @IBOutlet weak var webViewContainerTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var webViewContainer: UIView!
     fileprivate let webView = WKWebView()
     var url: URL?
@@ -26,6 +28,15 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
             self.webView.navigationDelegate = self
             self.webView.load(URLRequest(url: theUrl))
         }
+        
+        if !self.isBeingPresented {
+            self.dismissButton.isHidden = true
+            self.webViewContainerTopConstraint.constant = 0
+        }
+    }
+    
+    @IBAction func dismissButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

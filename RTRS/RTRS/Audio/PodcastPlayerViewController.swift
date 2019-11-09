@@ -156,15 +156,29 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row], let podDate = singlePodViewModel.dateString, let podUrl = self.sourceViewModel?.podUrls[indexPath.row], let podTitle = singlePodViewModel.title, let podCell = cell as? PodcastCollectionViewCell, let image = podCell.imageView.image {
+        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row],
+            let podDate = singlePodViewModel.dateString,
+            let podUrl = self.sourceViewModel?.podUrls[indexPath.row],
+            let podTitle = singlePodViewModel.title,
+            let podCell = cell as? PodcastCollectionViewCell {
             self.titleLabel.text = podTitle
             self.dateLabel.text = podDate
-            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
+            
+            if let image = podCell.imageView.image {
+                PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
+            } else if let imageUrl = singlePodViewModel.imageUrl {
+                podCell.imageView.pin_setImage(from: imageUrl) { (result) in
+                    if result.resultType != .none {
+                        if let image = podCell.imageView.image {
+                            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
+                        }
+                    }
+                }
+            }
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
         
         if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
@@ -185,6 +199,7 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         self.durationLabel.text = "\(TimestampFormatter.timestamp(for: duration))"
         
         PodcastManager.shared.play()
+        PodcastManager.shared.rate = self.desiredRate
     }
     
     func podcastTimeDidUpdate(elapsed: CMTime, position: Float) {

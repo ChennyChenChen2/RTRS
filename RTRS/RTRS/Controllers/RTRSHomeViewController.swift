@@ -16,6 +16,12 @@ class RTRSHomeViewController: UITableViewController {
         super.viewDidLoad()
 
         self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
+        if #available(iOS 11.0, *) {
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 50).isActive = true
+        }
+        
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
         
         self.navigationItem.customizeNavBarForHome()
         self.view.backgroundColor = .black
@@ -25,6 +31,12 @@ class RTRSHomeViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.setNeedsLayout()
         self.navigationController?.navigationBar.layoutIfNeeded()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if #available(iOS 11.0, *) {
+            print("HERE")
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
