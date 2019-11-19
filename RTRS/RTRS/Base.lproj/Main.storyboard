@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -565,9 +565,9 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mHH-u7-XvV">
-                                <rect key="frame" x="20" y="102" width="18" height="22"/>
+                                <rect key="frame" x="20" y="102" width="70" height="34"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" image="xmark" catalog="system"/>
+                                <state key="normal" title="DISMISS"/>
                                 <connections>
                                     <action selector="dismissButtonPressed:" destination="61u-pN-KfT" eventType="touchUpInside" id="K7D-FN-BSP"/>
                                 </connections>
@@ -621,13 +621,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="-5.5" y="188" width="425.00000000000011" height="530"/>
+                                <rect key="frame" x="-218" y="-77" width="850" height="1060"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="738" width="20" height="20"/>
+                                <rect key="frame" x="197" y="1003" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="23" y="773" width="368" height="21"/>
+                                <rect key="frame" x="23" y="1038" width="368" height="21"/>
                                 <attributedString key="attributedText">
                                     <fragment content="PROCESSING.......................">
                                         <attributes>
@@ -838,7 +838,6 @@
         <image name="RickyLogo" width="425" height="530"/>
         <image name="Skip-Back" width="25" height="25"/>
         <image name="Skip-Forward" width="25" height="25"/>
-        <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Zeb-4G-3Q6"/>

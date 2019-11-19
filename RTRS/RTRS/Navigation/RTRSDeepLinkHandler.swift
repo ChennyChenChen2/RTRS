@@ -33,7 +33,7 @@ class RTRSDeepLinkHandler: NSObject {
                         let document = try SwiftSoup.parse(htmlString)
                         let h1Elems = try document.getElementsByTag("h1")
                         let titleElems = h1Elems.filter { (element) -> Bool in
-                            return element.hasClass("title")
+                            return element.hasClass("title") || element.hasClass("entry-title")
                         }
                         
                         if let titleElem = titleElems.first,

@@ -6,9 +6,11 @@
 //  Copyright © 2019 Jonathan Chen. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
 import WebKit
 import Firebase
+import MediaPlayer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -21,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        
+
         setRootViewController()
         return true
     }
