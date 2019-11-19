@@ -84,10 +84,6 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                         guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
                         let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { continue }
                         
-                        if let dateAElem = try? dateElement.getElementsByTag("a").first() {
-                            try dateAElem.remove()
-                        }
-                        
                         var theTitle = title
                         if let openBracketIndex = title.firstIndex(of: "["), let closeBracketIndex = title.firstIndex(of: "]") {
                             theTitle.removeSubrange(openBracketIndex...closeBracketIndex)

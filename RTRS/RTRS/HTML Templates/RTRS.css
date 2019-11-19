@@ -19,3 +19,12 @@ a {
     font-weight: bold;
     text-align: center;
 }
+
+twitter-widget {
+    margin: auto;
+}
+
+iframe {
+    margin: auto;
+    display: block;
+}

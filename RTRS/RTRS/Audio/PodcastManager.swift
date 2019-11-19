@@ -68,11 +68,6 @@ class PodcastManager: NSObject {
             print(error)
         }
         
-        self.player.pause()
-        let item = AVPlayerItem(url: url)
-        self.player = AVPlayer(playerItem: item)
-        self.player.automaticallyWaitsToMinimizeStalling = false
-        
         var nowPlayingInfo = [String:Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
         nowPlayingInfo[MPMediaItemPropertyArtist] = "The Rights to Ricky Sanchez"
@@ -81,6 +76,11 @@ class PodcastManager: NSObject {
 //        })
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         self.configureCommandCenter()
+        
+        self.player.pause()
+        let item = AVPlayerItem(url: url)
+        self.player = AVPlayer(playerItem: item)
+        self.player.automaticallyWaitsToMinimizeStalling = false
         
         self.itemObserver = KeyValueObserver(observee: item)
         self.itemObserver?.addObserver(forKeyPath: "status", options: [.old, .new], closure: { [weak self] (item, changes) in
@@ -106,7 +106,6 @@ class PodcastManager: NSObject {
     }
     
     fileprivate func configureCommandCenter() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
         
         let commandCenter = MPRemoteCommandCenter.shared()
 /*         commandCenter.skipForwardCommand.isEnabled = true

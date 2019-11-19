@@ -91,10 +91,6 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                         guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
                         let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { continue }
                         
-                        if let dateAElem = try? dateElement.getElementsByTag("a").first() {
-                            try dateAElem.remove()
-                        }
-                        
                         var dateString = ""
                         if let newDate = try? dateElement.text() {
                             dateString = newDate

@@ -80,10 +80,18 @@ class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel, SingleContentView
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
         guard let theDoc = doc else { return }
         do {
-            if let divElem = try theDoc.getElementsByClass("main-content-wrapper").first() {
+            if let divElem = try theDoc.getElementsByClass("content-wrapper").first() {
                 
                 if let titleElem = try divElem.getElementsByClass("title").first() {
                     try titleElem.remove()
+                }
+                
+                if let headerElem = try divElem.getElementsByTag("header").first() {
+                    try headerElem.remove()
+                }
+                
+                if let footerElem = try divElem.getElementsByTag("footer").first() {
+                    try footerElem.remove()
                 }
 
                 if let dateAuthorElem = try divElem.getElementsByClass("date-author").first() {

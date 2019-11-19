@@ -16,7 +16,7 @@
 			"name": "Home",
 			"link": "https://www.rightstorickysanchez.com",
 			"type": "homepage",
-            "lastUpdate": 1573322829,
+            "lastUpdate": 1574199067,
             "announcement":
             {
                 "title": "Join the Bark in the Park team!",
@@ -27,12 +27,12 @@
 			"name": "About",
 			"link": "https://www.rightstorickysanchez.com/about",
 			"type": "descriptionPage",
-            "lastUpdate": 1573322829
+            "lastUpdate": 1574199067
 		},
 		{
             "name": "The Pod",
             "type": "multimedia",
-            "lastUpdate": 1573322829,
+            "lastUpdate": 1574199067,
             "links": ["https://www.rightstorickysanchez.com/podcast",
                     "https://www.rightstorickysanchez.com/podcast?offset=1563022800515",
                     "https://www.rightstorickysanchez.com/podcast?offset=1557717089396",
@@ -56,30 +56,30 @@
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1537799312931",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1525602099530"],
             "type": "contentlist",
-            "lastUpdate": 1573322829
+            "lastUpdate": 1574199067
         },
         {
             "name": "Newsletter",
             "link": "https://www.rightstorickysanchez.com/newsletter",
             "type": "externallink",
-            "lastUpdate": 1573322829
+            "lastUpdate": 1574199067
         },
         {
             "name": "Process Pups",
             "link": "https://www.rightstorickysanchez.com/processpups",
             "type": "contentlist",
-            "lastUpdate": 1573322829
+            "lastUpdate": 1574199067
         },
         {
             "name": "T-Shirt Store",
             "link": "https://crackedbellphl.com/collections/rights-to-ricky-sanchez",
             "type": "externallink",
-            "lastUpdate": 1573322829
+            "lastUpdate": 1574199067
         }
 	],
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
-        "lastUpdate": 1573322829
+        "lastUpdate": 1574199067
     },
     "moreItems": [
         "About",
