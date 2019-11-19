@@ -549,10 +549,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FGX-MN-ai2">
-                                <rect key="frame" x="0.0" y="142" width="414" height="671"/>
+                                <rect key="frame" x="0.0" y="148" width="414" height="665"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eFf-2u-ibE">
-                                        <rect key="frame" x="169.5" y="352" width="75" height="21"/>
+                                        <rect key="frame" x="169.5" y="349" width="75" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -575,10 +575,11 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="FGX-MN-ai2" firstAttribute="top" secondItem="tB5-Lu-fqO" secondAttribute="top" constant="54" id="DfG-tG-S7S"/>
+                            <constraint firstItem="FGX-MN-ai2" firstAttribute="top" secondItem="tB5-Lu-fqO" secondAttribute="top" constant="60" id="DfG-tG-S7S"/>
                             <constraint firstItem="mHH-u7-XvV" firstAttribute="leading" secondItem="1KT-Wt-aGl" secondAttribute="leading" constant="20" id="GZI-4I-6kN"/>
                             <constraint firstItem="FGX-MN-ai2" firstAttribute="centerX" secondItem="1KT-Wt-aGl" secondAttribute="centerX" id="HO0-8e-7qW"/>
                             <constraint firstItem="FGX-MN-ai2" firstAttribute="bottom" secondItem="tB5-Lu-fqO" secondAttribute="bottom" id="Qfl-yV-sYU"/>
+                            <constraint firstItem="tB5-Lu-fqO" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mHH-u7-XvV" secondAttribute="trailing" symbolic="YES" id="Syx-e0-Agk"/>
                             <constraint firstItem="mHH-u7-XvV" firstAttribute="top" secondItem="tB5-Lu-fqO" secondAttribute="top" constant="14" id="czD-Vh-5xx"/>
                             <constraint firstItem="FGX-MN-ai2" firstAttribute="leading" secondItem="tB5-Lu-fqO" secondAttribute="leading" id="jFU-ee-U0z"/>
                         </constraints>
@@ -621,13 +622,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="-218" y="-77" width="850" height="1060"/>
+                                <rect key="frame" x="0.0" y="183" width="414.00000000000011" height="530"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="1003" width="20" height="20"/>
+                                <rect key="frame" x="197" y="715" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="23" y="1038" width="368" height="21"/>
+                                <rect key="frame" x="91.5" y="743" width="231.5" height="21"/>
                                 <attributedString key="attributedText">
                                     <fragment content="PROCESSING.......................">
                                         <attributes>
@@ -642,13 +643,13 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="foi-eb-7Nd" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="2pG-lC-4Uv"/>
-                            <constraint firstItem="Lav-yv-9vI" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="6b0-Fc-jI9"/>
-                            <constraint firstItem="Lav-yv-9vI" firstAttribute="centerY" secondItem="FHc-KF-Pgd" secondAttribute="centerY" id="FvC-Ys-DQy"/>
-                            <constraint firstItem="uNp-jz-1uH" firstAttribute="top" secondItem="foi-eb-7Nd" secondAttribute="bottom" constant="15" id="ZF7-Hg-DUl"/>
-                            <constraint firstItem="foi-eb-7Nd" firstAttribute="top" secondItem="Lav-yv-9vI" secondAttribute="bottom" constant="20" id="h1f-i2-xSH"/>
-                            <constraint firstItem="FHc-KF-Pgd" firstAttribute="trailing" secondItem="uNp-jz-1uH" secondAttribute="trailing" constant="23" id="oWc-uo-nxH"/>
-                            <constraint firstItem="uNp-jz-1uH" firstAttribute="leading" secondItem="FHc-KF-Pgd" secondAttribute="leading" constant="23" id="sEP-BV-SYC"/>
+                            <constraint firstItem="Lav-yv-9vI" firstAttribute="leading" secondItem="FHc-KF-Pgd" secondAttribute="leading" id="9cH-Dm-LSu"/>
+                            <constraint firstItem="uNp-jz-1uH" firstAttribute="top" secondItem="foi-eb-7Nd" secondAttribute="bottom" constant="8" id="9hb-aB-Zce"/>
+                            <constraint firstItem="Lav-yv-9vI" firstAttribute="centerY" secondItem="Kq0-8G-6K4" secondAttribute="centerY" id="XD7-sI-0IL"/>
+                            <constraint firstItem="foi-eb-7Nd" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="daV-Bd-Qe4"/>
+                            <constraint firstAttribute="trailing" secondItem="Lav-yv-9vI" secondAttribute="trailing" id="e00-xV-Hhk"/>
+                            <constraint firstItem="uNp-jz-1uH" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="k1N-bt-xh7"/>
+                            <constraint firstItem="foi-eb-7Nd" firstAttribute="top" secondItem="Lav-yv-9vI" secondAttribute="bottom" constant="2" id="vfP-6i-d7J"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FHc-KF-Pgd"/>
                     </view>

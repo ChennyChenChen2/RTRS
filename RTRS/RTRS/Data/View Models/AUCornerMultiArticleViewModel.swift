@@ -66,10 +66,21 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                 let postElements = try doc.getElementsByTag("article")
                 for i in 0..<postElements.count {
                     let postElement = postElements[i]
+                    
+                    var theTitleElem: Element? = try? postElement.getElementsByClass("title").first()
+                    if theTitleElem == nil {
+                        theTitleElem = try? postElement.getElementsByClass("entry-title").first()
+                    }
+                    
+                    var theDateElem: Element? = try? postElement.getElementsByClass("date-author").first()
+                    if theDateElem == nil {
+                        theDateElem = try? postElement.getElementsByClass("date").first()
+                    }
+                    
                     let imageElement = try postElement.getElementsByClass("squarespace-social-buttons inline-style")
-                    if let titleElement = try? postElement.getElementsByClass("title").first(),
+                    if let titleElement = theTitleElem,
                         let aElement = try? titleElement.getElementsByTag("a").first(),
-                        let dateElement = try? postElement.getElementsByClass("date-author").first(),
+                        let dateElement = theDateElem,
                         let title = try? aElement.text(),
                         let urlSuffix = try? aElement.attr("href"),
                         let descriptionTextElement = try? postElement.getElementsByTag("p").first(),

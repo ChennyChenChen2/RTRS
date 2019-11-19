@@ -109,7 +109,7 @@ class PodcastManager: NSObject {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.skipForwardCommand.isEnabled = true
+/*         commandCenter.skipForwardCommand.isEnabled = true
         commandCenter.skipForwardCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
             guard let weakSelf = self else { return .commandFailed }
             
@@ -130,6 +130,8 @@ class PodcastManager: NSObject {
             }
             return .commandFailed
         }
+ 
+ */
 
         commandCenter.playCommand.isEnabled = true
         commandCenter.playCommand.addTarget { [weak self] event in
