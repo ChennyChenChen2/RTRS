@@ -165,12 +165,12 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
             self.dateLabel.text = podDate
             
             if let image = podCell.imageView.image {
-                PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
+                PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
             } else if let imageUrl = singlePodViewModel.imageUrl {
                 podCell.imageView.pin_setImage(from: imageUrl) { (result) in
                     if result.resultType != .none {
                         if let image = podCell.imageView.image {
-                            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image)
+                            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
                         }
                     }
                 }

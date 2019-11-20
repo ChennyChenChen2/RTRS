@@ -49,6 +49,7 @@ class RTRSDeepLinkHandler: NSObject {
                                     let vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
                                     vc.viewModel = podVM
                                     navController.present(vc, animated: true, completion: nil)
+                                    PodcastManager.shared.currentPodVC = vc
                                 }
                             }
                         }

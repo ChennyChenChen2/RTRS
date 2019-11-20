@@ -78,10 +78,16 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
                 if let viewModel = self.viewModel?.content.first(where: { (vm) -> Bool in
                     return vm.title == title
                 }) as? RTRSSinglePodViewModel {
-                    let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-                    let vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
-                    
-                    vc.viewModel = viewModel
+                    var vc: PodcastPlayerViewController!
+                    if let theVC = PodcastManager.shared.currentPodVC, let currentPodTitle = PodcastManager.shared.title, title == currentPodTitle {
+                        vc = theVC
+                    } else {
+                        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+                        vc = storyboard.instantiateViewController(withIdentifier: self.playerId) as! PodcastPlayerViewController
+                        
+                        vc.viewModel = viewModel
+                        PodcastManager.shared.currentPodVC = vc
+                    }
                     
                     self.present(vc, animated: true, completion: nil)
                 }

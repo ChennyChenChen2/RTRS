@@ -16,9 +16,6 @@ class RTRSHomeViewController: UITableViewController {
         super.viewDidLoad()
 
         self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
-        if #available(iOS 11.0, *) {
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 50).isActive = true
-        }
         
         self.view.setNeedsLayout()
         self.view.layoutIfNeeded()
