@@ -44,12 +44,18 @@ class RTRSDeepLinkHandler: NSObject {
                                 return title == text
                             }
                             
-                            if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
-                                DispatchQueue.main.async {
-                                    let vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
-                                    vc.viewModel = podVM
+                            DispatchQueue.main.async {
+                                if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                                     var vc: PodcastPlayerViewController!
+                                    if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
+                                         vc = theVC
+                                     } else {
+                                         vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
+                                         vc.viewModel = podVM
+                                         PodcastManager.shared.currentPodVC = vc
+                                     }
+                                    
                                     navController.present(vc, animated: true, completion: nil)
-                                    PodcastManager.shared.currentPodVC = vc
                                 }
                             }
                         }

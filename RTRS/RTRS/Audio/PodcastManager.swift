@@ -27,6 +27,14 @@ class PodcastManager: NSObject {
     var dateString: String?
     var currentPodVC: PodcastPlayerViewController?
     
+    var isPlaying: Bool {
+        if let player = self.player {
+            return player.rate > 0
+        } else {
+            return false
+        }
+    }
+    
     var rate: Float = 1.0 {
         didSet {
             self.setRate(rate: self.rate)
