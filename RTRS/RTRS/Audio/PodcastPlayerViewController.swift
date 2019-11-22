@@ -82,11 +82,13 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     
     @IBAction func playButtonPressed(_ sender: Any) {
         let manager = PodcastManager.shared
-        if manager.rate > 0 {
+        if manager.isPlaying {
             manager.rate = 0
+            manager.pause()
             self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
         } else {
             manager.rate = self.desiredRate
+            manager.play()
             self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
         }
     }
@@ -214,6 +216,10 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     
     func podcastDidBeginPlay() {
         self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+    }
+    
+    func podcastDidPause() {
+        self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
     }
 }
 

@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+import MarqueeLabel
 
 class PodcastManager: NSObject {
 
@@ -26,6 +27,7 @@ class PodcastManager: NSObject {
     var title: String?
     var dateString: String?
     var currentPodVC: PodcastPlayerViewController?
+    var tabPlayerView: TabBarPlayerView?
     
     var isPlaying: Bool {
         if let player = self.player {
@@ -46,10 +48,13 @@ class PodcastManager: NSObject {
     func play() {
         self.player?.play()
         self.delegate?.podcastDidBeginPlay()
+        self.tabPlayerView?.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
     }
     
     func pause() {
         self.player?.pause()
+        self.delegate?.podcastDidPause()
+        self.tabPlayerView?.playPauseButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
     }
     
     func skip(delta: Double) {
@@ -73,6 +78,9 @@ class PodcastManager: NSObject {
     }
     
     func preparePlayer(title: String, url: URL, image: UIImage, dateString: String) {
+        self.tabPlayerView?.titleLabel.text = title
+        self.tabPlayerView?.dateLabel.text = dateString
+        
         self.title = title
         self.dateString = dateString
         
@@ -191,9 +199,73 @@ protocol PodcastManagerDelegate: NSObject {
     func podcastReadyToPlay(duration: CMTime)
     func podcastDidFinish()
     func podcastDidBeginPlay()
+    func podcastDidPause()
     func podcastTimeDidUpdate(elapsed: CMTime, position: Float)
 }
 
 extension Notification.Name {
     static let PodcastManagerLoadedNewPod = Notification.Name("PodcastManagerLoadedNewPod")
+    static let PodcastManagerDidPlay = Notification.Name("PodcastManagerDidPlay")
+    static let PodcastManagerDidPause = Notification.Name("PodcastManagerDidPause")
+}
+
+class TabBarPlayerView: UIView {
+    fileprivate var playPauseButton: UIButton
+    fileprivate var titleLabel: MarqueeLabel
+    fileprivate var dateLabel: MarqueeLabel
+    
+    override init(frame: CGRect) {
+        self.playPauseButton = UIButton()
+        self.titleLabel = MarqueeLabel()
+        self.dateLabel = MarqueeLabel()
+        
+        super.init(frame: frame)
+        self.backgroundColor = .black
+        self.layer.borderColor = UIColor.darkGray.cgColor
+        self.layer.borderWidth = 1.0
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        let manager = PodcastManager.shared
+        if let title = manager.title, let date = manager.dateString {
+            let titleLabel = MarqueeLabel()
+            titleLabel.text = "\(title) "
+            titleLabel.textColor = .white
+            titleLabel.font = Utils.defaultFontBold
+            titleLabel.sizeToFit()
+            titleLabel.frame.size.width = self.frame.size.width * 0.75
+            titleLabel.frame = CGRect(x: 10, y: 5, width: titleLabel.frame.size.width, height: titleLabel.frame.size.height)
+            
+            let dateLabel = MarqueeLabel()
+            dateLabel.text = "\(date) "
+            dateLabel.textColor = .white
+            dateLabel.font = Utils.defaultFont
+            dateLabel.sizeToFit()
+            dateLabel.frame.size.width = self.frame.size.width * 0.75
+            dateLabel.frame = CGRect(x: 10, y: titleLabel.bounds.origin.y + 10 + dateLabel.frame.size.height, width: dateLabel.frame.size.width, height: dateLabel.frame.size.height)
+            
+            self.playPauseButton = UIButton()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+            self.playPauseButton.frame = CGRect(x: self.frame.size.width - 50, y: (self.frame.size.height / 2) - 12, width: 25, height: 25)
+            self.playPauseButton.addTarget(self, action: #selector(playerViewPlayPauseAction), for: .touchUpInside)
+            
+            self.addSubview(titleLabel)
+            self.addSubview(dateLabel)
+            self.addSubview(self.playPauseButton)
+        }
+    }
+    
+    @objc func playerViewPlayPauseAction() {
+        if PodcastManager.shared.isPlaying {
+            PodcastManager.shared.pause()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        } else {
+            PodcastManager.shared.play()
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        }
+    }
 }
