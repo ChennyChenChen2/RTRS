@@ -22,6 +22,8 @@ class RTRSHomeViewController: UITableViewController {
         
         self.navigationItem.customizeNavBarForHome()
         self.view.backgroundColor = .black
+        
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
