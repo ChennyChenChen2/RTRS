@@ -22,7 +22,6 @@ class RTRSMoreViewModel: NSObject, RTRSViewModel {
         return #imageLiteral(resourceName: "More-Icon")
     }
     
-    
     enum CodingKeys: String {
         case pages = "Pages"
     }

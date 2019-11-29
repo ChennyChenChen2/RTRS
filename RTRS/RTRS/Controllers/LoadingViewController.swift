@@ -37,6 +37,32 @@ class LoadingViewController: UIViewController {
         self.activityIndicator.startAnimating()
         
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
+            
+            func doStartup(dict: [String: Any]?) {
+                guard let weakSelf = self else { return }
+                weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
+                    if success {
+                        DispatchQueue.main.async {
+                            weakSelf.activityIndicator.stopAnimating()
+                            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+                            let vc = storyboard.instantiateViewController(withIdentifier: "Home")
+                            weakSelf.navigationController?.setViewControllers([vc], animated: true)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            let alert = UIAlertController(title: "Something went wrong. You hate to see it.", message: "Maybe your internet is as bad as AU's. Please try again later, or contact Kornblau if you suspect someone is sabotaging you.", preferredStyle: .alert)
+                            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(action)
+                            weakSelf.present(alert, animated: true, completion: nil)
+                        }
+                    }
+                }
+            }
+            
+            if error != nil {
+                doStartup(dict: nil)
+            }
+            
             guard let data = data, let weakSelf = self else { return }
             
             var dict: [String: Any]? // DO NOT DELETE: currently unused bc trying to test locally
@@ -64,14 +90,7 @@ class LoadingViewController: UIViewController {
                 }
             }
             
-            weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
-                DispatchQueue.main.async {
-                    weakSelf.activityIndicator.stopAnimating()
-                    let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "Home")
-                    weakSelf.navigationController?.setViewControllers([vc], animated: true)
-                }
-            }
+            doStartup(dict: dict)
         }.resume()
     }
 }

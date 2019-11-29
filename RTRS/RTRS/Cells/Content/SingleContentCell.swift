@@ -12,12 +12,12 @@ import PINRemoteImage
 class SingleContentCell: UITableViewCell {
 
     @IBOutlet weak var previewImageView: UIImageView!
-    @IBOutlet weak var auTitleLabel: UILabel!
+    @IBOutlet weak var contentTitleLabel: UILabel!
     @IBOutlet weak var auDescriptionLabel: UILabel!
     @IBOutlet weak var auTimestampLabel: UILabel!
     
     func applyViewModel(viewModel: SingleContentViewModel) {
-        self.auTitleLabel.text = viewModel.title
+        self.contentTitleLabel.text = viewModel.title
         self.auDescriptionLabel.text = viewModel.contentDescription
         self.auTimestampLabel.text = viewModel.dateString
         

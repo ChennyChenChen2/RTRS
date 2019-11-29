@@ -26,6 +26,7 @@ enum RTRSScreenType: String, Hashable {
     case contact = "Contact"
     case advertise = "Advertise"
     case more = "More"
+    case saved = "Saved"
     
     var rawValue: String {
         switch self {
@@ -61,6 +62,8 @@ enum RTRSScreenType: String, Hashable {
             return "Advertise"
         case .more:
             return "More"
+        case .saved:
+            return "Saved"
         }
     }
 }

@@ -25,6 +25,7 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     @IBOutlet weak var elapsedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var rateButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     
     var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
@@ -53,7 +54,6 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         
         PodcastManager.shared.delegate = self
         self.playButton.isHidden = true
-        self.loadingSpinner.startAnimating()
        
         if let viewModel = self.multiPodViewModel, let index = viewModel.content.firstIndex(where: { (vm) -> Bool in
             return vm.title == self.viewModel.title
@@ -67,12 +67,21 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.saveButton.setImage(RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
-            return vm.title == self.viewModel.title
-        }) {
-            self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
+        
+        if PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title {
+            
+            if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
+                return vm.title == self.viewModel.title
+            }) {
+                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
+            }
         }
     }
     
@@ -99,6 +108,16 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     
     @IBAction func forwardButtonPressed(_ sender: Any) {
         PodcastManager.shared.skip(delta: 15.0)
+    }
+    
+    @IBAction func saveButtonPresssed(_ sender: Any) {
+        if RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) {
+            RTRSPersistentStorage.unsaveContent(self.viewModel)
+            self.saveButton.setImage(#imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
+        } else {
+            RTRSPersistentStorage.saveContent(self.viewModel)
+            self.saveButton.setImage(#imageLiteral(resourceName: "Heart-Fill"), for: .normal)
+        }
     }
     
     @IBAction func seekBarValueChanged(_ sender: Any) {
@@ -164,7 +183,12 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
             let podTitle = singlePodViewModel.title,
             let podCell = cell as? PodcastCollectionViewCell {
             self.titleLabel.text = podTitle
+            self.elapsedLabel.text = "00:00:00"
             self.dateLabel.text = podDate
+            
+            self.loadingSpinner.startAnimating()
+            self.loadingSpinner.isHidden = false
+            self.playButton.isHidden = true
             
             if let image = podCell.imageView.image {
                 PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)

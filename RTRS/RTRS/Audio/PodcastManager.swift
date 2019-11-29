@@ -78,9 +78,6 @@ class PodcastManager: NSObject {
     }
     
     func preparePlayer(title: String, url: URL, image: UIImage, dateString: String) {
-        self.tabPlayerView?.titleLabel.text = title
-        self.tabPlayerView?.dateLabel.text = dateString
-        
         self.title = title
         self.dateString = dateString
         
@@ -210,9 +207,9 @@ extension Notification.Name {
 }
 
 class TabBarPlayerView: UIView {
-    fileprivate var playPauseButton: UIButton
-    fileprivate var titleLabel: MarqueeLabel
-    fileprivate var dateLabel: MarqueeLabel
+    fileprivate var playPauseButton: UIButton!
+    fileprivate var titleLabel: MarqueeLabel!
+    fileprivate var dateLabel: MarqueeLabel!
     
     override init(frame: CGRect) {
         self.playPauseButton = UIButton()
@@ -231,30 +228,30 @@ class TabBarPlayerView: UIView {
     
     override func layoutSubviews() {
         let manager = PodcastManager.shared
-        if let title = manager.title, let date = manager.dateString {
-            let titleLabel = MarqueeLabel()
-            titleLabel.text = "\(title) "
-            titleLabel.textColor = .white
-            titleLabel.font = Utils.defaultFontBold
-            titleLabel.sizeToFit()
-            titleLabel.frame.size.width = self.frame.size.width * 0.75
-            titleLabel.frame = CGRect(x: 10, y: 5, width: titleLabel.frame.size.width, height: titleLabel.frame.size.height)
+        if let title = manager.title, let dateString = manager.dateString {
+            self.titleLabel = MarqueeLabel()
+            self.titleLabel.text = title
+            self.titleLabel.textColor = .white
+            self.titleLabel.font = Utils.defaultFontBold
+            self.titleLabel.sizeToFit()
+            self.titleLabel.frame.size.width = self.frame.size.width * 0.75
+            self.titleLabel.frame = CGRect(x: 10, y: 5, width: self.titleLabel.frame.size.width, height: self.titleLabel.frame.size.height)
             
-            let dateLabel = MarqueeLabel()
-            dateLabel.text = "\(date) "
-            dateLabel.textColor = .white
-            dateLabel.font = Utils.defaultFont
-            dateLabel.sizeToFit()
-            dateLabel.frame.size.width = self.frame.size.width * 0.75
-            dateLabel.frame = CGRect(x: 10, y: titleLabel.bounds.origin.y + 10 + dateLabel.frame.size.height, width: dateLabel.frame.size.width, height: dateLabel.frame.size.height)
+            self.dateLabel = MarqueeLabel()
+            self.dateLabel.text = dateString
+            self.dateLabel.textColor = .white
+            self.dateLabel.font = Utils.defaultFont
+            self.dateLabel.sizeToFit()
+            self.dateLabel.frame.size.width = self.frame.size.width * 0.75
+            self.dateLabel.frame = CGRect(x: 10, y: self.titleLabel.bounds.origin.y + 10 + self.dateLabel.frame.size.height, width: self.dateLabel.frame.size.width, height: self.dateLabel.frame.size.height)
             
             self.playPauseButton = UIButton()
             self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
             self.playPauseButton.frame = CGRect(x: self.frame.size.width - 50, y: (self.frame.size.height / 2) - 12, width: 25, height: 25)
             self.playPauseButton.addTarget(self, action: #selector(playerViewPlayPauseAction), for: .touchUpInside)
             
-            self.addSubview(titleLabel)
-            self.addSubview(dateLabel)
+            self.addSubview(self.titleLabel)
+            self.addSubview(self.dateLabel)
             self.addSubview(self.playPauseButton)
         }
     }

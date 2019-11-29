@@ -33,6 +33,8 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
             self.dismissButton.isHidden = true
             self.webViewContainerTopConstraint.constant = 0
         }
+        
+        self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right: 0)
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {

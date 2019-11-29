@@ -18,6 +18,7 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var webViewHeightConstraint: NSLayoutConstraint!
     
+    var saveButton: UIBarButtonItem!
     var viewModel: AUCornerSingleArticleViewModel?
     var webView: WKWebView?
     var webViewContentObservation: NSKeyValueObservation?
@@ -25,8 +26,14 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        guard let vm = self.viewModel else { return }
+        
         self.view.backgroundColor = .black
         self.scrollView.backgroundColor = .black
+        self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
+        
+        self.saveButton = UIBarButtonItem(title: RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) ? "Unsave" : "Save", style: .plain, target: self, action: #selector(saveAction))
+        self.navigationItem.rightBarButtonItem = saveButton
         
         self.imageView.pin_setImage(from: self.viewModel?.imageUrl)
         
@@ -71,6 +78,18 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
         self.webView?.rightAnchor.constraint(equalTo: self.webViewContainer.rightAnchor, constant: 2.5).isActive = true
         self.webView?.topAnchor.constraint(equalTo: self.webViewContainer.topAnchor, constant: 5.0).isActive = true
         self.webView?.bottomAnchor.constraint(equalTo: self.webViewContainer.bottomAnchor).isActive = true
+    }
+    
+    @objc func saveAction() {
+        if let vm = self.viewModel {
+            if RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) {
+                RTRSPersistentStorage.unsaveContent(vm)
+                self.saveButton.title = "Save"
+            } else {
+                RTRSPersistentStorage.saveContent(vm)
+                self.saveButton.title = "Unsave"
+            }
+        }
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

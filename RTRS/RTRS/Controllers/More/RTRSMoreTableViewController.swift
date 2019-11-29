@@ -11,7 +11,8 @@ import UIKit
 class RTRSMoreTableViewController: UITableViewController {
 
     fileprivate let cellReuseId = "MoreCell"
-    fileprivate let externalBrowserSegueId = "extternalweb"
+    fileprivate let externalBrowserSegueId = "externalweb"
+    fileprivate let savedContentSegueId = "Saved"
     var viewModel: RTRSMoreViewModel?
     
     override func viewDidLoad() {
@@ -32,16 +33,24 @@ class RTRSMoreTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return viewModel?.pages?.count ?? 0
+        return (viewModel?.pages?.count ?? 0)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
-        if let page = self.viewModel?.pages?[indexPath.row] {
-            cell.textLabel?.text = page.pageName()
-            cell.textLabel?.textColor = .white
-            cell.imageView?.image = page.pageImage()
+        
+        if let vm = self.viewModel, let pages = vm.pages {
+            if indexPath.row == pages.count {
+                cell.textLabel?.text = "Saved"
+                cell.imageView?.image = #imageLiteral(resourceName: "Top-Nav-Image")
+            } else {
+                let page = pages[indexPath.row]
+                cell.textLabel?.text = page.pageName()
+                cell.imageView?.image = page.pageImage()
+            }
         }
+        
+        cell.textLabel?.textColor = .white
 
         return cell
     }
@@ -51,17 +60,21 @@ class RTRSMoreTableViewController: UITableViewController {
             if let _ = page.pageUrl() {
                 self.performSegue(withIdentifier: self.externalBrowserSegueId, sender: page)
             } else {
-             self.performSegue(withIdentifier: page.pageName(), sender: nil)
+                self.performSegue(withIdentifier: page.pageName(), sender: page)
             }
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let page = sender as? RTRSViewModel else { return }
-        if let id = segue.identifier, id == self.externalBrowserSegueId,
+        if let id = segue.identifier {
+            if id == self.externalBrowserSegueId,
             let pageUrl = page.pageUrl(), let vc = segue.destination as? RTRSExternalWebViewController {
-            vc.url = pageUrl
-            vc.name = page.pageName()
+                vc.url = pageUrl
+                vc.name = page.pageName()
+            } else if id == self.savedContentSegueId, let vc = segue.destination as? ContentTableViewController {
+                vc.contentType = .saved
+            }
         }
     }
 }

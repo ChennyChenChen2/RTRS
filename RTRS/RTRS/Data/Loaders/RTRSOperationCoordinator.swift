@@ -38,6 +38,8 @@ class RTRSOperationCoordinator {
                     let theConfigDict = try? JSONSerialization.jsonObject(with: configData, options: .allowFragments) as? [String: Any] {
                     configDict = theConfigDict
                 }
+            } else {
+                completionHandler(false)
             }
         }
         
@@ -62,6 +64,11 @@ class RTRSOperationCoordinator {
                                     viewModels.append(viewModel)
                                 }
                             }
+                            
+                            let savedContentVM = RTRSSavedContentViewModel()
+                            RTRSNavigation.shared.registerViewModel(viewModel: savedContentVM, for: .saved)
+                            viewModels.append(savedContentVM)
+                            
                             let moreViewModel = RTRSMoreViewModel(pages: viewModels)
                             RTRSNavigation.shared.registerViewModel(viewModel: moreViewModel, for: .more)
                         }

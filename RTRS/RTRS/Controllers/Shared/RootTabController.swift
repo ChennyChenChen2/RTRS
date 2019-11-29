@@ -21,18 +21,15 @@ class RootTabController: UITabBarController {
     @objc func showPlayerView() {
         let viewHeight: CGFloat = 50.0
         
-        var view: TabBarPlayerView
-        if let tabPlayerView = PodcastManager.shared.tabPlayerView {
-            view = tabPlayerView
-        } else {
-            view = TabBarPlayerView(frame: CGRect(x: 0, y: self.tabBar.frame.origin.y - viewHeight, width: self.view.frame.size.width, height: viewHeight))
-            PodcastManager.shared.tabPlayerView = view
+        self.playerView = TabBarPlayerView(frame: CGRect(x: 0, y: self.tabBar.frame.origin.y - viewHeight, width: self.view.frame.size.width, height: viewHeight))
+        PodcastManager.shared.tabPlayerView = self.playerView
+        
+        if let view = self.playerView {
+            self.view.addSubview(view)
+            
+            let recognizer = UITapGestureRecognizer(target: self, action: #selector(showPodVC))
+            view.addGestureRecognizer(recognizer)
         }
-        
-        self.view.addSubview(view)
-        
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(showPodVC))
-        view.addGestureRecognizer(recognizer)
     }
         
     @objc func showPodVC() {
