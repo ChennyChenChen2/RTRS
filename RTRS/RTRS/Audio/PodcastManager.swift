@@ -230,7 +230,7 @@ class TabBarPlayerView: UIView {
         let manager = PodcastManager.shared
         if let title = manager.title, let dateString = manager.dateString {
             self.titleLabel = MarqueeLabel()
-            self.titleLabel.text = title
+            self.titleLabel.text = "\(title). "
             self.titleLabel.textColor = .white
             self.titleLabel.font = Utils.defaultFontBold
             self.titleLabel.sizeToFit()

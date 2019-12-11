@@ -62,7 +62,6 @@ class RTRSOperation: Operation {
         }
      
         if shouldUpdate {
-//        if true {
             do {
                 if let url = self.urls.first {
                     let htmlString = try String.init(contentsOf: url)
@@ -82,7 +81,7 @@ class RTRSOperation: Operation {
                         } else {
                             viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls)
                         }
-                        
+                        	
                         if let theViewModel = viewModel {
                             DispatchQueue.main.async {
                                 RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
@@ -125,6 +124,8 @@ fileprivate class RTRSViewModelFactory {
             return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, completionHandler: completionHandler)
         case RTRSScreenType.au.rawValue:
             return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+        case RTRSScreenType.processPups.rawValue:
+            return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil)
         case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         case RTRSScreenType.newsletter.rawValue:

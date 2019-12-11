@@ -19,6 +19,10 @@ class RootTabController: UITabBarController {
     }
     
     @objc func showPlayerView() {
+        if let view = self.playerView {
+            view.removeFromSuperview()
+        }
+        
         let viewHeight: CGFloat = 50.0
         
         self.playerView = TabBarPlayerView(frame: CGRect(x: 0, y: self.tabBar.frame.origin.y - viewHeight, width: self.view.frame.size.width, height: viewHeight))

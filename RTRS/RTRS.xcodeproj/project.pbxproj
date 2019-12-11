@@ -30,6 +30,8 @@
 		877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */; };
 		877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 877B3A0E226A932800F061FA /* RTRSConfig.json */; };
 		8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8785EF422264120B0011CF6C /* RTRSNavigation.swift */; };
+		8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */; };
+		8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */; };
 		878B4B3323903276000FD5AF /* RTRSProcessPupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */; };
 		878B4B352390C3F8000FD5AF /* ProcessPups.html in Resources */ = {isa = PBXBuildFile; fileRef = 878B4B342390C3F8000FD5AF /* ProcessPups.html */; };
 		878B4B372390C3FF000FD5AF /* PodSource.html in Resources */ = {isa = PBXBuildFile; fileRef = 878B4B362390C3FF000FD5AF /* PodSource.html */; };
@@ -70,7 +72,7 @@
 		87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewController.swift; sourceTree = "<group>"; };
 		8736B192233FE1CB008DA87A /* RTRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RTRS.entitlements; sourceTree = "<group>"; };
 		8736B195233FE8C8008DA87A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8739E8872356C4D7004CE6D8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		8739E8872356C4D7004CE6D8 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		8739E8892356C59A004CE6D8 /* PodcastPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayerViewController.swift; sourceTree = "<group>"; };
 		8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSDeepLinkHandler.swift; sourceTree = "<group>"; };
 		8745B748232BEBE6003A2351 /* RTRS-bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RTRS-bridging-header.h"; sourceTree = "<group>"; };
@@ -89,6 +91,8 @@
 		877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperationCoordinator.swift; sourceTree = "<group>"; };
 		877B3A0E226A932800F061FA /* RTRSConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RTRSConfig.json; sourceTree = SOURCE_ROOT; };
 		8785EF422264120B0011CF6C /* RTRSNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigation.swift; sourceTree = "<group>"; };
+		8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPhotoContainerView.swift; sourceTree = "<group>"; };
+		8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSProcessPupsViewController.swift; sourceTree = "<group>"; };
 		878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSProcessPupsViewModel.swift; sourceTree = "<group>"; };
 		878B4B342390C3F8000FD5AF /* ProcessPups.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ProcessPups.html; sourceTree = "<group>"; };
 		878B4B362390C3FF000FD5AF /* PodSource.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = PodSource.html; sourceTree = "<group>"; };
@@ -200,6 +204,7 @@
 		8727B8B822D7D2A8001713AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8788EA79239D35A200C2CE82 /* Process Pups */,
 				8746130B230877AB00C57400 /* More */,
 				87C3B5A722EBC73700560958 /* Shared */,
 				87C3B5A622EBC72E00560958 /* Content */,
@@ -276,6 +281,15 @@
 				8745B744232A8B93003A2351 /* RTRSDeepLinkHandler.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		8788EA79239D35A200C2CE82 /* Process Pups */ = {
+			isa = PBXGroup;
+			children = (
+				8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */,
+				8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */,
+			);
+			path = "Process Pups";
 			sourceTree = "<group>";
 		};
 		8795C9B42329995200D34C99 /* HTML Templates */ = {
@@ -493,6 +507,7 @@
 				8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */,
 				87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */,
 				8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */,
+				8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */,
 				878B4B3323903276000FD5AF /* RTRSProcessPupsViewModel.swift in Sources */,
 				87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */,
 				875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */,
@@ -505,6 +520,7 @@
 				879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */,
 				87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */,
 				879D255A2387B6D900C1DA55 /* RTRSSavedContentViewModel.swift in Sources */,
+				8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */,
 				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
 				879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */,
 				87095A532263BC2B0081A540 /* RootTabController.swift in Sources */,

@@ -10,19 +10,20 @@ import UIKit
 import SwiftSoup
 
 class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
-    var processPups: [ProcessPup]?
+    var processPups: [ProcessPup] = [ProcessPup]()
     var pageDescription: String?
     var pageDescriptionImageURLs: [URL]?
     
     enum CodingKeys: String {
         case pageDescription = "pageDescription"
-        case processPups = "processsPups"
+        case processPups = "processPups"
         case pageDescriptionImageURLs = "pageDescriptionURLs"
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
         guard let theDoc = doc else { return }
         self.pageDescriptionImageURLs = [URL]()
+        
         do {
             if let pageWrapperElem = try theDoc.getElementById("pageWrapper") {
                 let rowElems = try pageWrapperElem.getElementsByClass("row sqs-row")
@@ -31,11 +32,10 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                     if i == 0 {
                         // First element, we need description and image URLs
                         let pElems = try row.getElementsByTag("p")
-                        if pElems.count == 2 {
-                            let description1 = try pElems[0].text()
-                            let description2 = try pElems[1].text()
-                            self.pageDescription = description1 + "\n\n" + description2
-                        }
+
+                        self.pageDescription = pElems.compactMap({ (elem) -> String? in
+                            return try? elem.text()
+                        }).joined()
                         
                         let imgElems = try row.getElementsByTag("img")
                         let filteredElems = imgElems.filter { (elem) -> Bool in
@@ -47,13 +47,46 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                             }
                         }
                     } else {
-                        
+                        if row.children().contains(where: { (elem) -> Bool in
+                            return elem.hasClass("col sqs-col-12 span-12")
+                        }) {
+                            continue
+                        } else {
+                            var imgURLs = [URL]()
+                            var name: String?
+                            var description: NSAttributedString?
+                            
+                            let imgElems = try row.getElementsByTag("img")
+                            let filteredElems = imgElems.filter { (elem) -> Bool in
+                                return elem.hasClass("thumb-image")
+                            }
+                            for imgElem in filteredElems {
+                                if let url = URL(string: try imgElem.attr("data-src")) {
+                                    imgURLs.append(url)
+                                }
+                            }
+                            
+                            let textElems = try row.getElementsByClass("sqs-block html-block sqs-block-html")
+                            if let elem = textElems.first() {
+                                if let nameElem = try elem.getElementsByTag("h3").first(),
+                                    let descriptionElem = try elem.getElementsByTag("p").first() {
+                                    name = try nameElem.text()
+                                    description = NSAttributedString.attributedStringFrom(element: descriptionElem)
+                                }
+                            }
+                            
+                            if let theName = name, let theDescription = description {
+                                self.processPups.append(ProcessPup(imageURLs: imgURLs, description: theDescription, name: theName))
+                            }
+                        }
                     }
                 }
             }
         } catch let error {
             print("Error parsing Process Pups View Model: \(error.localizedDescription)")
         }
+        
+        print("HERE")
     }
     
     func pageName() -> String {
@@ -69,9 +102,9 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     }
     
     func encode(with coder: NSCoder) {
-        coder.encode(self.processPups, forKey: CodingKeys.processPups.rawValue)
         coder.encode(self.pageDescription, forKey: CodingKeys.pageDescription.rawValue)
         coder.encode(self.pageDescriptionImageURLs, forKey: CodingKeys.pageDescriptionImageURLs.rawValue)
+        coder.encode(self.processPups, forKey: CodingKeys.processPups.rawValue)
     }
     
     required convenience init?(coder: NSCoder) {
@@ -83,7 +116,7 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     }
     
     required init(doc: Document?, pups: [ProcessPup]?, description: String?, imageURLs: [URL]?) {
-        self.processPups = pups
+        self.processPups = pups ?? []
         self.pageDescription = description
         self.pageDescriptionImageURLs = imageURLs
         super.init()
@@ -92,36 +125,34 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     }
 }
 
-struct ProcessPup: Codable {
+class ProcessPup: NSObject, NSCoding {
     
-    var pupImageURL: URL
-    var pupDescription: String
-    var pupName: String
+    var pupImageURLs: [URL]? = [URL]()
+    var pupDescription: NSAttributedString?
+    var pupName: String?
     
     private enum CodingKeys: String, CodingKey {
-        case pupImageURL
-        case pupDescription
-        case pupName
+        case pupImageURLs = "pupImageUrls"
+        case pupDescription = "pupDescription"
+        case pupName = "pupName"
     }
     
-    init(imageURL: URL, description: String, name: String) {
-        self.pupImageURL = imageURL
+    init(imageURLs: [URL]?, description: NSAttributedString?, name: String?) {
+        self.pupImageURLs = imageURLs
         self.pupDescription = description
         self.pupName = name
     }
     
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        let pupImageURL = try values.decode(URL.self, forKey: .pupImageURL)
-        let pupDescription = try values.decode(String.self, forKey: .pupDescription)
-        let pupName = try values.decode(String.self, forKey: .pupName)
-        self.init(imageURL: pupImageURL, description: pupDescription, name: pupName)
+    required convenience init?(coder aDecoder: NSCoder) {
+        let pupImageURLs = aDecoder.decodeObject(forKey: CodingKeys.pupImageURLs.rawValue) as? [URL]
+        let pupDescription = aDecoder.decodeObject(forKey: CodingKeys.pupDescription.rawValue) as? NSAttributedString
+        let pupName = aDecoder.decodeObject(forKey: CodingKeys.pupName.rawValue) as? String
+        self.init(imageURLs: pupImageURLs, description: pupDescription, name: pupName)
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.pupImageURL, forKey: .pupImageURL)
-        try container.encode(self.pupDescription, forKey: .pupDescription)
-        try container.encode(self.pupName, forKey: .pupName)
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.pupImageURLs, forKey: CodingKeys.pupImageURLs.rawValue)
+        aCoder.encode(self.pupDescription, forKey: CodingKeys.pupDescription.rawValue)
+        aCoder.encode(self.pupName, forKey: CodingKeys.pupName.rawValue)
     }
 }

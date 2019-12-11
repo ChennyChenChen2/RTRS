@@ -17,10 +17,8 @@ class RTRSUserDefaultsKeys {
 }
 
 class Utils {
-    
     static let defaultFont = UIFont(name: "TrebuchetMS", size: 14)!
     static let defaultFontBold = UIFont(name: "TrebuchetMS-Bold", size: 14)!
-    
 }
 
 extension NSAttributedString {
@@ -44,7 +42,7 @@ extension NSAttributedString {
         // TODO: Find a way more securely assign hrefs to "a" tag text
         if let aElem = try? element.getElementsByTag("a").first(),
             let href = try? aElem.attr("href") {
-            let aStyle = Style("a").foregroundColor(UIColor.blue, .normal).link(href)
+            let aStyle = Style("a").foregroundColor(UIColor.blue, .normal).underlineStyle(.patternDash).link(href)
             styles.append(aStyle)
         }
         

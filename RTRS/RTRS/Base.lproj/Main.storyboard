@@ -424,7 +424,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pv9-f0-7be">
+                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pv9-f0-7be">
                                 <rect key="frame" x="194.5" y="793" width="25" height="25"/>
                                 <state key="normal" image="Heart-No-Fill"/>
                                 <connections>
@@ -547,6 +547,7 @@
                         <segue destination="e0p-yq-Sqf" kind="show" identifier="About" id="Bvv-Jk-y72"/>
                         <segue destination="61u-pN-KfT" kind="show" identifier="externalweb" id="roz-li-Ohd"/>
                         <segue destination="bOP-We-QCa" kind="show" identifier="Saved" id="cqK-au-f3a"/>
+                        <segue destination="HR5-7T-bWi" kind="show" identifier="Process Pups" id="DW7-VD-uJw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZW-Ce-yfS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -635,13 +636,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="0.0" y="-82" width="414" height="1060"/>
+                                <rect key="frame" x="0.0" y="183" width="414.00000000000011" height="530"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="980" width="20" height="20"/>
+                                <rect key="frame" x="197" y="715" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="91.5" y="1008" width="231.5" height="21"/>
+                                <rect key="frame" x="91.5" y="743" width="231.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="HzC-nL-cr6"/>
+                                    <constraint firstAttribute="width" constant="231.5" id="edu-Gz-zFn"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="PROCESSING.......................">
                                         <attributes>
@@ -750,6 +755,127 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A6w-eK-COk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4422" y="1602"/>
+        </scene>
+        <!--Process Pups-->
+        <scene sceneID="9GB-6B-MXg">
+            <objects>
+                <viewController id="HR5-7T-bWi" customClass="RTRSProcessPupsViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="kka-Qu-szg">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dD9-9i-hLe">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gkK-6N-nT0">
+                                        <rect key="frame" x="20" y="20" width="374" height="174"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="174" id="Q1S-Ym-ALX"/>
+                                        </constraints>
+                                        <attributedString key="attributedText"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VZi-mG-vas" customClass="MultiPhotoContainerView" customModule="RTRS" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="202" width="374" height="179"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="179" id="dqn-V1-vYe"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XaZ-9z-9SJ">
+                                        <rect key="frame" x="20" y="427" width="374" height="270"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9Ii-sZ-NjG">
+                                            <size key="itemSize" width="70" height="70"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ProcessPupCell" id="Ue2-Vl-DsA" customClass="RTRSProcessPupCollectionViewCell" customModule="RTRS" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="BUs-DK-CoM">
+                                                    <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FZd-Iu-ADG">
+                                                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                </collectionViewCellContentView>
+                                                <size key="customSize" width="70" height="70"/>
+                                                <connections>
+                                                    <outlet property="pupImageView" destination="FZd-Iu-ADG" id="tVC-2A-m6Z"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Process Pup Gallery (tap to enlarge):" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97F-i7-141">
+                                        <rect key="frame" x="20" y="398" width="282" height="20"/>
+                                        <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="97F-i7-141" firstAttribute="top" secondItem="VZi-mG-vas" secondAttribute="bottom" constant="17" id="8mH-3q-vy4"/>
+                                    <constraint firstItem="VZi-mG-vas" firstAttribute="leading" secondItem="CF3-Aw-Zsj" secondAttribute="leading" constant="20" id="Dbd-UY-fai"/>
+                                    <constraint firstItem="CF3-Aw-Zsj" firstAttribute="bottom" secondItem="XaZ-9z-9SJ" secondAttribute="bottom" constant="28" id="EMn-mX-Cgh"/>
+                                    <constraint firstItem="VZi-mG-vas" firstAttribute="top" secondItem="gkK-6N-nT0" secondAttribute="bottom" constant="8" id="EZV-ve-g7c"/>
+                                    <constraint firstItem="CF3-Aw-Zsj" firstAttribute="trailing" secondItem="VZi-mG-vas" secondAttribute="trailing" constant="20" id="Fk8-oK-FJr"/>
+                                    <constraint firstAttribute="bottom" secondItem="XaZ-9z-9SJ" secondAttribute="bottom" constant="37" id="LWn-0G-DGB"/>
+                                    <constraint firstItem="gkK-6N-nT0" firstAttribute="top" secondItem="CF3-Aw-Zsj" secondAttribute="top" constant="20" id="Nws-5a-lCp"/>
+                                    <constraint firstItem="CF3-Aw-Zsj" firstAttribute="trailing" secondItem="XaZ-9z-9SJ" secondAttribute="trailing" constant="20" id="Owr-i0-50l"/>
+                                    <constraint firstItem="gkK-6N-nT0" firstAttribute="leading" secondItem="CF3-Aw-Zsj" secondAttribute="leading" constant="20" id="fd7-96-N1V"/>
+                                    <constraint firstItem="97F-i7-141" firstAttribute="leading" secondItem="XaZ-9z-9SJ" secondAttribute="leading" id="j2Z-9M-wt5"/>
+                                    <constraint firstItem="CF3-Aw-Zsj" firstAttribute="trailing" secondItem="gkK-6N-nT0" secondAttribute="trailing" constant="20" id="meP-SX-2AX"/>
+                                    <constraint firstItem="XaZ-9z-9SJ" firstAttribute="leading" secondItem="CF3-Aw-Zsj" secondAttribute="leading" constant="20" id="nBI-ro-wEx"/>
+                                    <constraint firstItem="XaZ-9z-9SJ" firstAttribute="top" secondItem="97F-i7-141" secondAttribute="bottom" constant="9" id="wZh-2U-hyr"/>
+                                    <constraint firstAttribute="trailing" secondItem="gkK-6N-nT0" secondAttribute="trailing" constant="20" id="x6M-np-1xB"/>
+                                    <constraint firstAttribute="trailing" secondItem="97F-i7-141" secondAttribute="trailing" constant="112" id="y0s-LM-nqS"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="SDl-32-udn"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="CF3-Aw-Zsj"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="dD9-9i-hLe" firstAttribute="leading" secondItem="xcH-0x-NxV" secondAttribute="leading" id="4Na-1F-mGL"/>
+                            <constraint firstItem="dD9-9i-hLe" firstAttribute="top" secondItem="xcH-0x-NxV" secondAttribute="top" id="Cfo-4C-qfr"/>
+                            <constraint firstItem="dD9-9i-hLe" firstAttribute="trailing" secondItem="xcH-0x-NxV" secondAttribute="trailing" id="FC5-AM-zUM"/>
+                            <constraint firstItem="xcH-0x-NxV" firstAttribute="bottom" secondItem="dD9-9i-hLe" secondAttribute="bottom" id="xH9-eD-dCs"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="xcH-0x-NxV"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Process Pups" id="HAZ-2b-QKa"/>
+                    <connections>
+                        <outlet property="collectionView" destination="XaZ-9z-9SJ" id="L9L-pL-Huv"/>
+                        <outlet property="descriptionTextView" destination="gkK-6N-nT0" id="jgx-3L-KGh"/>
+                        <outlet property="descriptionTextViewHeightConstraint" destination="Q1S-Ym-ALX" id="rUL-s4-YyN"/>
+                        <outlet property="imageContainer" destination="VZi-mG-vas" id="E0W-xa-e84"/>
+                        <outlet property="scrollView" destination="dD9-9i-hLe" id="xaJ-4t-Kcs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3qF-Y5-VHN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5169.5652173913049" y="1601.7857142857142"/>
         </scene>
         <!--Home-->
         <scene sceneID="D3Q-0k-rzw">

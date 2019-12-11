@@ -37,7 +37,6 @@ class LoadingViewController: UIViewController {
         self.activityIndicator.startAnimating()
         
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
-            
             func doStartup(dict: [String: Any]?) {
                 guard let weakSelf = self else { return }
                 weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
