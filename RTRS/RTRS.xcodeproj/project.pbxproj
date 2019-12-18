@@ -55,6 +55,7 @@
 		87C3B5AE22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */; };
 		87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */; };
 		87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */; };
+		87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */; };
 		87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */; };
 		87FA15712325BEF200EA8374 /* AUCornerArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */; };
 /* End PBXBuildFile section */
@@ -117,6 +118,7 @@
 		87C3B5AD22EBCD0500560958 /* AUCornerSingleArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerSingleArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSViewModel.swift; sourceTree = "<group>"; };
 		87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationBar.swift; sourceTree = "<group>"; };
+		87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSStandaloneSlideshowViewController.swift; sourceTree = "<group>"; };
 		87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueObserver.swift; sourceTree = "<group>"; };
 		87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerArticleViewController.swift; sourceTree = "<group>"; };
 		AF1DB3465F792B361E3E82F6 /* Pods_RTRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RTRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -288,6 +290,7 @@
 			children = (
 				8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */,
 				8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */,
+				87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */,
 			);
 			path = "Process Pups";
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 				87FA15712325BEF200EA8374 /* AUCornerArticleViewController.swift in Sources */,
 				8790C78D22DCF70800E8AE5C /* RTRSNavigationController.swift in Sources */,
 				8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */,
+				87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */,
 				87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */,
 				8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */,
 				8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */,

@@ -11,8 +11,9 @@ import SwiftSoup
 
 class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     var processPups: [ProcessPup] = [ProcessPup]()
-    var pageDescription: String?
+    var pageDescription: NSAttributedString?
     var pageDescriptionImageURLs: [URL]?
+    var completion: ((RTRSViewModel?) -> ())?
     
     enum CodingKeys: String {
         case pageDescription = "pageDescription"
@@ -26,37 +27,60 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
         
         do {
             if let pageWrapperElem = try theDoc.getElementById("pageWrapper") {
-                let rowElems = try pageWrapperElem.getElementsByClass("row sqs-row")
+                let rowElems = try pageWrapperElem.getElementsByClass("sqs-block html-block sqs-block-html")
+                let buffer = NSMutableAttributedString()
                 for i in 0..<rowElems.count {
                     let row = rowElems[i]
+                    
                     if i == 0 {
                         // First element, we need description and image URLs
                         let pElems = try row.getElementsByTag("p")
 
-                        self.pageDescription = pElems.compactMap({ (elem) -> String? in
-                            return try? elem.text()
-                        }).joined()
-                        
-                        let imgElems = try row.getElementsByTag("img")
-                        let filteredElems = imgElems.filter { (elem) -> Bool in
-                            return elem.hasClass("thumb-image")
+                        let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
+                            return NSAttributedString.attributedStringFrom(element: elem)
+                            })
+                        for string in aStrings {
+                            buffer.append(string)
                         }
-                        for imgElem in filteredElems {
-                            if let url = URL(string: try imgElem.attr("data-src")) {
-                                self.pageDescriptionImageURLs?.append(url)
+                        
+                        if let parent = row.parent() {
+                            let imgElems = try parent.getElementsByTag("img")
+                            let filteredElems = imgElems.filter { (elem) -> Bool in
+                                return elem.hasClass("thumb-image")
+                            }
+                            for imgElem in filteredElems {
+                                if let url = URL(string: try imgElem.attr("data-src")) {
+                                    self.pageDescriptionImageURLs?.append(url)
+                                }
                             }
                         }
+                    } else if  i == 1 {
+                        let pElems = try row.getElementsByTag("p")
+                        let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
+                            return NSAttributedString.attributedStringFrom(element: elem)
+                            })
+                        for string in aStrings {
+                            buffer.append(string)
+                        }
+                        self.pageDescription = buffer
+                        continue
                     } else {
-                        if row.children().contains(where: { (elem) -> Bool in
-                            return elem.hasClass("col sqs-col-12 span-12")
-                        }) {
-                            continue
-                        } else {
-                            var imgURLs = [URL]()
-                            var name: String?
-                            var description: NSAttributedString?
-                            
-                            let imgElems = try row.getElementsByTag("img")
+                        var imgURLs = [URL]()
+                        var name: String?
+                        let description = NSMutableAttributedString()
+                        
+                        let parents = row.parents()
+                        var parentDiv: Element?
+                        
+                        for p in parents {
+                            if try p.className() == "row sqs-row" {
+                                parentDiv = p
+                                break
+                            }
+                        }
+                        
+                        if let parent = parentDiv {
+                            let imgElems = try parent.getElementsByTag("img")
                             let filteredElems = imgElems.filter { (elem) -> Bool in
                                 return elem.hasClass("thumb-image")
                             }
@@ -65,19 +89,35 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                                     imgURLs.append(url)
                                 }
                             }
-                            
-                            let textElems = try row.getElementsByClass("sqs-block html-block sqs-block-html")
-                            if let elem = textElems.first() {
-                                if let nameElem = try elem.getElementsByTag("h3").first(),
-                                    let descriptionElem = try elem.getElementsByTag("p").first() {
-                                    name = try nameElem.text()
-                                    description = NSAttributedString.attributedStringFrom(element: descriptionElem)
-                                }
+                        }
+                        
+                        var nElem: Element?
+                        if let e = try row.getElementsByTag("h3").first() {
+                            nElem = e
+                        } else if let e = try row.getElementsByTag("h2").first() {
+                            nElem = e
+                        }
+                        
+                        if let nameElem = nElem {
+                            name = try nameElem.text()
+                        }
+                        
+                        let descriptionElems = try row.getElementsByTag("p")
+                        for descriptionElem in descriptionElems {
+                            let brElems = try descriptionElem.select("br")
+                            // Replace <br> with spaces
+                            for brElem in brElems {
+                                let pHTML = "<p> </p>"
+                                let pDoc = try SwiftSoup.parse(pHTML)
+                                let pElem = try pDoc.select("p").first()!
+                                try brElem.replaceWith(pElem)
                             }
                             
-                            if let theName = name, let theDescription = description {
-                                self.processPups.append(ProcessPup(imageURLs: imgURLs, description: theDescription, name: theName))
-                            }
+                            description.append(NSAttributedString.attributedStringFrom(element: descriptionElem))
+                        }
+                        
+                        if let theName = name {
+                            self.processPups.append(ProcessPup(imageURLs: imgURLs, description: description, name: theName))
                         }
                     }
                 }
@@ -86,7 +126,8 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
             print("Error parsing Process Pups View Model: \(error.localizedDescription)")
         }
         
-        print("HERE")
+        print("FINISHED LOADING PROCESS PUPS")
+        self.completion?(self)
     }
     
     func pageName() -> String {
@@ -109,16 +150,18 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     
     required convenience init?(coder: NSCoder) {
         let pups = coder.decodeObject(forKey: CodingKeys.processPups.rawValue) as? [ProcessPup]
-        let description = coder.decodeObject(forKey: CodingKeys.pageDescription.rawValue) as? String
+        let description = coder.decodeObject(forKey: CodingKeys.pageDescription.rawValue) as? NSAttributedString
         let imageURLs = coder.decodeObject(forKey: CodingKeys.pageDescriptionImageURLs.rawValue) as? [URL]
         
-        self.init(doc: nil, pups: pups, description: description, imageURLs: imageURLs)
+        self.init(doc: nil, pups: pups, description: description, imageURLs: imageURLs, completion: nil)
     }
     
-    required init(doc: Document?, pups: [ProcessPup]?, description: String?, imageURLs: [URL]?) {
+    required init(doc: Document?, pups: [ProcessPup]?, description: NSAttributedString?, imageURLs: [URL]?, completion: ((RTRSViewModel?) -> ())?) {
         self.processPups = pups ?? []
         self.pageDescription = description
         self.pageDescriptionImageURLs = imageURLs
+        self.completion = completion
+        
         super.init()
         
         self.extractDataFromDoc(doc: doc, urls: nil)

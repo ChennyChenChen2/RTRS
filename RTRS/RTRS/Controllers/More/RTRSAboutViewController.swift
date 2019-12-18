@@ -21,8 +21,10 @@ class RTRSAboutViewController: UIViewController {
         self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
         self.imageView.pin_setImage(from: viewModel?.imageUrl)
         
+        self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
+        
+        self.navigationController?.navigationBar.tintColor = .white
     }
-    
 
     /*
     // MARK: - Navigation

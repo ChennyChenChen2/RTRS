@@ -99,10 +99,12 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                         self.content.append(singleViewModel)
                     }
                 }
-                self.completion?(self)
             } catch {
                 print("Error parsing multi pod view model")
             }
         }
+        
+        print("FINISHED LOADING MULTI-POD")
+        self.completion?(self)
     }
 }

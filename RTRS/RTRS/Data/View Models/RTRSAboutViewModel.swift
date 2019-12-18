@@ -19,7 +19,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "RickyLogo")
+        return #imageLiteral(resourceName: "Top-Nav-Image")
     }
     
     
@@ -63,7 +63,6 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
             let contentDivElements = try doc.getElementsByClass("sqs-block html-block sqs-block-html")
             
             for element in contentDivElements {
-                
                 if try element.getElementsByTag("h3").count > 0 {
                     try element.remove()
                     continue
@@ -77,6 +76,15 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                         bodyText.append(NSAttributedString(string: "\n"))
                     }
                 }
+            }
+            
+            let jonHTML = """
+                <p>Jonathan Chen is the developer of this app. He works as an app developer and musician in New York City. You can follow him on Twitter <strong><a target="_blank" href="http://www.twitter.com/ChennyChen_Chen">@ChennyChen_Chen</a>.</strong></p>
+            """
+            let jonDoc = try SwiftSoup.parse(jonHTML)
+            if let pElem = try jonDoc.select("p").first() {
+                let attrString = NSAttributedString.attributedStringFrom(element: pElem)
+                bodyText.append(attrString)
             }
             
             self.body = bodyText

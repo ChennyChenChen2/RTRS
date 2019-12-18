@@ -24,7 +24,6 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
 
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
@@ -49,6 +48,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
     
     @objc func savedContentUpdated() {
         guard let content = self.viewModel?.content else { return }
+        self.clearAllButton?.isEnabled = content.count != 0
         self.filteredResults = content
         self.tableView.reloadData()
     }
@@ -73,14 +73,9 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let content = self.viewModel?.content {
-            self.filteredResults = content
-            self.tableView.reloadData()
-            
-            if content.count == 0 {
-                self.clearAllButton?.isEnabled = false
-            }
-        }
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        savedContentUpdated()
     }
 
     // MARK: - Table view data source
@@ -93,7 +88,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150.0
+        return 200
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

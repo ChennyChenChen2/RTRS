@@ -11,7 +11,7 @@ import PINRemoteImage
 import MarqueeLabel
 import AVFoundation
 
-class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, PodcastManagerDelegate {
+class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionViewDataSource, PodcastManagerDelegate {
     
     let cellReuseId = "PodcastCell"
     var player: AVPlayer?
@@ -21,12 +21,12 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var elapsedLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var rateButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     
+    var displayedViaTabView = false
     var viewModel: RTRSSinglePodViewModel!
     var sourceViewModel: RTRSPodSourceViewModel?
     var multiPodViewModel: RTRSMultiPodViewModel?
@@ -46,7 +46,6 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
         self.multiPodViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel
@@ -75,8 +74,9 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title {
+        if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
             
+            self.displayedViaTabView = false
             if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
                 return vm.title == self.viewModel.title
             }) {
@@ -176,6 +176,12 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
         return self.multiPodViewModel?.content.count ?? 0
     }
     
+    func collectionView(_ collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                          minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row],
             let podDate = singlePodViewModel.dateString,
@@ -247,42 +253,59 @@ class PodcastPlayerViewController: UIViewController, UICollectionViewDelegate, U
     }
 }
 
-class PodcastCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageView: UIImageView!
-}
-
-class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    override func awakeFromNib() {
-        guard let collectionView = self.collectionView else { return }
-        self.minimumInteritemSpacing = 0.0;
-        self.minimumLineSpacing = 0.0;
-        self.scrollDirection = .horizontal;
-        self.sectionInset = UIEdgeInsets.zero
-        let contentInset = collectionView.contentInset
-        self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height - 1 - contentInset.top - contentInset.bottom)
+class RTRSCollectionViewController: UIViewController, UICollectionViewDelegate {
+    private var indexOfCellBeforeDragging = 0
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.collectionView.delegate = self
     }
     
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        
-        guard let collectionView = self.collectionView else { return CGPoint.zero }
-        
-//        var offsetAdjustment = CGFloat.greatestFiniteMagnitude
-        var offsetAdjustment: CGFloat = 0.0
-        let horizontalOffset = proposedContentOffset.x + 5
-        
-        let targetRect = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
-        
-        if let attributes = super.layoutAttributesForElements(in: targetRect) {
-            for attribute in attributes {
-                let itemOffset = attribute.frame.origin.x
-//                if abs(itemOffset - horizontalOffset) < abs(offsetAdjustment) {
-                offsetAdjustment = offsetAdjustment + itemOffset
-//                }
-            }
-        }
-        
-        return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.indexOfCellBeforeDragging = self.collectionView.indexOfMajorCell()
     }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        
+        // Stop scrollView sliding:
+        targetContentOffset.pointee = scrollView.contentOffset
+
+        // calculate where scrollView should snap to:
+        let indexOfMajorCell = self.collectionView.indexOfMajorCell()
+
+        // calculate conditions:
+        let dataSourceCount = self.collectionView.numberOfItems(inSection: 0)
+        let swipeVelocityThreshold: CGFloat = 0.3
+        let hasEnoughVelocityToSlideToTheNextCell = self.indexOfCellBeforeDragging + 1 < dataSourceCount && velocity.x > swipeVelocityThreshold
+        let hasEnoughVelocityToSlideToThePreviousCell = self.indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
+        let majorCellIsTheCellBeforeDragging = indexOfMajorCell == self.indexOfCellBeforeDragging
+        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
+
+        if didUseSwipeToSkipCell {
+
+            let snapToIndex = self.indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
+            let toValue = layout.itemSize.width * CGFloat(snapToIndex)
+
+            // Damping equal 1 => no oscillations => decay animation:
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
+                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
+                scrollView.layoutIfNeeded()
+            }, completion: nil)
+
+        } else {
+            // This is a much better way to scroll to a cell:
+            let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+}
+
+class PodcastCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var imageView: UIImageView!
 }
 
 fileprivate class TimestampFormatter {
@@ -315,5 +338,54 @@ fileprivate class TimestampFormatter {
         }
         
         return result
+    }
+}
+
+class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
+    override func awakeFromNib() {
+        guard let collectionView = self.collectionView else { return }
+        self.minimumInteritemSpacing = 0.0;
+        self.minimumLineSpacing = 0.0;
+        self.scrollDirection = .horizontal;
+        self.sectionInset = UIEdgeInsets.zero
+        let contentInset = collectionView.contentInset
+        self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height - 1 - contentInset.top - contentInset.bottom)
+    }
+     
+//    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+//
+//        guard let collectionView = self.collectionView else { return CGPoint.zero }
+//
+////        var offsetAdjustment = CGFloat.greatestFiniteMagnitude
+//        var offsetAdjustment: CGFloat = 0.0
+//        let horizontalOffset = proposedContentOffset.x + 5
+//
+//        let targetRect = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+//
+//        if let attributes = super.layoutAttributesForElements(in: targetRect) {
+//            for attribute in attributes {
+//                let itemOffset = attribute.frame.origin.x
+////                if abs(itemOffset - horizontalOffset) < abs(offsetAdjustment) {
+//                offsetAdjustment = offsetAdjustment + itemOffset
+////                }
+//            }
+//        }
+//
+//        return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
+//    }
+}
+
+extension UICollectionView {
+    func indexOfMajorCell() -> Int {
+        if let layout = self.collectionViewLayout as? UICollectionViewFlowLayout {
+            let itemWidth = layout.itemSize.width
+            let proportionalOffset = layout.collectionView!.contentOffset.x / itemWidth
+            let index = Int(round(proportionalOffset))
+            let numberOfItems = self.numberOfItems(inSection: 0)
+            let safeIndex = max(0, min(numberOfItems - 1, index))
+            return safeIndex
+        }
+        
+        return 0
     }
 }

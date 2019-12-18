@@ -30,15 +30,45 @@ class LoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        func showError() {
+            DispatchQueue.main.async { [weak self] in
+                guard let weakSelf = self else { return }
+                let alert = UIAlertController(title: "Something went wrong. You hate to see it.", message: "Maybe your internet is as bad as AU's. Please try again later, or contact Kornblau if you suspect someone is sabotaging you.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                weakSelf.present(alert, animated: true, completion: nil)
+            }
+        }
+        
         guard let configURLString = Bundle.main.object(forInfoDictionaryKey: "RTRSConfigURL") as? String,
-            let configURL = URL(string: configURLString) else { return }
+            let configURL = URL(string: configURLString) else {
+                // We'll show an error here, but really, it was definitely our fault, lol...
+                showError()
+                return
+        }
         
         self.navigationController?.navigationBar.isHidden = true
         self.activityIndicator.startAnimating()
         
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
-            func doStartup(dict: [String: Any]?) {
+            func doStartup(dict: [String: Any]) {
                 guard let weakSelf = self else { return }
+                
+                if let messages = dict["loadingMessages"] as? [String] {
+                    weakSelf.loadingMessages = messages
+                    weakSelf.loadingMessageTimer = Timer(timeInterval: 5, repeats: true, block: { (timer) in
+                        let index = Int.random(in: 0..<weakSelf.loadingMessages.count)
+                        let message = weakSelf.loadingMessages[index]
+                        DispatchQueue.main.async {
+                            weakSelf.statusLabel.text = message
+                        }
+                    })
+                    
+                    if let timer = weakSelf.loadingMessageTimer {
+                        RunLoop.main.add(timer, forMode: .default)
+                    }
+                }
+                
                 weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
                     if success {
                         DispatchQueue.main.async {
@@ -48,48 +78,56 @@ class LoadingViewController: UIViewController {
                             weakSelf.navigationController?.setViewControllers([vc], animated: true)
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            let alert = UIAlertController(title: "Something went wrong. You hate to see it.", message: "Maybe your internet is as bad as AU's. Please try again later, or contact Kornblau if you suspect someone is sabotaging you.", preferredStyle: .alert)
-                            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(action)
-                            weakSelf.present(alert, animated: true, completion: nil)
-                        }
+                        showError()
                     }
                 }
             }
             
+            func getBundledConfig() -> [String: Any]? {
+                if let configPath = Bundle.main.path(forResource: "RTRSConfig", ofType: "json") {
+                    let configUrl = URL(fileURLWithPath: configPath)
+                    if let configData = try? Data(contentsOf: configUrl) {
+                        return try? JSONSerialization.jsonObject(with: configData, options: .allowFragments) as? [String: Any]
+                    }
+                }
+                
+                return nil
+            }
+            
+            var configDict: [String: Any]?
             if error != nil {
-                doStartup(dict: nil)
-            }
-            
-            guard let data = data, let weakSelf = self else { return }
-            
-            var dict: [String: Any]? // DO NOT DELETE: currently unused bc trying to test locally
-            if let configDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any],
-                let messages = configDict["loadingMessages"] as? [String] {
-//                dict = configDict // DO NOT DELETE for same reason above
-                
-                do {
-                    try data.write(to: LoadingViewController.cachedConfigPath)
-                } catch {
-                    print("Error saving cached config")
+                if let config = getBundledConfig() {
+                    doStartup(dict: config)
+                } else {
+                    showError()
                 }
+            } else {
+                // USING BUNDLED CONFIG FOR TESTING
                 
-                weakSelf.loadingMessages = messages
-                weakSelf.loadingMessageTimer = Timer(timeInterval: 5, repeats: true, block: { (timer) in
-                    let index = Int.random(in: 0..<weakSelf.loadingMessages.count)
-                    let message = weakSelf.loadingMessages[index]
-                    DispatchQueue.main.async {
-                        weakSelf.statusLabel.text = message
+                if false, let data = data, let theDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                    
+                    do {
+                        try data.write(to: LoadingViewController.cachedConfigPath)
+                    } catch {
+                        print("Error saving cached config")
                     }
-                })
+                    
+                    configDict = theDict
+                } else if false, let data = try? Data(contentsOf: LoadingViewController.cachedConfigPath),
+                        let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                    configDict = dict
+                } else {
+                    if let config = getBundledConfig() {
+                        configDict = config
+                    }
+                }
                 
-                if let timer = weakSelf.loadingMessageTimer {
-                    RunLoop.main.add(timer, forMode: .default)
+                if let dict = configDict {
+                    doStartup(dict: dict)
+                } else {
+                    showError()
                 }
             }
-            
-            doStartup(dict: dict)
         }.resume()
     }
 }

@@ -20,8 +20,13 @@ class RTRSMoreTableViewController: UITableViewController {
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
-        self.navigationController?.navigationBar.backgroundColor = .black
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.backgroundColor = .black
     }
 
     // MARK: - Table view data source

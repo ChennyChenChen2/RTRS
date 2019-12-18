@@ -21,6 +21,13 @@ class RootTabController: UITabBarController {
     @objc func showPlayerView() {
         if let view = self.playerView {
             view.removeFromSuperview()
+            self.playerView = nil
+            
+            for subview in self.view.subviews {
+                if subview is TabBarPlayerView {
+                    subview.removeFromSuperview()
+                }
+            }
         }
         
         let viewHeight: CGFloat = 50.0
@@ -38,6 +45,7 @@ class RootTabController: UITabBarController {
         
     @objc func showPodVC() {
         if let vc = PodcastManager.shared.currentPodVC {
+            vc.displayedViaTabView = true
             self.present(vc, animated: true, completion: nil)
         }
     }

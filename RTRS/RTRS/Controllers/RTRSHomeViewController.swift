@@ -21,6 +21,11 @@ class RTRSHomeViewController: UITableViewController {
         self.view.layoutIfNeeded()
         
         self.navigationItem.customizeNavBarForHome()
+        
+        let titleImageView = UIImageView(image: #imageLiteral(resourceName: "Top-Nav-Image"))
+        titleImageView.contentMode = .scaleAspectFit
+        titleImageView.frame.size = CGSize(width: 50.0, height: 50.0)
+        self.navigationItem.titleView = titleImageView
         self.view.backgroundColor = .black
         
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
@@ -30,12 +35,6 @@ class RTRSHomeViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.setNeedsLayout()
         self.navigationController?.navigationBar.layoutIfNeeded()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        if #available(iOS 11.0, *) {
-            print("HERE")
-        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -17,13 +17,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="beO-5z-TDv">
-                                <rect key="frame" x="0.0" y="-82" width="414" height="1060"/>
+                                <rect key="frame" x="0.0" y="-132" width="414" height="1060"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="beO-5z-TDv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="JEM-Sg-pm9"/>
-                            <constraint firstItem="beO-5z-TDv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="auF-d0-RiW"/>
+                            <constraint firstItem="beO-5z-TDv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-50" id="auF-d0-RiW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="beO-5z-TDv" secondAttribute="trailing" constant="1.1368683772161603e-13" id="dGA-yV-jX2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

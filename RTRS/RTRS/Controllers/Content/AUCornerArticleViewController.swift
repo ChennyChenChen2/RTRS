@@ -17,7 +17,9 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var webViewContainer: UIView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var webViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollViewTopConstraint: NSLayoutConstraint!
     
+    var dismissButton: UIButton?
     var saveButton: UIBarButtonItem!
     var viewModel: AUCornerSingleArticleViewModel?
     var webView: WKWebView?
@@ -67,6 +69,22 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
                 }
             })
         }
+        
+        if self.navigationController == nil || self.isBeingPresented {
+            self.dismissButton = UIButton()
+            self.dismissButton?.translatesAutoresizingMaskIntoConstraints = false
+            self.dismissButton?.setImage(#imageLiteral(resourceName: "Dismiss-Icon"), for: .normal)
+            
+            self.dismissButton?.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+            self.view.addSubview(self.dismissButton!)
+            self.scrollViewTopConstraint.constant = 50
+        } else {
+            self.scrollViewTopConstraint.constant = 0
+        }
+    }
+    
+    @objc func dismissAction() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     deinit {
@@ -74,6 +92,9 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     }
     
     override func viewWillLayoutSubviews() {
+        self.dismissButton?.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
+        self.dismissButton?.bottomAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: -10).isActive = true
+                
         self.webView?.leftAnchor.constraint(equalTo: self.webViewContainer.leftAnchor, constant:2.5).isActive = true
         self.webView?.rightAnchor.constraint(equalTo: self.webViewContainer.rightAnchor, constant: 2.5).isActive = true
         self.webView?.topAnchor.constraint(equalTo: self.webViewContainer.topAnchor, constant: 5.0).isActive = true

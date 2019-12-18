@@ -71,11 +71,12 @@ class RTRSOperation: Operation {
                     } else {
                         doc = try SwiftSoup.parse(htmlString)
                     }
+                    
                     if let type = RTRSScreenType(rawValue: self.pageName) {
                         var viewModel: RTRSViewModel?
                         var deferredCompletion = false
                         
-                        if type == .au || type == .podcasts {
+                        if type == .au || type == .podcasts || type == .processPups {
                             viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, completionHandler: self.customCompletion)
                             deferredCompletion = true
                         } else {
@@ -93,17 +94,14 @@ class RTRSOperation: Operation {
                             }
                         } else {
                             retrieveSavedDataIfAvailable()
-                            self.customCompletion?(nil)
                         }
                     } else {
                         retrieveSavedDataIfAvailable()
-                        self.customCompletion?(nil)
                     }
                 }
             } catch {
                 print("Error?")
                 retrieveSavedDataIfAvailable()
-                self.customCompletion?(nil)
             }
         } else {
             retrieveSavedDataIfAvailable()
@@ -125,7 +123,7 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.au.rawValue:
             return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
         case RTRSScreenType.processPups.rawValue:
-            return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil)
+            return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler)
         case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         case RTRSScreenType.newsletter.rawValue:
