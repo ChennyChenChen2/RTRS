@@ -53,7 +53,7 @@ class MultiPhotoContainerView: UIView {
             imageView.contentMode = .scaleAspectFit
             imageView.frame.size.width = imageWidth
             imageView.pin_setImage(from: url) { [weak self] (result) in
-                guard let weakSelf = self else { return }
+                guard let weakSelf = self, result.error == nil else { return }
                 imageView.sizeToFit()
                 
                 let aspectRatio = imageView.frame.size.width / imageView.frame.size.height

@@ -46,18 +46,24 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
         self.webViewContainer.addSubview(self.webView)
     }
     
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        RTRSErrorHandler.showNetworkError(in: self) { [weak self] in
+            self?.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
-        if navigationAction.navigationType == .linkActivated {
-            guard let url = navigationAction.request.url else {
-                decisionHandler(.cancel)
-                return
-            }
-            
-            UIApplication.shared.open(url, options: [:]) { (success) in }
-            decisionHandler(.cancel)
-            return
-        }
+//        if navigationAction.navigationType == .linkActivated {
+//            guard let url = navigationAction.request.url else {
+//                decisionHandler(.cancel)
+//                return
+//            }
+//
+//            UIApplication.shared.open(url, options: [:]) { (success) in }
+//            decisionHandler(.cancel)
+//            return
+//        }
         
         decisionHandler(.allow)
     }

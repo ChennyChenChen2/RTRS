@@ -57,15 +57,16 @@ class RTRSOperationCoordinator {
         
             if let podSource = dict["podSource"] as? [String: Any],
                 let podSourceURLString = podSource["url"] as? String,
-                let podSourceURL = URL(string: podSourceURLString), let lastUpdate = podSource["lastUpdate"] as? Int
+                let podSourceURL = URL(string: podSourceURLString),
+                let ignoreTitles = podSource["ignoreTitles"] as? [String]
             {
-                let operation = RTRSOperation(urls: [podSourceURL], pageName: "Pod Source", type: "Pod Source", lastUpdate: lastUpdate)
+                let operation = RTRSOperation(urls: [podSourceURL], pageName: "Pod Source", type: "Pod Source", ignoreTitles: ignoreTitles)
                 operation.customCompletion = operationCompletion
                 self.operationQueue.addOperation(operation)
             }
                 
             for page in pages {
-                if let name = page["name"] as? String, let type = page["type"] as? String, let lastUpdate = page["lastUpdate"] as? Int {
+                if let name = page["name"] as? String, let type = page["type"] as? String {
                     var urls = [URL]()
                     if let urlString = page["link"] as? String, let url = URL(string: urlString) {
                        urls.append(url)
@@ -77,7 +78,12 @@ class RTRSOperationCoordinator {
                         }
                     }
                     
-                    let operation = RTRSOperation(urls: urls, pageName: name, type: type, lastUpdate: lastUpdate)
+                    var ignoreTitles = [String]()
+                    if let titles = page["ignoreTitles"] as? [String] {
+                        ignoreTitles = titles
+                    }
+                    
+                    let operation = RTRSOperation(urls: urls, pageName: name, type: type, ignoreTitles: ignoreTitles)
                     operation.customCompletion = operationCompletion
                     self.operationQueue.addOperation(operation)
                 }

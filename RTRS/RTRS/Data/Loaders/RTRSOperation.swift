@@ -15,14 +15,14 @@ class RTRSOperation: Operation {
     let urls: [URL]
     let pageName: String
     let type: String
-    let lastUpdate: Int
+    let ignoreTitles: [String]
     var customCompletion: ((RTRSViewModel?) -> ())?
     
-    required init(urls: [URL], pageName: String, type: String, lastUpdate: Int) {
+    required init(urls: [URL], pageName: String, type: String, ignoreTitles: [String]) {
         self.urls = urls
         self.pageName = pageName
         self.type = type
-        self.lastUpdate = lastUpdate
+        self.ignoreTitles = ignoreTitles
         
         super.init()
     }
@@ -54,72 +54,98 @@ class RTRSOperation: Operation {
         }
             
         var shouldUpdate = false
-        let keyName = "\(self.pageName)-\(RTRSUserDefaultsKeys.lastUpdated)"
-        let updated = UserDefaults.standard.integer(forKey: keyName)
-        if updated < self.lastUpdate {
-            UserDefaults.standard.set(self.lastUpdate, forKey: keyName)
-            shouldUpdate = true
-        }
-     
-        if shouldUpdate {
-            do {
-                if let url = self.urls.first {
-                    let htmlString = try String.init(contentsOf: url)
-                    var doc: Document
-                    if self.pageName == "Pod Source" {
-                        doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
-                    } else {
-                        doc = try SwiftSoup.parse(htmlString)
+        if let url = self.urls.first {
+            var request = URLRequest(url: url)
+            request.httpMethod = "HEAD"
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let response = response as? HTTPURLResponse,
+                    let headers = response.allHeaderFields as? [String: String] else {
+                    retrieveSavedDataIfAvailable()
+                    return
+                }
+                
+                let keyName = "\(self.pageName)-\(RTRSUserDefaultsKeys.lastUpdated)"
+                let updated = UserDefaults.standard.string(forKey: keyName)
+                var lastUpdated = headers["Last-Modified"]
+                
+                if lastUpdated != nil {
+                    if updated != lastUpdated {
+                        shouldUpdate = true
+                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
+                        UserDefaults.standard.synchronize()
                     }
-                    
-                    if let type = RTRSScreenType(rawValue: self.pageName) {
-                        var viewModel: RTRSViewModel?
-                        var deferredCompletion = false
-                        
-                        if type == .au || type == .podcasts || type == .processPups {
-                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, completionHandler: self.customCompletion)
-                            deferredCompletion = true
-                        } else {
-                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls)
-                        }
-                        	
-                        if let theViewModel = viewModel {
-                            DispatchQueue.main.async {
-                                RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                                RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
-                            }
-                            
-                            if !deferredCompletion {
-                                self.customCompletion?(viewModel)
-                            }
-                        } else {
-                            retrieveSavedDataIfAvailable()
-                        }
-                    } else {
-                        retrieveSavedDataIfAvailable()
+                } else {
+                    lastUpdated = headers["Etag"]
+                    if updated != lastUpdated {
+                        shouldUpdate = true
+                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
+                        UserDefaults.standard.synchronize()
                     }
                 }
-            } catch {
-                print("Error?")
-                retrieveSavedDataIfAvailable()
+            
+                if shouldUpdate {
+                    do {
+                        if let url = self.urls.first {
+                            let htmlString = try String.init(contentsOf: url)
+                            var doc: Document
+                            if self.pageName == "Pod Source" {
+                                doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
+                            } else {
+                                doc = try SwiftSoup.parse(htmlString)
+                            }
+                           
+                            if let type = RTRSScreenType(rawValue: self.pageName) {
+                                var viewModel: RTRSViewModel?
+                                var deferredCompletion = false
+                               
+                                if type == .au || type == .podcasts || type == .processPups {
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name:     self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion)
+                                    deferredCompletion = true
+                                } else {
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
+                                }
+                                   
+                                if let theViewModel = viewModel {
+                                    DispatchQueue.main.async {
+                                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                                        RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
+                                    }
+                                   
+                                    if !deferredCompletion {
+                                        self.customCompletion?(viewModel)
+                                    }
+                                } else {
+                                    retrieveSavedDataIfAvailable()
+                                }
+                            } else {
+                                retrieveSavedDataIfAvailable()
+                            }
+                        }
+                    } catch {
+                        print("Error?")
+                        retrieveSavedDataIfAvailable()
+                    }
+                } else {
+                    retrieveSavedDataIfAvailable()
+                }
             }
-        } else {
-            retrieveSavedDataIfAvailable()
+            
+            task.resume()
         }
     }
 }
 
 fileprivate class RTRSViewModelFactory {
     
-    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil) -> RTRSViewModel? {
+    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil) -> RTRSViewModel? {
         
         switch name {
         case RTRSScreenType.home.rawValue:
             return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
         case RTRSScreenType.podSource.rawValue:
-            return RTRSPodSourceViewModel(doc: doc, pods: nil)
+            return RTRSPodSourceViewModel(doc: doc, pods: nil, ignoreTitles: ignoreTitles)
         case RTRSScreenType.podcasts.rawValue:
-            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, completionHandler: completionHandler)
+            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler)
         case RTRSScreenType.au.rawValue:
             return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
         case RTRSScreenType.processPups.rawValue:

@@ -10,6 +10,7 @@ import UIKit
 
 class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICollectionViewDataSource {
 
+    @IBOutlet weak var pupNameLabel: UILabel!
     @IBOutlet weak var pupDescriptionTextView: UITextView!
     static let storyboardId = "standalonePups"
     var viewModel: RTRSProcessPupsViewModel!
@@ -25,6 +26,7 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
         let index = self.collectionView.indexOfMajorCell()
         let pup = self.viewModel.processPups[index]
         self.pupDescriptionTextView.attributedText = pup.pupDescription
+        self.pupNameLabel.text = pup.pupName
     }
     
     override func viewWillAppear(_ animated: Bool) {

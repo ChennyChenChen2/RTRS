@@ -39,10 +39,12 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     
     var pods = [String: URL]() // TODO: Guess we don't need this anymore
     var podUrls = [URL]()
+    var ignoreTitles: [String]
     
-    required init(doc: Document?, pods: [String: URL]?, podUrls: [URL]? = nil) {
+    required init(doc: Document?, pods: [String: URL]?, podUrls: [URL]? = nil, ignoreTitles: [String]?) {
         self.pods = pods ?? [String: URL]()
         self.podUrls = podUrls ?? [URL]()
+        self.ignoreTitles = ignoreTitles ?? [String]()
         super.init()
         self.extractDataFromDoc(doc: doc, urls: nil)
     }
@@ -51,24 +53,17 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
         let pods = coder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [String: URL]
         let podUrls = coder.decodeObject(forKey: CodingKeys.podUrls.rawValue) as? [URL]
         
-        self.init(doc: nil, pods: pods, podUrls: podUrls)
+        self.init(doc: nil, pods: pods, podUrls: podUrls, ignoreTitles: nil)
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
-        guard let theDoc = doc, let element = try? theDoc.getElementsByTag("pubDate").first() else { return }
+        guard let theDoc = doc else { return }
         
         do {
             let items = try theDoc.getElementsByTag("item")
             for item in items {
-                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let dateElem = try item.getElementsByTag("pubDate").first(), let dateString = try? dateElem.text(), let link = URL(string: try linkElem.attr("url")) {
-                    let inputFormatter = DateFormatter()
-                    inputFormatter.dateFormat = "E, dd MMM yyyyy HH:mm:ss Z" // Fri, 28 Dec 2018 18:51:20 +0000
-                    
-                    let outputFormatter = DateFormatter()
-                    outputFormatter.dateFormat = "MMMM dd, yyyy"
-                    if let date = inputFormatter.date(from: dateString) {
-                        let formattedString = outputFormatter.string(from: date)
-                        pods[formattedString] = link
+                if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let link = URL(string: try linkElem.attr("url")) {
+                    if let title = try? titleElem.text(), !self.ignoreTitles.contains(title) {
                         podUrls.append(link)
                     }
                 }

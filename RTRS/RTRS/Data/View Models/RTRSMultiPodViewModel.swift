@@ -36,17 +36,19 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let pods = aDecoder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [RTRSSinglePodViewModel]
         
-        self.init(urls: nil, name: name, pods: pods, completionHandler: nil)
+        self.init(urls: nil, name: name, pods: pods, ignoreTitles: nil, completionHandler: nil)
     }
 
     let name: String?
     var content: [SingleContentViewModel] = [RTRSSinglePodViewModel]()
     var completion: ((RTRSViewModel?) -> ())?
+    var ignoreTitles: [String]?
 
-    required init(urls: [URL]?, name: String?, pods: [RTRSSinglePodViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
+    required init(urls: [URL]?, name: String?, pods: [RTRSSinglePodViewModel]?, ignoreTitles: [String]?, completionHandler: ((RTRSViewModel?) -> ())?) {
         self.name = name
         self.content = pods ?? []
         self.completion = completionHandler
+        self.ignoreTitles = ignoreTitles
         super.init()
         extractDataFromDoc(doc: nil, urls: urls)
     }
@@ -76,13 +78,13 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                         let aElement = try? titleElement.getElementsByTag("a").first(),
                         let dateElement = theDateElem,
                         let title = try? aElement.text(),
-                        let urlSuffix = try? aElement.attr("href"),
                         let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
                         let podDescription = try? descriptionTextElement.text(),
                         let imageAttribute = try? imageElement.attr("data-asset-url")
                     {
-                        guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { continue }
+                        if let titles = self.ignoreTitles, titles.contains(title) {
+                            continue
+                        }
                         
                         var theTitle = title
                         if let openBracketIndex = title.firstIndex(of: "["), let closeBracketIndex = title.firstIndex(of: "]") {

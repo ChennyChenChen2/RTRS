@@ -588,9 +588,9 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mHH-u7-XvV">
-                                <rect key="frame" x="20" y="102" width="70" height="34"/>
+                                <rect key="frame" x="20" y="102" width="25" height="25"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="DISMISS"/>
+                                <state key="normal" image="Dismiss-Icon"/>
                                 <connections>
                                     <action selector="dismissButtonPressed:" destination="61u-pN-KfT" eventType="touchUpInside" id="K7D-FN-BSP"/>
                                 </connections>
@@ -645,16 +645,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="0.0" y="133" width="414.00000000000011" height="530"/>
+                                <rect key="frame" x="0.0" y="-132" width="414" height="1060"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="665" width="20" height="20"/>
+                                <rect key="frame" x="197" y="930" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="91.5" y="690" width="231.5" height="21"/>
+                                <rect key="frame" x="62" y="955" width="290.5" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="HzC-nL-cr6"/>
-                                    <constraint firstAttribute="width" constant="231.5" id="edu-Gz-zFn"/>
+                                    <constraint firstAttribute="width" constant="290.5" id="edu-Gz-zFn"/>
                                 </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="PROCESSING.......................">
@@ -941,7 +941,7 @@
                                 </cells>
                             </collectionView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Doggo text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VTl-8I-5Qr">
-                                <rect key="frame" x="20" y="506" width="374" height="356"/>
+                                <rect key="frame" x="20" y="562" width="374" height="300"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -955,24 +955,34 @@
                                     <action selector="dismissButtonPressed:" destination="QsD-fi-Oda" eventType="touchUpInside" id="sdg-Ks-CHg"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Doggo Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwo-AM-hJ8">
+                                <rect key="frame" x="20" y="506" width="374" height="26"/>
+                                <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="22"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="u9E-Sr-Tvw" firstAttribute="trailing" secondItem="xwo-AM-hJ8" secondAttribute="trailing" constant="20" id="62c-cf-Abu"/>
                             <constraint firstItem="TVK-Ae-oOM" firstAttribute="top" secondItem="u9E-Sr-Tvw" secondAttribute="top" constant="40" id="9QW-5r-wLc"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="trailing" secondItem="TVK-Ae-oOM" secondAttribute="trailing" id="HlH-5G-Qca"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="bottom" secondItem="VTl-8I-5Qr" secondAttribute="bottom" id="JJa-pE-S0K"/>
+                            <constraint firstItem="VTl-8I-5Qr" firstAttribute="top" secondItem="xwo-AM-hJ8" secondAttribute="bottom" constant="30" id="K3d-DY-qnV"/>
                             <constraint firstItem="F2I-3i-XXJ" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="31" id="Khg-Ba-aWQ"/>
-                            <constraint firstItem="VTl-8I-5Qr" firstAttribute="top" secondItem="TVK-Ae-oOM" secondAttribute="bottom" constant="8" id="Kj3-PO-xVM"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="top" secondItem="F2I-3i-XXJ" secondAttribute="top" id="R8v-kt-eYK"/>
+                            <constraint firstItem="xwo-AM-hJ8" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="20" id="X47-hn-Z67"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="trailing" secondItem="VTl-8I-5Qr" secondAttribute="trailing" constant="20" id="XVX-gy-Lr0"/>
                             <constraint firstItem="TVK-Ae-oOM" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" id="jKW-5o-tfE"/>
                             <constraint firstItem="VTl-8I-5Qr" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="20" id="mKr-dR-8ag"/>
+                            <constraint firstItem="xwo-AM-hJ8" firstAttribute="top" secondItem="TVK-Ae-oOM" secondAttribute="bottom" constant="8" id="mrN-HS-vZe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="u9E-Sr-Tvw"/>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="TVK-Ae-oOM" id="fUO-ab-tMA"/>
                         <outlet property="pupDescriptionTextView" destination="VTl-8I-5Qr" id="dcW-9y-mds"/>
+                        <outlet property="pupNameLabel" destination="xwo-AM-hJ8" id="xsT-9N-bgq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofD-aV-ffz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

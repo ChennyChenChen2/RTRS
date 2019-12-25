@@ -16,7 +16,6 @@
 			"name": "Home",
 			"link": "https://www.rightstorickysanchez.com",
 			"type": "homepage",
-            "lastUpdate": 1574199070,
             "announcement":
             {
                 "title": "Join the Bark in the Park team!",
@@ -27,26 +26,39 @@
 			"name": "About",
 			"link": "https://www.rightstorickysanchez.com/about",
 			"type": "descriptionPage",
-            "lastUpdate": 1574199068
 		},
 		{
             "name": "The Pod",
             "type": "multimedia",
-            "lastUpdate": 1574199070,
+            "ignoreTitles": ["Rights To Ricky Sanchez Providence Animal Center Bark In The Park 5K Team",
+                "Fly The Process IV: Sixers vs. Minnesota Timberwolves",
+                "Summer Vacation: The Ricky Rebroadcasts",
+                "Bus/Fly The Process III: Operation Shithole",
+                "Mike Levin's \"The Process Is The Most Dramatic Thing In Sports History\" Recap",
+                "[05.16.17] The Lottery Party Podcasts",
+                "2017 Lottery Party T-Shirts",
+                "2017 Lottery Party Recap, Podcasts And Links #SamsTown",
+                "Contest: Get Engaged At The Lottery Party With LL Pavorsky",
+                "2017 Process, Hinkie Related Christmas Gifts",
+                "Bus The Process II: Rights To Ricky Sanchez Bus Trip To D.C. (F*ck Andrew Sharp)",
+                "Apply To Be A Fan Representative In The Retweet Armageddon Congress"
+                
+            ],
             "links": ["https://www.rightstorickysanchez.com/podcast",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1563022800515",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1557717089396",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1552448153380",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1546799406773",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1541259108716",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1535217344820",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1528338738258",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1523121303713",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1513184669957",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1504905649264",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1496508381161",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1487005942529",
-                    "https://www.rightstorickysanchez.com/podcast?offset=1475945797103"]
+                    "https://www.rightstorickysanchez.com/podcast?page=2",
+                    "https://www.rightstorickysanchez.com/podcast?page=3",
+                    "https://www.rightstorickysanchez.com/podcast?page=4",
+                    "https://www.rightstorickysanchez.com/podcast?page=5",
+                    "https://www.rightstorickysanchez.com/podcast?page=6",
+                    "https://www.rightstorickysanchez.com/podcast?page=7",
+                    "https://www.rightstorickysanchez.com/podcast?page=8",
+                    "https://www.rightstorickysanchez.com/podcast?page=9",
+                    "https://www.rightstorickysanchez.com/podcast?page=10",
+                    "https://www.rightstorickysanchez.com/podcast?page=11",
+                    "https://www.rightstorickysanchez.com/podcast?page=12",
+                    "https://www.rightstorickysanchez.com/podcast?page=13",
+                    "https://www.rightstorickysanchez.com/podcast?page=14",
+                    "https://www.rightstorickysanchez.com/podcast?page=15"]
 		},
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
@@ -56,30 +68,39 @@
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1537799312931",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1525602099530"],
             "type": "contentlist",
-            "lastUpdate": 1574199069
         },
         {
             "name": "Newsletter",
             "link": "https://www.rightstorickysanchez.com/newsletter",
             "type": "externallink",
-            "lastUpdate": 1574199068
         },
         {
             "name": "Process Pups",
             "link": "https://www.rightstorickysanchez.com/processpups",
             "type": "contentlist",
-            "lastUpdate": 1574199070
         },
         {
             "name": "T-Shirt Store",
             "link": "https://crackedbellphl.com/collections/rights-to-ricky-sanchez",
             "type": "externallink",
-            "lastUpdate": 1574199068
         }
 	],
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
-        "lastUpdate": 1574199070
+        "ignoreTitles": [
+            "Important Announcement: He's Coming Over!",
+            "The Nik Stauskas Interview (Ricky Rebroadcast)",
+            "Hanging With Spencer Hawes and The Michael Carter-Williams Trade (Ricky Rebroadcast)",
+            "The Night They Drafted Okafor (Ricky Rebroadcast)",
+            "The Fight About Evan Turner vs. Dion Waiters At The Trade Deadline (Ricky Rebroadcast)",
+            "The Paul Millsap All-Star Episode (Ricky Rebroadcast)",
+            "The Jrue Holiday Trade (Ricky Rebroadcast)",
+            "Good: Lottery Party Preview",
+            "Post Lottery All-Star Podcast From XFINITY Live!",
+            "Post Lottery Party Podcast With Spike And Mike, Sixers Get #3 Pick",
+            "Bus The Process Instructions And Information (And Hollis Thompson Farewell)",
+            "Sam Hinkie's Resignation Letter"
+        ],
     },
     "moreItems": [
         "About",

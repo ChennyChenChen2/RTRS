@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTRSAboutViewController: UIViewController {
+class RTRSAboutViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textView: UITextView!
@@ -21,19 +21,19 @@ class RTRSAboutViewController: UIViewController {
         self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
         self.imageView.pin_setImage(from: viewModel?.imageUrl)
         
+        self.textView.delegate = self
         self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
         
         self.navigationController?.navigationBar.tintColor = .white
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        
+        if let navController = self.navigationController as? RTRSNavigationController {
+            let payload = RTRSDeepLinkPayload(baseURL: URL, title: URL.absoluteString)
+            RTRSDeepLinkHandler.route(payload: payload, navController: navController)
+        }
+        
+        return false
     }
-    */
-
 }

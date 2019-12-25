@@ -2,6 +2,8 @@ PODS:
   - Atributika (4.8.2)
   - Firebase (4.13.0):
     - Firebase/Core (= 4.13.0)
+  - Firebase/Analytics (4.13.0):
+    - Firebase/Core
   - Firebase/Core (4.13.0):
     - FirebaseAnalytics (= 4.2.0)
     - FirebaseCore (= 4.0.20)
@@ -44,12 +46,13 @@ PODS:
   - PINRemoteImage/FLAnimatedImage (2.1.4):
     - FLAnimatedImage (>= 1.0)
     - PINRemoteImage/Core
-  - Protobuf (3.10.0)
+  - Protobuf (3.11.2)
   - SwiftSoup (2.2.0)
 
 DEPENDENCIES:
   - Atributika (= 4.8.2)
   - Firebase
+  - Firebase/Analytics
   - Firebase/Messaging
   - FirebaseInstanceID (= 2.0.0)
   - FLEX (~> 2.4)
@@ -89,9 +92,9 @@ SPEC CHECKSUMS:
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
-  Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
+  Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 0f6f179a6d3694aaed20f0d0449589ffb076dc58
+PODFILE CHECKSUM: 4af0b9d9f9f229281e29ebb87b1ddd8ffdca7f50
 
 COCOAPODS: 1.7.4

@@ -53,17 +53,6 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         
         PodcastManager.shared.delegate = self
         self.playButton.isHidden = true
-       
-        if let viewModel = self.multiPodViewModel, let index = viewModel.content.firstIndex(where: { (vm) -> Bool in
-            return vm.title == self.viewModel.title
-        }) {
-            let pageSize = self.view.bounds.size
-            let page: Int = index
-            let contentOffset = CGPoint(x: pageSize.width * CGFloat(page), y: 0)
-            DispatchQueue.main.async {
-                self.collectionView.setContentOffset(contentOffset, animated: false)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -13,8 +13,8 @@ class RTRSNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let appearanceProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [RTRSNavigationController.self])
+        appearanceProxy.tintColor = .white
         
-        // Do any additional setup after loading the view.
     }
     
 //    override var navigationBar: UINavigationBar {

@@ -229,6 +229,10 @@ class TabBarPlayerView: UIView {
     override func layoutSubviews() {
         let manager = PodcastManager.shared
         if let title = manager.title, let dateString = manager.dateString {
+            for subview in self.subviews {
+                subview.removeFromSuperview()
+            }
+            
             self.titleLabel = MarqueeLabel()
             self.titleLabel.text = "\(title). "
             self.titleLabel.textColor = .white

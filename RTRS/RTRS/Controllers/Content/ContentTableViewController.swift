@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ContentTableViewController: UITableViewController, UISearchBarDelegate {
+class ContentTableViewController: UITableViewController, UISearchBarDelegate, LoggableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     var viewModel: MultiContentViewModel?
@@ -25,7 +25,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
         
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
             self.viewModel = theViewModel
@@ -76,6 +76,15 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         savedContentUpdated()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsUtils.logScreenView(self)
+    }
+    
+    func viewModelForLogging() -> RTRSViewModel? {
+        return self.viewModel is RTRSViewModel ? (self.viewModel as! RTRSViewModel) : nil
     }
 
     // MARK: - Table view data source
@@ -220,11 +229,11 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate {
         
         self.filteredResults = articles.filter { (viewModel) -> Bool in
             
-            if let title = viewModel.title, title.contains(searchText) {
+            if let title = viewModel.title, title.lowercased().contains(searchText.lowercased()) {
                 return true
-            } else if let description = viewModel.contentDescription, description.contains(searchText) {
+            } else if let description = viewModel.contentDescription?.lowercased(), description.contains(searchText.lowercased()) {
                 return true
-            } else if let dateString = viewModel.dateString, dateString.contains(searchText) {
+            } else if let dateString = viewModel.dateString?.lowercased(), dateString.contains(searchText.lowercased()) {
                 return true
             }
             

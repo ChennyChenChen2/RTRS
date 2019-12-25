@@ -50,7 +50,7 @@ class RTRSDeepLinkHandler: NSObject {
                                 if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
                                      vc = theVC
                                  } else {
-                                     vc = storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController
+                                    vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
                                      vc.viewModel = podVM
                                      PodcastManager.shared.currentPodVC = vc
                                  }
@@ -59,7 +59,8 @@ class RTRSDeepLinkHandler: NSObject {
                             }
                         }
                     }
-                } catch {
+                } catch let error {
+                    RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
                     return
                 }
             }
@@ -67,7 +68,7 @@ class RTRSDeepLinkHandler: NSObject {
             if url.path.contains("podcast") {
                 completion(url)
             } else if url.absoluteString.contains("bit.ly") {
-                makeBitlyRequest(url, completion: completion)
+                makeBitlyRequest(url, navController: navController, completion: completion)
             }
         } else if url.path.contains("if-not-will-convey-as-two-second-rounders") {
             if let vm = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
@@ -93,7 +94,7 @@ class RTRSDeepLinkHandler: NSObject {
         }
     }
     
-    fileprivate static func makeBitlyRequest(_ url: URL, completion: @escaping (URL) -> ()) {
+    fileprivate static func makeBitlyRequest(_ url: URL, navController: RTRSNavigationController, completion: @escaping (URL) -> ()) {
         let requestUrlString = "https://api-ssl.bitly.com/v3/expand?access_token=f7916216fac500f0cd358971fddb8399330ddb9f&shortUrl=\(url.absoluteString)"
         if let requestUrl = URL(string: requestUrlString) {
             URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
@@ -110,6 +111,9 @@ class RTRSDeepLinkHandler: NSObject {
                             }
                         }
                     }
+                } else {
+                    // TODO: Refactor out error handling stuff
+                    RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
                 }
             }.resume()
         }

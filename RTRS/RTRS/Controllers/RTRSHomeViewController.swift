@@ -8,8 +8,7 @@
 
 import UIKit
 
-class RTRSHomeViewController: UITableViewController {
-
+class RTRSHomeViewController: UITableViewController, LoggableViewController {
     private var viewModel: RTRSHomeViewModel?
     
     override func viewDidLoad() {
@@ -35,6 +34,11 @@ class RTRSHomeViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.setNeedsLayout()
         self.navigationController?.navigationBar.layoutIfNeeded()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsUtils.logScreenView(self)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -74,6 +78,10 @@ class RTRSHomeViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    func viewModelForLogging() -> RTRSViewModel? {
+        return self.viewModel
     }
 }
 

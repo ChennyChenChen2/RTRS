@@ -30,20 +30,10 @@ class LoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        func showError() {
-            DispatchQueue.main.async { [weak self] in
-                guard let weakSelf = self else { return }
-                let alert = UIAlertController(title: "Something went wrong. You hate to see it.", message: "Maybe your internet is as bad as AU's. Please try again later, or contact Kornblau if you suspect someone is sabotaging you.", preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(action)
-                weakSelf.present(alert, animated: true, completion: nil)
-            }
-        }
-        
         guard let configURLString = Bundle.main.object(forInfoDictionaryKey: "RTRSConfigURL") as? String,
             let configURL = URL(string: configURLString) else {
                 // We'll show an error here, but really, it was definitely our fault, lol...
-                showError()
+                RTRSErrorHandler.showNetworkError(in: self, completion: nil)
                 return
         }
         
@@ -51,6 +41,8 @@ class LoadingViewController: UIViewController {
         self.activityIndicator.startAnimating()
         
         URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
+            guard let weakSelf = self else { return }
+            
             func doStartup(dict: [String: Any]) {
                 guard let weakSelf = self else { return }
                 
@@ -78,7 +70,7 @@ class LoadingViewController: UIViewController {
                             weakSelf.navigationController?.setViewControllers([vc], animated: true)
                         }
                     } else {
-                        showError()
+                        RTRSErrorHandler.showNetworkError(in: weakSelf, completion: nil)
                     }
                 }
             }
@@ -99,7 +91,7 @@ class LoadingViewController: UIViewController {
                 if let config = getBundledConfig() {
                     doStartup(dict: config)
                 } else {
-                    showError()
+                    RTRSErrorHandler.showNetworkError(in: weakSelf, completion: nil)
                 }
             } else {
                 // USING BUNDLED CONFIG FOR TESTING
@@ -125,7 +117,7 @@ class LoadingViewController: UIViewController {
                 if let dict = configDict {
                     doStartup(dict: dict)
                 } else {
-                    showError()
+                    RTRSErrorHandler.showNetworkError(in: weakSelf, completion: nil)
                 }
             }
         }.resume()
