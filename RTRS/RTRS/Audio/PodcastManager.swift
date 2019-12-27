@@ -48,6 +48,9 @@ class PodcastManager: NSObject {
     func play() {
         self.player?.play()
         self.delegate?.podcastDidBeginPlay()
+        if let title = self.title {
+            AnalyticsUtils.logPodBegan(title)
+        }
         self.tabPlayerView?.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
     }
     
@@ -81,6 +84,7 @@ class PodcastManager: NSObject {
         self.title = title
         self.dateString = dateString
         
+        UIApplication.shared.beginReceivingRemoteControlEvents()
         var nowPlayingInfo = [String:Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
         nowPlayingInfo[MPMediaItemPropertyArtist] = "The Rights to Ricky Sanchez"
@@ -89,6 +93,15 @@ class PodcastManager: NSObject {
         })
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            print("Playback OK")
+            try AVAudioSession.sharedInstance().setActive(true)
+            print("Session is Active")
+        } catch {
+            print(error)
+        }
         
         self.player?.pause()
         let item = AVPlayerItem(url: url)
@@ -111,6 +124,10 @@ class PodcastManager: NSObject {
                 let duration = Float(item.duration.seconds)
                 weakSelf.delegate?.podcastTimeDidUpdate(elapsed: time, position: Float(time.seconds) / duration)
                 if time.seconds == item.duration.seconds {
+                    if let title = weakSelf.title {
+                        AnalyticsUtils.logPodFinished(title)
+                    }
+                    
                     weakSelf.delegate?.podcastDidFinish()
                 }
             }
@@ -127,7 +144,7 @@ class PodcastManager: NSObject {
             guard let weakSelf = self else { return .commandFailed }
             
             if let player = weakSelf.player, player.rate > 0.0 {
-                weakSelf.skip(delta: 15.0)
+                weakSelf.skip(delta: 10.0)
                 return .success
             }
             return .commandFailed
@@ -138,7 +155,7 @@ class PodcastManager: NSObject {
             guard let weakSelf = self else { return .commandFailed }
             
             if let player = weakSelf.player, player.rate > 0.0 {
-                weakSelf.skip(delta: -15.0)
+                weakSelf.skip(delta: -10.0)
                 return .success
             }
             return .commandFailed
@@ -158,7 +175,7 @@ class PodcastManager: NSObject {
             return .success
         }
         
-// Seek bar and rate changes are bonus
+        // Seek bar and rate changes are bonus
 //        commandCenter.changePlaybackPositionCommand.isEnabled = true
 //        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
 //            guard let weakSelf = self, let playbackEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }

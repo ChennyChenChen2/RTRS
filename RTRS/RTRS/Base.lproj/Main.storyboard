@@ -22,9 +22,6 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="THE POD" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4pi-5w-OLT">
                                         <rect key="frame" x="50" y="274" width="208" height="45"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="208" id="uG3-NQ-3oa"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="45"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -33,10 +30,7 @@
                                         <rect key="frame" x="200" y="570" width="214" height="243"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AU'S CORNER" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R9H-bG-Ke8">
-                                                <rect key="frame" x="-5.5" y="82.5" width="225" height="78"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="225" id="7G3-Oo-G4b"/>
-                                                </constraints>
+                                                <rect key="frame" x="0.0" y="82.5" width="214" height="78"/>
                                                 <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="39"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -44,8 +38,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="R9H-bG-Ke8" firstAttribute="centerY" secondItem="eP0-Hu-8ez" secondAttribute="centerY" id="1ei-B4-B61"/>
-                                            <constraint firstItem="R9H-bG-Ke8" firstAttribute="centerX" secondItem="eP0-Hu-8ez" secondAttribute="centerX" id="6tl-y2-Vne"/>
+                                            <constraint firstAttribute="trailing" secondItem="R9H-bG-Ke8" secondAttribute="trailing" id="6bB-8b-mSN"/>
+                                            <constraint firstItem="R9H-bG-Ke8" firstAttribute="centerY" secondItem="eP0-Hu-8ez" secondAttribute="centerY" id="Sdz-Aq-xD1"/>
+                                            <constraint firstItem="R9H-bG-Ke8" firstAttribute="leading" secondItem="eP0-Hu-8ez" secondAttribute="leading" id="jaq-Kw-ejB"/>
                                             <constraint firstAttribute="height" constant="243" id="wYj-tP-F0h"/>
                                         </constraints>
                                     </view>
@@ -224,7 +219,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0VL-Nu-n0L">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8wu-f2-bDP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="217"/>
@@ -941,7 +936,7 @@
                                 </cells>
                             </collectionView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Doggo text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VTl-8I-5Qr">
-                                <rect key="frame" x="20" y="562" width="374" height="300"/>
+                                <rect key="frame" x="20" y="539" width="374" height="323"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -956,7 +951,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Doggo Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwo-AM-hJ8">
-                                <rect key="frame" x="20" y="506" width="374" height="26"/>
+                                <rect key="frame" x="20" y="503" width="374" height="26"/>
                                 <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -968,14 +963,14 @@
                             <constraint firstItem="TVK-Ae-oOM" firstAttribute="top" secondItem="u9E-Sr-Tvw" secondAttribute="top" constant="40" id="9QW-5r-wLc"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="trailing" secondItem="TVK-Ae-oOM" secondAttribute="trailing" id="HlH-5G-Qca"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="bottom" secondItem="VTl-8I-5Qr" secondAttribute="bottom" id="JJa-pE-S0K"/>
-                            <constraint firstItem="VTl-8I-5Qr" firstAttribute="top" secondItem="xwo-AM-hJ8" secondAttribute="bottom" constant="30" id="K3d-DY-qnV"/>
+                            <constraint firstItem="VTl-8I-5Qr" firstAttribute="top" secondItem="xwo-AM-hJ8" secondAttribute="bottom" constant="10" id="K3d-DY-qnV"/>
                             <constraint firstItem="F2I-3i-XXJ" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="31" id="Khg-Ba-aWQ"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="top" secondItem="F2I-3i-XXJ" secondAttribute="top" id="R8v-kt-eYK"/>
                             <constraint firstItem="xwo-AM-hJ8" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="20" id="X47-hn-Z67"/>
                             <constraint firstItem="u9E-Sr-Tvw" firstAttribute="trailing" secondItem="VTl-8I-5Qr" secondAttribute="trailing" constant="20" id="XVX-gy-Lr0"/>
                             <constraint firstItem="TVK-Ae-oOM" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" id="jKW-5o-tfE"/>
                             <constraint firstItem="VTl-8I-5Qr" firstAttribute="leading" secondItem="u9E-Sr-Tvw" secondAttribute="leading" constant="20" id="mKr-dR-8ag"/>
-                            <constraint firstItem="xwo-AM-hJ8" firstAttribute="top" secondItem="TVK-Ae-oOM" secondAttribute="bottom" constant="8" id="mrN-HS-vZe"/>
+                            <constraint firstItem="xwo-AM-hJ8" firstAttribute="top" secondItem="TVK-Ae-oOM" secondAttribute="bottom" constant="5" id="mrN-HS-vZe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="u9E-Sr-Tvw"/>
                     </view>
@@ -1094,7 +1089,7 @@
         <image name="Skip-Forward" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cqK-au-f3a"/>
+        <segue reference="Zeb-4G-3Q6"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

@@ -96,6 +96,8 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                             nElem = e
                         } else if let e = try row.getElementsByTag("h2").first() {
                             nElem = e
+                        } else if let e = try row.getElementsByTag("h1").first() {
+                            nElem = e
                         }
                         
                         if let nameElem = nElem {

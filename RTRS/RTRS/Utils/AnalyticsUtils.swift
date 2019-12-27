@@ -29,23 +29,37 @@ class AnalyticsUtils {
         ])
     }
     
-    class func logViewAUMultiArticle() {
-        
-    }
-    
-    class func logViewMultiPod() {
-        
-    }
-    
-    class func logViewAUArticle() {
+    class func logViewProcessPup(_ name: String) {
         Analytics.logEvent(AnalyticsEventViewItem, parameters: [
-            AnalyticsParameterItemName: "Content View"
+            AnalyticsParameterItemName: name,
+            AnalyticsParameterItemID: "Process Pup"
+        ])
+    }
+    
+    class func logPodBegan(_ title: String) {
+        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
+            AnalyticsParameterItemName: title,
+            AnalyticsParameterItemID: "PodBegan"
+        ])
+    }
+    
+    class func logPodFinished(_ title: String) {
+        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
+            AnalyticsParameterItemName: title,
+            AnalyticsParameterItemID: "PodFinished"
+        ])
+    }
+    
+    class func logViewAUArticle(_ title: String) {
+        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
+            AnalyticsParameterItemName: title,
+            AnalyticsParameterItemID: "AU Article"
         ])
     }
     
     class func logError(_ vc: LoggableViewController) {
         Analytics.logEvent("Error", parameters: [
-            AnalyticsParameterItemName: vc.viewModelForLogging()?.pageName(),
+            AnalyticsParameterItemName: vc.viewModelForLogging()!.pageName(),
             "Source View Controller": vc,
         ])
     }

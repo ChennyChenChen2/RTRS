@@ -4,10 +4,6 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
-	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<string>rightstorickysanchez.com</string>
-	</array>
 	<key>inter-app-audio</key>
 	<true/>
 </dict>

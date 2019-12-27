@@ -7,6 +7,9 @@ PODS:
   - Firebase/Core (4.13.0):
     - FirebaseAnalytics (= 4.2.0)
     - FirebaseCore (= 4.0.20)
+  - Firebase/Database (4.13.0):
+    - Firebase/Core
+    - FirebaseDatabase (= 4.1.5)
   - Firebase/Messaging (4.13.0):
     - Firebase/Core
     - FirebaseMessaging (= 2.2.0)
@@ -17,6 +20,10 @@ PODS:
     - nanopb (~> 0.3)
   - FirebaseCore (4.0.20):
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - FirebaseDatabase (4.1.5):
+    - FirebaseAnalytics (~> 4.1)
+    - FirebaseCore (~> 4.0)
+    - leveldb-library (~> 1.18)
   - FirebaseInstanceID (2.0.0):
     - FirebaseCore (~> 4.0)
   - FirebaseMessaging (2.2.0):
@@ -32,7 +39,8 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.2.2)
   - "GoogleToolboxForMac/NSData+zlib (2.2.2)":
     - GoogleToolboxForMac/Defines (= 2.2.2)
-  - MarqueeLabel (4.0.0)
+  - leveldb-library (1.22)
+  - MarqueeLabel (4.0.1)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -53,6 +61,7 @@ DEPENDENCIES:
   - Atributika (= 4.8.2)
   - Firebase
   - Firebase/Analytics
+  - Firebase/Database
   - Firebase/Messaging
   - FirebaseInstanceID (= 2.0.0)
   - FLEX (~> 2.4)
@@ -66,11 +75,13 @@ SPEC REPOS:
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
+    - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseMessaging
     - FLAnimatedImage
     - FLEX
     - GoogleToolboxForMac
+    - leveldb-library
     - MarqueeLabel
     - nanopb
     - PINCache
@@ -83,18 +94,20 @@ SPEC CHECKSUMS:
   Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
   FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
   FirebaseCore: 90cb1c53d69b556f112a1bf72b5fcfaad7650790
+  FirebaseDatabase: 5f0bc6134c5c237cf55f9e1249d406770a75eafd
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
-  MarqueeLabel: b55b26e690b6ad41faedd95cbf5eae6f1d1735b4
+  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  MarqueeLabel: d24e821159667c93064ea3042ccf1875ca94db6b
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 4af0b9d9f9f229281e29ebb87b1ddd8ffdca7f50
+PODFILE CHECKSUM: c7abaadab1d37c62e7dadf9dbe399f28b3c634cc
 
 COCOAPODS: 1.7.4

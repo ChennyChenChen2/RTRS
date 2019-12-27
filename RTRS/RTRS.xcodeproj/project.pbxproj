@@ -109,7 +109,7 @@
 		879CE1D522E1490F002F58CB /* RTRSTransittionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSTransittionCoordinator.swift; sourceTree = "<group>"; };
 		879CE1D722E14A93002F58CB /* RTRSAuCornerTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAuCornerTransition.swift; sourceTree = "<group>"; };
 		879D25592387B6D900C1DA55 /* RTRSSavedContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSSavedContentViewModel.swift; sourceTree = "<group>"; };
-		879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RTRSExternalWebViewController.swift; path = RTRS/Controllers/More/RTRSExternalWebViewController.swift; sourceTree = "<group>"; };
+		879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSExternalWebViewController.swift; sourceTree = "<group>"; };
 		879F1E69236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNewsletterViewModel.swift; sourceTree = "<group>"; };
 		87A53C8023516D9E006822F2 /* AUCornerArticle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AUCornerArticle.html; sourceTree = "<group>"; };
 		87A53C8323555A8D006822F2 /* PodcastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastManager.swift; sourceTree = "<group>"; };
@@ -164,7 +164,6 @@
 		87095A442263BC2B0081A540 = {
 			isa = PBXGroup;
 			children = (
-				879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */,
 				87095A4F2263BC2B0081A540 /* RTRS */,
 				87095A4E2263BC2B0081A540 /* Products */,
 				546E1403B66EE1B96ADF60DC /* Pods */,
@@ -358,6 +357,7 @@
 		87C3B5A722EBC73700560958 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				879F1E67236CF51500DEE6C7 /* RTRSExternalWebViewController.swift */,
 				87095A522263BC2B0081A540 /* RootTabController.swift */,
 				8790C78C22DCF70800E8AE5C /* RTRSNavigationController.swift */,
 			);

@@ -59,7 +59,7 @@ class RTRSDeepLinkHandler: NSObject {
                             }
                         }
                     }
-                } catch let error {
+                } catch {
                     RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
                     return
                 }

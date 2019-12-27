@@ -23,15 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
-            print("Playback OK")
-            try AVAudioSession.sharedInstance().setActive(true)
-            print("Session is Active")
-        } catch {
-            print(error)
-        }
         
         setRootViewController()
         return true
@@ -41,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
         if !firstLaunchFinished {
             UserDefaults.standard.set(true, forKey: firstLaunchFinishedKey)
-            let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Would you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Please trust the processor as the app loads for the first time.\nWould you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
                 if #available(iOS 10.0, *) {
@@ -92,7 +83,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print("HERE")
+        if let link = response.notification.request.content.userInfo["deepLink"] as? String, let url = URL(string: link), let title = response.notification.request.content.userInfo["deepLinkTitle"] as? String, let rootVC = self.window?.rootViewController as? RTRSNavigationController {
+            let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
+            RTRSDeepLinkHandler.route(payload: payload, navController: rootVC)
+        }
     }
     
     func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
