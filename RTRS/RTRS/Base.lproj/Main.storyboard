@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -690,7 +690,7 @@
         <scene sceneID="m2D-GR-2ue">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kzQ-dS-CKm" customClass="RTRSNavigationController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Content" id="Hcq-JW-oYB">
+                    <tabBarItem key="tabBarItem" title="Content" image="Hinkie" id="Hcq-JW-oYB">
                         <color key="badgeColor" name="textColor" catalog="System" colorSpace="catalog"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -988,7 +988,7 @@
         <scene sceneID="D3Q-0k-rzw">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KMl-cS-gNU" customClass="RTRSNavigationController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" id="RHO-NQ-fZ1"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="SpikeMike" id="RHO-NQ-fZ1"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="V9h-Bb-BDH">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1082,11 +1082,13 @@
     <resources>
         <image name="Dismiss-Icon" width="25" height="25"/>
         <image name="Heart-No-Fill" width="25" height="25"/>
+        <image name="Hinkie" width="33" height="33"/>
         <image name="More-Icon" width="19" height="19"/>
         <image name="Play" width="25" height="25"/>
         <image name="RickyLogo" width="425" height="530"/>
         <image name="Skip-Back" width="25" height="25"/>
         <image name="Skip-Forward" width="25" height="25"/>
+        <image name="SpikeMike" width="48" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Zeb-4G-3Q6"/>

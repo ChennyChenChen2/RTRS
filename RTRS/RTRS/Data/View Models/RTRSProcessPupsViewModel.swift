@@ -137,7 +137,7 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Top-Nav-Image")
+        return #imageLiteral(resourceName: "Joel")
     }
     
     func pageUrl() -> URL? {

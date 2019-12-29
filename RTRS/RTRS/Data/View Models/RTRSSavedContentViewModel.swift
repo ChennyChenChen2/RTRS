@@ -19,7 +19,7 @@ class RTRSSavedContentViewModel: NSObject, RTRSViewModel, MultiContentViewModel 
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Top-Nav-Image")
+        return #imageLiteral(resourceName: "Roco")
     }
     
     func pageUrl() -> URL? {

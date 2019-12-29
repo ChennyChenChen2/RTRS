@@ -72,14 +72,16 @@ class RTRSOperation: Operation {
                     if updated != lastUpdated {
                         shouldUpdate = true
                         UserDefaults.standard.set(lastUpdated, forKey: keyName)
-                        UserDefaults.standard.synchronize()
                     }
                 } else {
                     lastUpdated = headers["Etag"]
+                    if let value = lastUpdated {
+                        lastUpdated = value.replacingOccurrences(of: "--gzip", with: "")
+                    }
+                    
                     if updated != lastUpdated {
                         shouldUpdate = true
                         UserDefaults.standard.set(lastUpdated, forKey: keyName)
-                        UserDefaults.standard.synchronize()
                     }
                 }
             

@@ -26,7 +26,7 @@ class RTRSNewsletterViewModel: NSObject, RTRSViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Top-Nav-Image")
+        return #imageLiteral(resourceName: "Dario")
     }
     
     func pageUrl() -> URL? {
@@ -68,7 +68,7 @@ class RTRSTshirtStoreViewModel: NSObject, RTRSViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Top-Nav-Image")
+        return #imageLiteral(resourceName: "TJ")
     }
     
     func pageUrl() -> URL? {

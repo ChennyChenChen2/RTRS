@@ -15,6 +15,11 @@ class RootTabController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let itemAppearance = UITabBarItem.appearance(whenContainedInInstancesOf: [UITabBar.self])
+        let barAppearance = UITabBar.appearance(whenContainedInInstancesOf: [RootTabController.self])
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(showPlayerView), name: NSNotification.Name.PodcastManagerLoadedNewPod, object: nil)
     }
     
