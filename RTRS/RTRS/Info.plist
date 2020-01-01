@@ -28,6 +28,8 @@
 	<string>1.03</string>
 	<key>RTRSConfigURL</key>
 	<string>https://firebasestorage.googleapis.com/v0/b/rights-to-ricky-sanchez.appspot.com/o/RTRSConfig.json?alt=media&amp;token={{TOKEN}}</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-2106401489471689~9460515259</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>CFBundlePackageType</key>
