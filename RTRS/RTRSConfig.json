@@ -11,7 +11,8 @@
         "ARGUING WITH DOUBTERS ABOUT COVINGTON'S VALUE...",
         "LOOKING FOR THE REAL ERIC JR...",
         "NEEDLESSLY GETTING SHOTS UP AT 3AM...",
-        "COUNTING THE NUMBER OF TIMES THE SHOT HIT THE RIM..."],
+        "COUNTING THE NUMBER OF TIMES THE SHOT HIT THE RIM...",
+        "GOING TO NAPA VALLEY TO SEE IF BEN AND JO ARE THERE..."],
 	"pages": [
 		{
 			"name": "Home",
@@ -64,11 +65,16 @@
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
             "links": ["https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1557225162492",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1549539821493",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1537799312931",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?offset=1525602099530"],
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=2",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=3",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=4",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=5"],
             "type": "contentlist",
+        },
+        {
+            "name": "Sixers Adam: Normal Column",
+            "links": ["https://www.rightstorickysanchez.com/normal-column"],
+            "type": "contentlist"
         },
         {
             "name": "Newsletter",
