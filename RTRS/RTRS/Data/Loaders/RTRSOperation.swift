@@ -149,7 +149,9 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.podcasts.rawValue:
             return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler)
         case RTRSScreenType.au.rawValue:
-            return AUCornerMultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+        case RTRSScreenType.normalColumn.rawValue:
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
         case RTRSScreenType.processPups.rawValue:
             return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler)
         case RTRSScreenType.about.rawValue:

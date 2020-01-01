@@ -71,13 +71,13 @@ class RTRSDeepLinkHandler: NSObject {
                 makeBitlyRequest(url, navController: navController, completion: completion)
             }
         } else if url.path.contains("if-not-will-convey-as-two-second-rounders") {
-            if let vm = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
+            if let vm = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
                 let articles = vm.content.filter({ (vm) -> Bool in
-                    guard let articleVm = vm as? AUCornerSingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
+                    guard let articleVm = vm as? SingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
                     return articleUrl == url
                 })
                 
-                if articles.count > 0, let article = articles.first as? AUCornerSingleArticleViewModel {
+                if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
                     
                     let vc = storyboard.instantiateViewController(withIdentifier: "AUSingleArticle") as! AUCornerArticleViewController
                     vc.viewModel = article

@@ -13,7 +13,7 @@ protocol MultiContentViewModel {
     var content: [SingleContentViewModel] { get }
 }
 
-class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
+class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     func pageUrl() -> URL? {
         return nil
     }
@@ -38,16 +38,16 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
     
     required convenience init?(coder aDecoder: NSCoder) {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
-        let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [AUCornerSingleArticleViewModel]
+        let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [SingleArticleViewModel]
         
         self.init(urls: nil, name: name, articles: articles, completionHandler: nil)
     }
 
     let name: String?
-    var content: [SingleContentViewModel]  = [AUCornerSingleArticleViewModel]()
+    var content: [SingleContentViewModel]  = [SingleArticleViewModel]()
     var completion: ((RTRSViewModel?) -> ())?
 
-    required init(urls: [URL]?, name: String?, articles: [AUCornerSingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
+    required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
         self.name = name
         self.content = articles ?? []
         self.completion = completionHandler
@@ -98,7 +98,7 @@ class AUCornerMultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewMo
                         
                         let htmlString = try String.init(contentsOf: articleUrl)
                         let articleDoc = try SwiftSoup.parse(htmlString)
-                        let singleArticleViewModel = AUCornerSingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
+                        let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
                         content.append(singleArticleViewModel)
                     }
                 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -61,12 +61,19 @@
                                             <constraint firstAttribute="height" constant="112" id="zc1-j6-XvJ"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tJh-ii-9ae">
+                                        <rect key="frame" x="0.0" y="327" width="414" height="242"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="tJh-ii-9ae" firstAttribute="top" secondItem="4pi-5w-OLT" secondAttribute="bottom" constant="8" id="3Za-tt-o9r"/>
                                     <constraint firstAttribute="trailing" secondItem="eP0-Hu-8ez" secondAttribute="trailing" id="7Uh-yk-Hxf"/>
                                     <constraint firstAttribute="bottom" secondItem="eP0-Hu-8ez" secondAttribute="bottom" id="CCL-dZ-wKH"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4pi-5w-OLT" secondAttribute="trailing" constant="156" id="Ciy-gI-ewB"/>
+                                    <constraint firstAttribute="trailing" secondItem="tJh-ii-9ae" secondAttribute="trailing" id="IfL-Ab-qJ9"/>
+                                    <constraint firstItem="eP0-Hu-8ez" firstAttribute="top" secondItem="tJh-ii-9ae" secondAttribute="bottom" constant="1" id="gHm-wx-oIZ"/>
                                     <constraint firstItem="eP0-Hu-8ez" firstAttribute="leading" secondItem="fkB-j7-QJk" secondAttribute="leading" constant="200" id="jys-5z-aHM"/>
                                     <constraint firstItem="4pi-5w-OLT" firstAttribute="top" secondItem="fkB-j7-QJk" secondAttribute="top" constant="274" id="ss9-Po-ApD"/>
                                     <constraint firstItem="4pi-5w-OLT" firstAttribute="leading" secondItem="fkB-j7-QJk" secondAttribute="leading" constant="50" id="tGK-LQ-7Bd"/>
@@ -78,6 +85,7 @@
                             <constraint firstItem="fkB-j7-QJk" firstAttribute="leading" secondItem="wKX-bw-W5T" secondAttribute="leadingMargin" constant="-20" id="Hvc-fP-Xdy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3wc-G4-0ch" secondAttribute="trailing" constant="-20" id="Iyp-CA-8oQ"/>
                             <constraint firstAttribute="bottomMargin" secondItem="fkB-j7-QJk" secondAttribute="bottom" id="Tnc-xp-5Dt"/>
+                            <constraint firstItem="tJh-ii-9ae" firstAttribute="leading" secondItem="aaY-1l-tbY" secondAttribute="leading" id="azb-LU-P7k"/>
                             <constraint firstItem="3wc-G4-0ch" firstAttribute="leading" secondItem="wKX-bw-W5T" secondAttribute="leadingMargin" constant="-20" id="mZ3-WO-eAC"/>
                             <constraint firstItem="fkB-j7-QJk" firstAttribute="top" secondItem="wKX-bw-W5T" secondAttribute="topMargin" constant="-44" id="rjf-sA-DWN"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fkB-j7-QJk" secondAttribute="trailing" constant="-20" id="tWG-92-9Ia"/>
@@ -90,14 +98,16 @@
                     <connections>
                         <outlet property="cornerView" destination="eP0-Hu-8ez" id="ipX-Au-6wJ"/>
                         <outlet property="explanationView" destination="3wc-G4-0ch" id="9ns-Wv-S9Y"/>
+                        <outlet property="normalColumnContainer" destination="tJh-ii-9ae" id="EnD-GV-HVP"/>
                         <outlet property="podView" destination="fkB-j7-QJk" id="72Y-aL-idf"/>
                         <segue destination="bOP-We-QCa" kind="show" identifier="AU's Corner" id="7U1-RO-DoR"/>
                         <segue destination="bOP-We-QCa" kind="show" identifier="The Pod" id="Zeb-4G-3Q6"/>
+                        <segue destination="bOP-We-QCa" kind="show" identifier="Normal Column" id="BWH-bX-Mxo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2k6-do-H75" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="986" y="1592"/>
+            <point key="canvasLocation" x="985.50724637681162" y="1591.7410714285713"/>
         </scene>
         <!--Content Table View Controller-->
         <scene sceneID="Dau-ON-pxB">
@@ -304,7 +314,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-ej-5Y0">
-                                <rect key="frame" x="0.0" y="109" width="414" height="402.5"/>
+                                <rect key="frame" x="0.0" y="134" width="414" height="377.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="Vax-Bp-pwJ" customClass="RTRSCustomCollectionViewFlowLayout" customModule="RTRS" customModuleProvider="target"/>
                                 <cells>
@@ -375,7 +385,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NOO-MV-M9W">
-                                <rect key="frame" x="20" y="44" width="25" height="25"/>
+                                <rect key="frame" x="20" y="44" width="50" height="50"/>
                                 <state key="normal" image="Dismiss-Icon">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -429,7 +439,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pv9-f0-7be">
-                                <rect key="frame" x="194.5" y="793" width="25" height="25"/>
+                                <rect key="frame" x="182" y="793" width="50" height="25"/>
                                 <state key="normal" image="Heart-No-Fill"/>
                                 <connections>
                                     <action selector="saveButtonPresssed:" destination="z1F-01-woh" eventType="touchUpInside" id="we6-vV-20F"/>
@@ -583,7 +593,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mHH-u7-XvV">
-                                <rect key="frame" x="20" y="102" width="25" height="25"/>
+                                <rect key="frame" x="20" y="102" width="50" height="50"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="Dismiss-Icon"/>
                                 <connections>
@@ -944,7 +954,7 @@
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F2I-3i-XXJ">
-                                <rect key="frame" x="31" y="44" width="25" height="25"/>
+                                <rect key="frame" x="31" y="44" width="50" height="50"/>
                                 <state key="normal" image="Dismiss-Icon"/>
                                 <connections>
                                     <action selector="dismissButtonPressed:" destination="QsD-fi-Oda" eventType="touchUpInside" id="sdg-Ks-CHg"/>
@@ -1091,7 +1101,7 @@
         <image name="SpikeMike" width="48" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zeb-4G-3Q6"/>
+        <segue reference="BWH-bX-Mxo"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

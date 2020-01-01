@@ -21,7 +21,7 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     
     var dismissButton: UIButton?
     var saveButton: UIBarButtonItem!
-    var viewModel: AUCornerSingleArticleViewModel?
+    var viewModel: SingleArticleViewModel?
     var webView: WKWebView?
     var webViewContentObservation: NSKeyValueObservation?
     

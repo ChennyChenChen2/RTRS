@@ -27,9 +27,12 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
-        if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? AUCornerMultiArticleViewModel {
+        if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "AU'S CORNER"
+        } else if self.contentType == .normalColumn, let theViewModel = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
+            self.viewModel = theViewModel
+            self.navigationItem.title = "SIXERS ADAM: NORMAL COLUMN"
         } else if self.contentType == .podcasts, let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "THE POD"
@@ -173,7 +176,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         
         guard let viewModel = self.viewModel?.content[indexPath.row] else { return }
         
-        if viewModel is AUCornerSingleArticleViewModel {
+        if viewModel is SingleArticleViewModel {
             self.performSegue(withIdentifier: self.articleSegueId, sender: indexPath)
         } else {
             if let cell = tableView.cellForRow(at: indexPath) as? SingleContentCell, let title = cell.contentTitleLabel.text {
@@ -202,7 +205,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         guard let indexPath = sender as? IndexPath else { return }
         let vc = segue.destination as! AUCornerArticleViewController
         if indexPath.row < self.filteredResults.count {
-            vc.viewModel = self.filteredResults[indexPath.row] as? AUCornerSingleArticleViewModel
+            vc.viewModel = self.filteredResults[indexPath.row] as? SingleArticleViewModel
         }
     }
     

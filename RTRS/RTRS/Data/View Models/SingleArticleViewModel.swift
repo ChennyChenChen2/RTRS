@@ -16,7 +16,7 @@ protocol SingleContentViewModel {
     var imageUrl: URL? { get }
 }
 
-class AUCornerSingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
     func pageUrl() -> URL? {
         return nil
     }

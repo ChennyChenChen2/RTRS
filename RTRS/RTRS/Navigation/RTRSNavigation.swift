@@ -16,6 +16,8 @@ enum RTRSScreenType: String, Hashable {
     case pod = "A Pod"
     case podSource = "Pod Source"
     case au = "If Not, Pick Will Convey As Two Second-Rounders"
+    case normalColumn = "Sixers Adam: Normal Column"
+    case normalColumnArticle = "Normal Column Article"
     case auArticle = "AU Article"
     case newsletter = "Newsletter"
     case subscribe = "Subscribe"
@@ -42,6 +44,10 @@ enum RTRSScreenType: String, Hashable {
             return "Pod Source"
         case .au:
             return "If Not, Pick Will Convey As Two Second-Rounders"
+        case .normalColumn:
+            return "Sixers Adam: Normal Column"
+        case .normalColumnArticle:
+            return "Normal Column Article"
         case .auArticle:
             return "AU Article"
         case .newsletter:
