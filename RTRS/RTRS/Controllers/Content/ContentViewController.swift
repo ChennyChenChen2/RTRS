@@ -100,17 +100,18 @@ fileprivate class NormalColumnView: UIView {
     
     var titleLabel: UILabel
     var shapeLayer: CAShapeLayer?
+    var angle: CGFloat?
     
     override init(frame: CGRect) {
         self.titleLabel = UILabel()
-        self.titleLabel.font = Utils.defaultFont.withSize(30.0)
+        self.titleLabel.font = Utils.defaultFont.withSize(25.0)
         self.titleLabel.text = "SIXERS ADAM: NORMAL COLUMN"
         super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
         self.titleLabel = UILabel()
-        self.titleLabel.font = Utils.defaultFont.withSize(30.0)
+        self.titleLabel.font = Utils.defaultFont.withSize(25.0)
         self.titleLabel.text = "SIXERS ADAM: NORMAL COLUMN"
         super.init(coder: coder)
     }
@@ -127,8 +128,13 @@ fileprivate class NormalColumnView: UIView {
         self.layer.addSublayer(shapeLayer!)
         
         self.addSubview(self.titleLabel)
+        self.titleLabel.textColor = .black
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            self.titleLabel.transform = CGAffineTransform(rotationAngle: CGFloat.pi / -10)
+        
+        if let angle = self.angle {
+            self.titleLabel.transform = CGAffineTransform(rotationAngle: angle)
+        }
+        
         self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         self.titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
@@ -140,6 +146,8 @@ fileprivate class NormalColumnView: UIView {
         path.addLine(to: CGPoint(x: frame.size.width, y: frame.size.height / 2))
         path.addLine(to: CGPoint(x: 0, y: frame.size.height))
         path.addLine(to: CGPoint(x: 0, y: frame.size.height / 2))
+        
+        self.angle = atan2((0 - frame.size.height / 2), (frame.size.width - 0))
         
         path.close()
         

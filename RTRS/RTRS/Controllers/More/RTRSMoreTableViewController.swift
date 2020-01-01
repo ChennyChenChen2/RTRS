@@ -38,20 +38,24 @@ class RTRSMoreTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (viewModel?.pages?.count ?? 0)
+        return (viewModel?.pages?.count ?? 0) + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
         
-        if let vm = self.viewModel, let pages = vm.pages {
-            if indexPath.row == pages.count {
-                cell.textLabel?.text = "Saved"
-                cell.imageView?.image = #imageLiteral(resourceName: "Top-Nav-Image")
-            } else {
-                let page = pages[indexPath.row]
-                cell.textLabel?.text = page.pageName()
-                cell.imageView?.image = page.pageImage()
+        if indexPath.row == 0 {
+            
+        } else {
+            if let vm = self.viewModel, let pages = vm.pages {
+                if indexPath.row == pages.count {
+                    cell.textLabel?.text = "Saved"
+                    cell.imageView?.image = #imageLiteral(resourceName: "Top-Nav-Image")
+                } else {
+                    let page = pages[indexPath.row]
+                    cell.textLabel?.text = page.pageName()
+                    cell.imageView?.image = page.pageImage()
+                }
             }
         }
         

@@ -2,9 +2,6 @@ PODS:
   - Atributika (4.8.2)
   - Firebase (4.13.0):
     - Firebase/Core (= 4.13.0)
-  - Firebase/AdMob (4.13.0):
-    - Firebase/Core
-    - Google-Mobile-Ads-SDK (= 7.30.0)
   - Firebase/Analytics (4.13.0):
     - Firebase/Core
   - Firebase/Core (4.13.0):
@@ -37,7 +34,6 @@ PODS:
     - Protobuf (~> 3.5)
   - FLAnimatedImage (1.0.12)
   - FLEX (2.4.0)
-  - Google-Mobile-Ads-SDK (7.30.0)
   - GoogleToolboxForMac/Defines (2.2.2)
   - GoogleToolboxForMac/Logger (2.2.2):
     - GoogleToolboxForMac/Defines (= 2.2.2)
@@ -64,7 +60,6 @@ PODS:
 DEPENDENCIES:
   - Atributika (= 4.8.2)
   - Firebase
-  - Firebase/AdMob
   - Firebase/Analytics
   - Firebase/Database
   - Firebase/Messaging
@@ -85,7 +80,6 @@ SPEC REPOS:
     - FirebaseMessaging
     - FLAnimatedImage
     - FLEX
-    - Google-Mobile-Ads-SDK
     - GoogleToolboxForMac
     - leveldb-library
     - MarqueeLabel
@@ -105,7 +99,6 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
-  Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   MarqueeLabel: d24e821159667c93064ea3042ccf1875ca94db6b
@@ -115,6 +108,6 @@ SPEC CHECKSUMS:
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 24b61a4d601f8b95adfdf3ab7d3f7420d8737747
+PODFILE CHECKSUM: c7abaadab1d37c62e7dadf9dbe399f28b3c634cc
 
 COCOAPODS: 1.7.4
