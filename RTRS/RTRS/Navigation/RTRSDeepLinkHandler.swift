@@ -79,7 +79,23 @@ class RTRSDeepLinkHandler: NSObject {
                 
                 if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
                     
-                    let vc = storyboard.instantiateViewController(withIdentifier: "AUSingleArticle") as! AUCornerArticleViewController
+                    let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
+                    vc.viewModel = article
+                    
+                    navController.present(vc, animated: true
+                        , completion: nil)
+                }
+            }
+        } else if url.path.contains("normal-column") {
+            if let vm = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
+                let articles = vm.content.filter({ (vm) -> Bool in
+                    guard let articleVm = vm as? SingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
+                    return articleUrl == url
+                })
+                
+                if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
+                    
+                    let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
                     vc.viewModel = article
                     
                     navController.present(vc, animated: true

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -223,7 +223,7 @@
         <!--Corner Article View Controller-->
         <scene sceneID="Ohz-tD-fVP">
             <objects>
-                <viewController storyboardIdentifier="AUSingleArticle" id="TLI-CJ-GAl" customClass="AUCornerArticleViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SingleArticle" id="TLI-CJ-GAl" customClass="AUCornerArticleViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DMu-4e-ITZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -540,15 +540,50 @@
                         <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="55" id="6cd-56-Hzq">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="55" id="6cd-56-Hzq" customClass="NotificationsTableViewCell" customModule="RTRS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6cd-56-Hzq" id="BB0-tB-HNz">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wfS-Vg-zWQ">
+                                            <rect key="frame" x="345" y="12" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="switchValueChanged:" destination="6cd-56-Hzq" eventType="valueChanged" id="f9D-DI-81t"/>
+                                            </connections>
+                                        </switch>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Notifications" translatesAutoresizingMaskIntoConstraints="NO" id="0yx-Xc-Phz">
+                                            <rect key="frame" x="10" y="5" width="44" height="45"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="fbQ-Ww-bCj"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yVm-ko-Lev">
+                                            <rect key="frame" x="62" y="17.5" width="97" height="20"/>
+                                            <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="yVm-ko-Lev" firstAttribute="centerY" secondItem="BB0-tB-HNz" secondAttribute="centerY" id="3fh-cq-8t6"/>
+                                        <constraint firstItem="yVm-ko-Lev" firstAttribute="leading" secondItem="0yx-Xc-Phz" secondAttribute="trailing" constant="8" id="4po-0t-AxH"/>
+                                        <constraint firstAttribute="trailing" secondItem="wfS-Vg-zWQ" secondAttribute="trailing" constant="20" id="5ek-aT-kyv"/>
+                                        <constraint firstItem="wfS-Vg-zWQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yVm-ko-Lev" secondAttribute="trailing" constant="8" symbolic="YES" id="JQn-t4-5Qj"/>
+                                        <constraint firstItem="0yx-Xc-Phz" firstAttribute="leading" secondItem="BB0-tB-HNz" secondAttribute="leading" constant="10" id="L3o-H9-WXV"/>
+                                        <constraint firstAttribute="bottom" secondItem="0yx-Xc-Phz" secondAttribute="bottom" constant="5" id="VTK-J0-Cnu"/>
+                                        <constraint firstItem="0yx-Xc-Phz" firstAttribute="centerY" secondItem="BB0-tB-HNz" secondAttribute="centerY" id="Y6E-Fz-dLJ"/>
+                                        <constraint firstItem="wfS-Vg-zWQ" firstAttribute="centerY" secondItem="BB0-tB-HNz" secondAttribute="centerY" id="dGH-OT-3hM"/>
+                                        <constraint firstItem="0yx-Xc-Phz" firstAttribute="top" secondItem="BB0-tB-HNz" secondAttribute="top" constant="5" id="elt-bB-ov0"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="cellImageView" destination="0yx-Xc-Phz" id="ttz-SA-Ipk"/>
+                                    <outlet property="notificationSwitch" destination="wfS-Vg-zWQ" id="tH3-dH-Pcy"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MoreCell" rowHeight="55" id="Z3I-F7-VEj">
                                 <rect key="frame" x="0.0" y="83" width="414" height="55"/>
@@ -660,13 +695,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="0.0" y="133" width="414.00000000000011" height="530"/>
+                                <rect key="frame" x="0.0" y="-132" width="414" height="1060"/>
                             </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="665" width="20" height="20"/>
+                                <rect key="frame" x="197" y="930" width="20" height="20"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="62" y="690" width="290.5" height="21"/>
+                                <rect key="frame" x="62" y="955" width="290.5" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="HzC-nL-cr6"/>
                                     <constraint firstAttribute="width" constant="290.5" id="edu-Gz-zFn"/>
@@ -1104,6 +1139,7 @@
         <image name="Heart-No-Fill" width="25" height="25"/>
         <image name="Hinkie" width="33" height="33"/>
         <image name="More-Icon" width="19" height="19"/>
+        <image name="Notifications" width="38" height="38"/>
         <image name="Play" width="25" height="25"/>
         <image name="RickyLogo" width="425" height="530"/>
         <image name="Skip-Back" width="25" height="25"/>

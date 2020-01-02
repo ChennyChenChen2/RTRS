@@ -12,6 +12,10 @@ import WebKit
 import Firebase
 import MediaPlayer
 
+extension Notification.Name {
+    static let WillEnterForeground = Notification.Name("WillEnterForeground")
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
     
@@ -28,6 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        NotificationCenter.default.post(name: Notification.Name.WillEnterForeground, object: nil)
+    }
+    
     fileprivate func registerForPushNotifications(vc: UIViewController) {
         let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
         if !firstLaunchFinished {
@@ -41,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     UIApplication.shared.registerForRemoteNotifications()
                 } else {
                     let settings: UIUserNotificationSettings =
-                    UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+                    UIUserNotificationSettings(types: [.alert], categories: nil)
                     UIApplication.shared.registerUserNotificationSettings(settings)
                 }
             }))
@@ -68,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { (success, error) in
             
         }
     }

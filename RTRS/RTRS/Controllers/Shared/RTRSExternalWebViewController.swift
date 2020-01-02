@@ -53,18 +53,6 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
-//        if navigationAction.navigationType == .linkActivated {
-//            guard let url = navigationAction.request.url else {
-//                decisionHandler(.cancel)
-//                return
-//            }
-//
-//            UIApplication.shared.open(url, options: [:]) { (success) in }
-//            decisionHandler(.cancel)
-//            return
-//        }
-        
         decisionHandler(.allow)
     }
 }

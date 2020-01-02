@@ -21,7 +21,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController {
         
         self.navigationItem.customizeNavBarForHome()
         
-        let titleImageView = UIImageView(image: #imageLiteral(resourceName: "Top-Nav-Image"))
+        let titleImageView = UIImageView(image: #imageLiteral(resourceName: "RickyLogoCutout"))
         titleImageView.contentMode = .scaleAspectFit
         titleImageView.frame.size = CGSize(width: 50.0, height: 50.0)
         self.navigationItem.titleView = titleImageView
