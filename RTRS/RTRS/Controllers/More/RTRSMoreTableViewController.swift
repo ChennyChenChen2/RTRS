@@ -119,7 +119,8 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let page = self.viewModel?.pages?[indexPath.row] {
+        if let pages = self.viewModel?.pages, indexPath.row - 1 >= 0 {
+            let page = pages[indexPath.row - 1]
             if let _ = page.pageUrl() {
                 self.performSegue(withIdentifier: self.externalBrowserSegueId, sender: page)
             } else {
