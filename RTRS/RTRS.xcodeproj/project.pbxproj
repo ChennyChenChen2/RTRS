@@ -15,7 +15,7 @@
 		87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87095A592263BC2C0081A540 /* LaunchScreen.storyboard */; };
 		871D322A23AB048D0013CC4D /* RTRSErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871D322923AB048D0013CC4D /* RTRSErrorHandler.swift */; };
 		871D322C23AB22700013CC4D /* AnalyticsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871D322B23AB22700013CC4D /* AnalyticsUtils.swift */; };
-		8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727B8B922D7D2C8001713AF /* LoadingViewController.swift */; };
+		8727B8BA22D7D2C8001713AF /* LoadingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727B8B922D7D2C8001713AF /* LoadingManager.swift */; };
 		8731FF7823596BA4008E2F6A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8731FF7723596BA4008E2F6A /* AudioToolbox.framework */; };
 		87364F6322DFD11E00EDAB17 /* RTRSHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */; };
 		8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8736B195233FE8C8008DA87A /* GoogleService-Info.plist */; };
@@ -72,7 +72,7 @@
 		87095A5C2263BC2C0081A540 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		871D322923AB048D0013CC4D /* RTRSErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSErrorHandler.swift; sourceTree = "<group>"; };
 		871D322B23AB22700013CC4D /* AnalyticsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsUtils.swift; sourceTree = "<group>"; };
-		8727B8B922D7D2C8001713AF /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		8727B8B922D7D2C8001713AF /* LoadingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingManager.swift; sourceTree = "<group>"; };
 		8731FF7723596BA4008E2F6A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSHomeViewController.swift; sourceTree = "<group>"; };
 		8736B192233FE1CB008DA87A /* RTRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RTRS.entitlements; sourceTree = "<group>"; };
@@ -213,7 +213,6 @@
 				8746130B230877AB00C57400 /* More */,
 				87C3B5A722EBC73700560958 /* Shared */,
 				87C3B5A622EBC72E00560958 /* Content */,
-				8727B8B922D7D2C8001713AF /* LoadingViewController.swift */,
 				87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */,
 			);
 			path = Controllers;
@@ -309,6 +308,7 @@
 		879CE1CD22E137D6002F58CB /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
+				8727B8B922D7D2C8001713AF /* LoadingManager.swift */,
 				877B3A0A226A90BE00F061FA /* RTRSOperation.swift */,
 				877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */,
 			);
@@ -516,7 +516,7 @@
 				8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */,
 				87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */,
 				87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */,
-				8727B8BA22D7D2C8001713AF /* LoadingViewController.swift in Sources */,
+				8727B8BA22D7D2C8001713AF /* LoadingManager.swift in Sources */,
 				8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */,
 				878B4B3323903276000FD5AF /* RTRSProcessPupsViewModel.swift in Sources */,
 				87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */,

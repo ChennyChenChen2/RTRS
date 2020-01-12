@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -314,7 +314,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-ej-5Y0">
-                                <rect key="frame" x="0.0" y="109" width="414" height="402.5"/>
+                                <rect key="frame" x="0.0" y="134" width="414" height="377.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="Vax-Bp-pwJ" customClass="RTRSCustomCollectionViewFlowLayout" customModule="RTRS" customModuleProvider="target"/>
                                 <cells>
@@ -385,7 +385,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NOO-MV-M9W">
-                                <rect key="frame" x="20" y="44" width="25" height="25"/>
+                                <rect key="frame" x="20" y="44" width="50" height="50"/>
                                 <state key="normal" image="Dismiss-Icon">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -439,7 +439,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pv9-f0-7be">
-                                <rect key="frame" x="194.5" y="793" width="25" height="25"/>
+                                <rect key="frame" x="182" y="793" width="50" height="25"/>
                                 <state key="normal" image="Heart-No-Fill"/>
                                 <connections>
                                     <action selector="saveButtonPresssed:" destination="z1F-01-woh" eventType="touchUpInside" id="we6-vV-20F"/>
@@ -638,7 +638,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mHH-u7-XvV">
-                                <rect key="frame" x="20" y="102" width="25" height="25"/>
+                                <rect key="frame" x="20" y="102" width="50" height="50"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="Dismiss-Icon"/>
                                 <connections>
@@ -685,61 +685,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gba-LP-3fR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3542.0289855072465" y="862.5"/>
-        </scene>
-        <!--Loading View Controller-->
-        <scene sceneID="iWs-uY-Ke5">
-            <objects>
-                <viewController storyboardIdentifier="Loading" id="Zlp-yW-yyD" customClass="LoadingViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Kq0-8G-6K4">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RickyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Lav-yv-9vI">
-                                <rect key="frame" x="0.0" y="-132" width="414" height="1060"/>
-                            </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="foi-eb-7Nd">
-                                <rect key="frame" x="197" y="930" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNp-jz-1uH">
-                                <rect key="frame" x="62" y="955" width="290.5" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="HzC-nL-cr6"/>
-                                    <constraint firstAttribute="width" constant="290.5" id="edu-Gz-zFn"/>
-                                </constraints>
-                                <attributedString key="attributedText">
-                                    <fragment content="PROCESSING.......................">
-                                        <attributes>
-                                            <color key="NSColor" red="0.45919689119170981" green="0.45919689119170981" blue="0.45919689119170981" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="18" name="HiraginoSansGB-W3"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="3" lineHeightMultiple="1" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Lav-yv-9vI" firstAttribute="leading" secondItem="FHc-KF-Pgd" secondAttribute="leading" id="9cH-Dm-LSu"/>
-                            <constraint firstItem="uNp-jz-1uH" firstAttribute="top" secondItem="foi-eb-7Nd" secondAttribute="bottom" constant="5" id="9hb-aB-Zce"/>
-                            <constraint firstItem="Lav-yv-9vI" firstAttribute="centerY" secondItem="Kq0-8G-6K4" secondAttribute="centerY" constant="-50" id="XD7-sI-0IL"/>
-                            <constraint firstItem="foi-eb-7Nd" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="daV-Bd-Qe4"/>
-                            <constraint firstAttribute="trailing" secondItem="Lav-yv-9vI" secondAttribute="trailing" id="e00-xV-Hhk"/>
-                            <constraint firstItem="uNp-jz-1uH" firstAttribute="centerX" secondItem="FHc-KF-Pgd" secondAttribute="centerX" id="k1N-bt-xh7"/>
-                            <constraint firstItem="foi-eb-7Nd" firstAttribute="top" secondItem="Lav-yv-9vI" secondAttribute="bottom" constant="2" id="vfP-6i-d7J"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="FHc-KF-Pgd"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="3Df-BT-pep"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="foi-eb-7Nd" id="9Z3-63-p0P"/>
-                        <outlet property="statusLabel" destination="uNp-jz-1uH" id="hbh-Vo-KDP"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lHO-Jm-weH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="105.79710144927537" y="138.61607142857142"/>
         </scene>
         <!--Content-->
         <scene sceneID="m2D-GR-2ue">
@@ -999,7 +944,7 @@
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F2I-3i-XXJ">
-                                <rect key="frame" x="31" y="44" width="25" height="25"/>
+                                <rect key="frame" x="31" y="44" width="50" height="50"/>
                                 <state key="normal" image="Dismiss-Icon"/>
                                 <connections>
                                     <action selector="dismissButtonPressed:" destination="QsD-fi-Oda" eventType="touchUpInside" id="sdg-Ks-CHg"/>
@@ -1141,7 +1086,6 @@
         <image name="More-Icon" width="19" height="19"/>
         <image name="Notifications" width="38" height="38"/>
         <image name="Play" width="25" height="25"/>
-        <image name="RickyLogo" width="425" height="530"/>
         <image name="Skip-Back" width="25" height="25"/>
         <image name="Skip-Forward" width="25" height="25"/>
         <image name="SpikeMike" width="48" height="32"/>

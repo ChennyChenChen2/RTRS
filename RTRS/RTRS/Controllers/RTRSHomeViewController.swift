@@ -24,6 +24,10 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController {
         let titleImageView = UIImageView(image: #imageLiteral(resourceName: "RickyLogoCutout"))
         titleImageView.contentMode = .scaleAspectFit
         titleImageView.frame.size = CGSize(width: 50.0, height: 50.0)
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openRefreshView))
+        titleImageView.addGestureRecognizer(gestureRecognizer)
+        
         self.navigationItem.titleView = titleImageView
         self.view.backgroundColor = .black
         
@@ -39,6 +43,10 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         AnalyticsUtils.logScreenView(self)
+    }
+    
+    @objc private func openRefreshView() {
+        
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
