@@ -9,36 +9,19 @@
 import UIKit
 import FirebaseDatabase
 
-class LoadingViewController: UIViewController {
-
-    static let storyboardId = "Loading"
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var statusLabel: UILabel!
-    var loadingMessageTimer: Timer?
+@objc class LoadingManager: NSObject {
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+    private override init() {}
+    static let shared = LoadingManager()
+    let operationCoordinator = RTRSOperationCoordinator()
+    var loadingMessages = [String]()
+    @objc var isLoading = false
     
     static var cachedConfigPath: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
         return URL(string: "\(documentsDirectory.absoluteString)RTRSConfig.json")!
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-    }
-}
-
-class LoadingManager {
-    
-    private init() {}
-    static let shared = LoadingManager()
-    let operationCoordinator = RTRSOperationCoordinator()
-    var loadingMessages = [String]()
     
     func executeStartup() {
         guard let configURLString = Bundle.main.object(forInfoDictionaryKey: "RTRSConfigURL") as? String else {
@@ -47,6 +30,7 @@ class LoadingManager {
                 return
         }
         
+        self.isLoading = true
         let databaseRef = Database.database().reference().child("token/M0Yez6yEsPnEf1C4qSF4")
 
         databaseRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -67,26 +51,20 @@ class LoadingManager {
                         
                         if let messages = dict["loadingMessages"] as? [String] {
                             weakSelf.loadingMessages = messages
-//                            weakSelf.loadingMessageTimer = Timer(timeInterval: 5, repeats: true, block: { (timer) in
-//                                let index = Int.random(in: 0..<weakSelf.loadingMessages.count)
-//                                let message = weakSelf.loadingMessages[index]
-//                                DispatchQueue.main.async {
-//                                    weakSelf.statusLabel.text = message
-//                                }
-//                            })
-
-//                            if let timer = weakSelf.loadingMessageTimer {
-//                                RunLoop.main.add(timer, forMode: .default)
-//                            }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .LoadingBeganNotification, object: nil)
                         }
                         
                         weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
-                            if success {
-                                DispatchQueue.main.async {
-                                    
-                                }
-                            } else {
+                            if !success {
                                 RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                            }
+                            
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: .LoadingFinishedNotification, object: nil)
+                                self?.isLoading = false
                             }
                         }
                     }
@@ -111,15 +89,14 @@ class LoadingManager {
                         }
                     } else {
                         if let data = data, let theDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
-                            
                             do {
-                                try data.write(to: LoadingViewController.cachedConfigPath)
+                                try data.write(to: LoadingManager.cachedConfigPath)
                             } catch {
                                 print("Error saving cached config")
                             }
                             
                             configDict = theDict
-                        } else if let data = try? Data(contentsOf: LoadingViewController.cachedConfigPath),
+                        } else if let data = try? Data(contentsOf: LoadingManager.cachedConfigPath),
                                 let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
                             configDict = dict
                         } else {

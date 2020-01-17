@@ -82,9 +82,10 @@ class RTRSNavigation: NSObject {
     
     func registerViewModel(viewModel: RTRSViewModel, for page: RTRSScreenType) {
         pages[page] = viewModel
+        RTRSPersistentStorage.save(viewModel: viewModel, type: page)
     }
     
     func viewModel(for page: RTRSScreenType) -> RTRSViewModel? {
-        return pages[page]
+        return pages[page] ?? RTRSPersistentStorage.getViewModel(type: page)
     }
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		399EB0CC8524EE9E14258147 /* Pods_RTRS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF1DB3465F792B361E3E82F6 /* Pods_RTRS.framework */; };
+		8709022623CAC220003104F7 /* RefreshPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8709022523CAC220003104F7 /* RefreshPopoverViewController.swift */; };
 		87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87095A502263BC2B0081A540 /* AppDelegate.swift */; };
 		87095A532263BC2B0081A540 /* RootTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87095A522263BC2B0081A540 /* RootTabController.swift */; };
 		87095A562263BC2B0081A540 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87095A542263BC2B0081A540 /* Main.storyboard */; };
@@ -63,6 +64,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8709022523CAC220003104F7 /* RefreshPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshPopoverViewController.swift; sourceTree = "<group>"; };
 		87095A4D2263BC2B0081A540 /* RTRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RTRS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		87095A502263BC2B0081A540 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		87095A522263BC2B0081A540 /* RootTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabController.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				87C3B5A722EBC73700560958 /* Shared */,
 				87C3B5A622EBC72E00560958 /* Content */,
 				87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */,
+				8709022523CAC220003104F7 /* RefreshPopoverViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -532,6 +535,7 @@
 				879D255A2387B6D900C1DA55 /* RTRSSavedContentViewModel.swift in Sources */,
 				8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */,
 				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
+				8709022623CAC220003104F7 /* RefreshPopoverViewController.swift in Sources */,
 				879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */,
 				87095A532263BC2B0081A540 /* RootTabController.swift in Sources */,
 				87C3B5AE22EBCD0500560958 /* SingleArticleViewModel.swift in Sources */,

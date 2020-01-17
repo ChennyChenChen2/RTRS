@@ -27,6 +27,17 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
+        determineViewModelType()
+        
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func determineViewModelType() {
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "AU'S CORNER"
@@ -45,8 +56,11 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
             
             NotificationCenter.default.addObserver(self, selector: #selector(savedContentUpdated), name: Notification.Name.SavedContentUpdated, object: nil)
         }
-        
-        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+    }
+    
+    @objc func loadingFinished() {
+        determineViewModelType()
+        self.tableView.reloadData()
     }
     
     @objc func savedContentUpdated() {

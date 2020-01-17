@@ -110,7 +110,6 @@ class RTRSOperation: Operation {
                                 if let theViewModel = viewModel {
                                     DispatchQueue.main.async {
                                         RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                                        RTRSPersistentStorage.save(viewModel: theViewModel, type: type)
                                     }
                                    
                                     if !deferredCompletion {

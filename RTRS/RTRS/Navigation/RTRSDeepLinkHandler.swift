@@ -21,85 +21,127 @@ struct RTRSDeepLinkPayload {
 
 class RTRSDeepLinkHandler: NSObject {
     
+    private static let podCompletion: (URL, RTRSNavigationController) -> () = { (url, navController) in
+        do {
+            let htmlString = try String.init(contentsOf: url)
+            let document = try SwiftSoup.parse(htmlString)
+            let h1Elems = try document.getElementsByTag("h1")
+            let titleElems = h1Elems.filter { (element) -> Bool in
+                return element.hasClass("title") || element.hasClass("entry-title")
+            }
+            
+            if let titleElem = titleElems.first,
+                let text = try? titleElem.text(),
+                let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
+                let filteredVms = vm.content.filter { (vm) -> Bool in
+                    guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
+                    return title == text
+                }
+                
+                DispatchQueue.main.async {
+                    if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                         var vc: PodcastPlayerViewController!
+                        if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
+                             vc = theVC
+                         } else {
+                            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+                            vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
+                             vc.viewModel = podVM
+                             PodcastManager.shared.currentPodVC = vc
+                         }
+                        
+                        navController.present(vc, animated: true, completion: nil)
+                    }
+                }
+            }
+        } catch {
+            RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
+            return
+        }
+    }
+    
+    
     static func route(payload: RTRSDeepLinkPayload, navController: RTRSNavigationController) {
         let url = payload.baseURL
         
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         
-        if url.path.contains("podcast") || url.absoluteString.contains("bit.ly") {
-            let completion: (URL) -> () = { (url) in
-                do {
-                    let htmlString = try String.init(contentsOf: url)
-                    let document = try SwiftSoup.parse(htmlString)
-                    let h1Elems = try document.getElementsByTag("h1")
-                    let titleElems = h1Elems.filter { (element) -> Bool in
-                        return element.hasClass("title") || element.hasClass("entry-title")
+        if url.absoluteString.contains("bit.ly") {
+            makeBitlyRequest(url, navController: navController, payload: payload)
+        } else if url.path.contains("podcast") {
+            do {
+                let htmlString = try String.init(contentsOf: url)
+                let document = try SwiftSoup.parse(htmlString)
+                let h1Elems = try document.getElementsByTag("h1")
+                let titleElems = h1Elems.filter { (element) -> Bool in
+                    return element.hasClass("title") || element.hasClass("entry-title")
+                }
+                
+                if let titleElem = titleElems.first,
+                    let text = try? titleElem.text(),
+                    let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
+                    let filteredVms = vm.content.filter { (vm) -> Bool in
+                        guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
+                        return title == text
                     }
                     
-                    if let titleElem = titleElems.first,
-                        let text = try? titleElem.text(),
-                        let vm = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
-                        let filteredVms = vm.content.filter { (vm) -> Bool in
-                            guard let theVm = vm as? RTRSSinglePodViewModel, let title = theVm.title else { return false }
-                            return title == text
-                        }
-                        
-                        DispatchQueue.main.async {
-                            if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
-                                 var vc: PodcastPlayerViewController!
-                                if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
-                                     vc = theVC
-                                 } else {
-                                    vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
-                                     vc.viewModel = podVM
-                                     PodcastManager.shared.currentPodVC = vc
-                                 }
-                                
-                                navController.present(vc, animated: true, completion: nil)
-                            }
+                    DispatchQueue.main.async {
+                        if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                             var vc: PodcastPlayerViewController!
+                            if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
+                                 vc = theVC
+                             } else {
+                                vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
+                                 vc.viewModel = podVM
+                                 PodcastManager.shared.currentPodVC = vc
+                             }
+                            
+                            navController.present(vc, animated: true, completion: nil)
                         }
                     }
-                } catch {
-                    RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
-                    return
                 }
-            }
-            
-            if url.path.contains("podcast") {
-                completion(url)
-            } else if url.absoluteString.contains("bit.ly") {
-                makeBitlyRequest(url, navController: navController, completion: completion)
+            } catch {
+                RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
+                return
             }
         } else if url.path.contains("if-not-will-convey-as-two-second-rounders") {
             if let vm = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
                 let articles = vm.content.filter({ (vm) -> Bool in
                     guard let articleVm = vm as? SingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
-                    return articleUrl == url
+                    let vmPath = articleUrl.lastPathComponent
+                    let urlPath = url.lastPathComponent
+                    
+                    return vmPath == urlPath
                 })
                 
                 if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
-                    
-                    let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
-                    vc.viewModel = article
-                    
-                    navController.present(vc, animated: true
-                        , completion: nil)
+                    DispatchQueue.main.async {
+                        let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
+                        vc.viewModel = article
+                        
+                        navController.present(vc, animated: true
+                            , completion: nil)
+                    }
                 }
             }
         } else if url.path.contains("normal-column") {
             if let vm = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
                 let articles = vm.content.filter({ (vm) -> Bool in
                     guard let articleVm = vm as? SingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
-                    return articleUrl == url
+                    let vmPath = articleUrl.lastPathComponent
+                    let urlPath = url.lastPathComponent
+                    
+                    return vmPath == urlPath
                 })
                 
                 if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
-                    
-                    let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
-                    vc.viewModel = article
-                    
-                    navController.present(vc, animated: true
-                        , completion: nil)
+                    DispatchQueue.main.async {
+                        let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! AUCornerArticleViewController
+                        vc.viewModel = article
+                        
+                        navController.present(vc, animated: true
+                            , completion: nil)
+                    }
                 }
             }
         } else {
@@ -110,7 +152,7 @@ class RTRSDeepLinkHandler: NSObject {
         }
     }
     
-    fileprivate static func makeBitlyRequest(_ url: URL, navController: RTRSNavigationController, completion: @escaping (URL) -> ()) {
+    fileprivate static func makeBitlyRequest(_ url: URL, navController: RTRSNavigationController, payload: RTRSDeepLinkPayload) {
         let requestUrlString = "https://api-ssl.bitly.com/v3/expand?access_token=f7916216fac500f0cd358971fddb8399330ddb9f&shortUrl=\(url.absoluteString)"
         if let requestUrl = URL(string: requestUrlString) {
             URLSession.shared.dataTask(with: requestUrl) { (data, response, error) in
@@ -123,7 +165,8 @@ class RTRSDeepLinkHandler: NSObject {
                             if let expandDict = expandArray[0] as? [String: Any],
                             let longUrlString = expandDict["long_url"] as? String,
                                 let longUrl = URL(string: longUrlString) {
-                                completion(longUrl)
+                                let newPayload = RTRSDeepLinkPayload(baseURL: longUrl, title: payload.title)
+                                RTRSDeepLinkHandler.route(payload: newPayload, navController: navController)
                             }
                         }
                     }

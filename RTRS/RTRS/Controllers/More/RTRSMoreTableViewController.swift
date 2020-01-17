@@ -21,6 +21,12 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
+    }
+    
+    @objc private func loadingFinished() {
+        self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
+        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,6 +82,7 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    
     }
     
     func switchValueChanged(_ sender: UISwitch) {
