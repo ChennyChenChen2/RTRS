@@ -17,6 +17,10 @@ protocol SingleContentViewModel {
 }
 
 class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
+    }
+    
     func pageUrl() -> URL? {
         return nil
     }

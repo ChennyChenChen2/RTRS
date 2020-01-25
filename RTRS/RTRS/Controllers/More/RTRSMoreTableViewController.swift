@@ -21,7 +21,8 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .moreLoadedNotificationName, object: nil)
     }
     
     @objc private func loadingFinished() {

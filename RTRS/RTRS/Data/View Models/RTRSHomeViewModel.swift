@@ -74,7 +74,11 @@ class Announcement: NSObject, NSCoding {
     }
 }
 
-class RTRSHomeViewModel: NSObject, RTRSViewModel {    
+class RTRSHomeViewModel: NSObject, RTRSViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return .homeLoadedNotificationName
+    }
+    
     enum CodingKeys: String {
         case items = "Items"
         case name = "Name"

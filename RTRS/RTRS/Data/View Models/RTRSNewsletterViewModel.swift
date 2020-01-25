@@ -33,6 +33,10 @@ class RTRSNewsletterViewModel: NSObject, RTRSViewModel {
         return self.url
     }
     
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
+    }
+    
     func encode(with coder: NSCoder) {
         coder.encode(self.name, forKey: CodingKeys.name.rawValue)
         coder.encode(self.url, forKey: CodingKeys.url.rawValue)
@@ -52,6 +56,10 @@ class RTRSNewsletterViewModel: NSObject, RTRSViewModel {
 }
 
 class RTRSTshirtStoreViewModel: NSObject, RTRSViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
+    }
+    
     var name: String
     var url: URL
     

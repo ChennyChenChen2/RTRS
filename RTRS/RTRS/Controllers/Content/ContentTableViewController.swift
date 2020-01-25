@@ -30,7 +30,6 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         determineViewModelType()
         
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
     }
     
     deinit {
@@ -38,15 +37,19 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     }
     
     private func determineViewModelType() {
+        var name: Notification.Name?
         if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "AU'S CORNER"
+            name = .auLoadedNotificationName
         } else if self.contentType == .normalColumn, let theViewModel = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "SIXERS ADAM: NORMAL COLUMN"
+            name = .normalColumnLoadedNotificationName
         } else if self.contentType == .podcasts, let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "THE POD"
+            name = .podLoadedNotificationName
         } else if self.contentType == .saved, let theViewModel = RTRSNavigation.shared.viewModel(for: .saved) as? RTRSSavedContentViewModel {
             self.viewModel = theViewModel
             self.navigationItem.title = "SAVED"
@@ -55,6 +58,10 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
             self.navigationItem.rightBarButtonItem = self.clearAllButton
             
             NotificationCenter.default.addObserver(self, selector: #selector(savedContentUpdated), name: Notification.Name.SavedContentUpdated, object: nil)
+        }
+        
+        if let name = name {
+            NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: name, object: nil)
         }
     }
     

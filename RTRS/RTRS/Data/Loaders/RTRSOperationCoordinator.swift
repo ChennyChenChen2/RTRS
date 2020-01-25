@@ -29,6 +29,10 @@ class RTRSOperationCoordinator {
                         return
                     }
                     
+                    if let name = viewModel?.loadedNotificationName() {
+                        NotificationCenter.default.post(name: name, object: nil)
+                    }
+                    
                     print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") successfully called custom completion")
                     weakSelf.processedOperations = weakSelf.processedOperations + 1
                     if weakSelf.processedOperations == weakSelf.operationCount {
@@ -47,6 +51,9 @@ class RTRSOperationCoordinator {
                             
                             let moreViewModel = RTRSMoreViewModel(pages: viewModels)
                             RTRSNavigation.shared.registerViewModel(viewModel: moreViewModel, for: .more)
+                            if let name = moreViewModel.loadedNotificationName() {
+                                NotificationCenter.default.post(name: name, object: nil)
+                            }
                         }
                         
                         print("LOADING COMPLETE")

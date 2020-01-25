@@ -15,6 +15,7 @@ struct PodInfo {
 }
 
 class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
+    
     func pageUrl() -> URL? {
         return nil
     }
@@ -30,6 +31,10 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     
     func pageImage() -> UIImage {
         return #imageLiteral(resourceName: "RickyLogo")
+    }
+    
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
     }
     
     func encode(with coder: NSCoder) {

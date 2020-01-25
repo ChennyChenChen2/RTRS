@@ -14,6 +14,10 @@ protocol MultiContentViewModel {
 }
 
 class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return (self.pageName() == "AU's Corner") ? .auLoadedNotificationName : .normalColumnLoadedNotificationName
+    }
+    
     func pageUrl() -> URL? {
         return nil
     }

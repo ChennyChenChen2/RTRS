@@ -26,6 +26,10 @@ class RTRSSavedContentViewModel: NSObject, RTRSViewModel, MultiContentViewModel 
         return nil
     }
     
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
+    }
+    
     func encode(with coder: NSCoder) {
         // empty implementation
     }

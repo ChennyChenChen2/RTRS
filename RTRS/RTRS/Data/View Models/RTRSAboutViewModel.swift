@@ -22,6 +22,9 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
         return #imageLiteral(resourceName: "Brett")
     }
     
+    func loadedNotificationName() -> Notification.Name? {
+        return .aboutLoadedNotificationName
+    }
     
     enum CodingKeys: String {
         case name = "Name"

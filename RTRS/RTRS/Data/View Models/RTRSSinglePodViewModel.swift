@@ -10,6 +10,10 @@ import UIKit
 import SwiftSoup
 
 class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return nil
+    }
+    
     func pageUrl() -> URL? {
         return nil
     }

@@ -40,7 +40,8 @@ PODS:
   - "GoogleToolboxForMac/NSData+zlib (2.2.2)":
     - GoogleToolboxForMac/Defines (= 2.2.2)
   - leveldb-library (1.22)
-  - MarqueeLabel (4.0.1)
+  - MarqueeLabel (4.0.2)
+  - MKToolTip (1.0.6)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -66,7 +67,8 @@ DEPENDENCIES:
   - FirebaseInstanceID (= 2.0.0)
   - FLEX (~> 2.4)
   - MarqueeLabel
-  - PINRemoteImage
+  - MKToolTip
+  - PINRemoteImage (= 2.1.4)
   - SwiftSoup (= 2.2.0)
 
 SPEC REPOS:
@@ -83,6 +85,7 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - leveldb-library
     - MarqueeLabel
+    - MKToolTip
     - nanopb
     - PINCache
     - PINRemoteImage
@@ -101,13 +104,14 @@ SPEC CHECKSUMS:
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
-  MarqueeLabel: d24e821159667c93064ea3042ccf1875ca94db6b
+  MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
+  MKToolTip: 69509b1cada10f96bd9f4ab559a768e7c6557933
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: c7abaadab1d37c62e7dadf9dbe399f28b3c634cc
+PODFILE CHECKSUM: 551f729dae4df0edde0d0518185ed8002f42a90e
 
 COCOAPODS: 1.7.4

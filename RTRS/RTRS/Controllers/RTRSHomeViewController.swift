@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MKToolTip
 
 class RTRSHomeViewController: UITableViewController, LoggableViewController, UIPopoverPresentationControllerDelegate {
     private let firstLaunchFinishedKey = "kRTRSFirstLaunchFinishedKey"
@@ -39,7 +40,8 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         
         showFTUEIfNecessary()
         NotificationCenter.default.addObserver(self, selector: #selector(rotateRefreshButton), name: .LoadingBeganNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .homeLoadedNotificationName, object: nil)
     }
     
     deinit {
@@ -82,7 +84,16 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
             }))
             
             DispatchQueue.main.async {
-                self.present(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: {
+                    le  t gradientColor = UIColor.black
+                    let gradientColor2 = UIColor.darkGray
+                    let preference = ToolTipPreferences()
+                    preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
+                    preference.drawing.arrow.tipCornerRadius = 0
+                    preference.drawing.title.color = .white
+                    preference.drawing.message.color = .white
+                    self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
+                })
             }
         }
     }

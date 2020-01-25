@@ -10,6 +10,10 @@ import UIKit
 import SwiftSoup
 
 class RTRSMoreViewModel: NSObject, RTRSViewModel {
+    func loadedNotificationName() -> Notification.Name? {
+        return .moreLoadedNotificationName
+    }
+    
     func pageUrl() -> URL? {
         return nil
     }

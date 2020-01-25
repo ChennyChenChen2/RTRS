@@ -144,6 +144,10 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
         return nil
     }
     
+    func loadedNotificationName() -> Notification.Name? {
+        return .processPupsLoadedNotificationName
+    }
+    
     func encode(with coder: NSCoder) {
         coder.encode(self.pageDescription, forKey: CodingKeys.pageDescription.rawValue)
         coder.encode(self.pageDescriptionImageURLs, forKey: CodingKeys.pageDescriptionImageURLs.rawValue)

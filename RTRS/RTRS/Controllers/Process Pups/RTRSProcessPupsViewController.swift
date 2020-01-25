@@ -21,21 +21,32 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewModel = (RTRSNavigation.shared.viewModel(for: .processPups) as! RTRSProcessPupsViewModel)
+        self.viewModel = (RTRSNavigation.shared.viewModel(for: .processPups) as? RTRSProcessPupsViewModel)
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.clipsToBounds = true
 
         self.descriptionTextView.backgroundColor = .black
+        self.descriptionTextViewHeightConstraint.constant = self.descriptionTextView.frame.size.height + 20
+
+        loadingFinished()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .processPupsLoadedNotificationName, object: nil)
+    }
+    
+    @objc private func loadingFinished() {
+        self.viewModel = RTRSNavigation.shared.viewModel(for: .processPups) as? RTRSProcessPupsViewModel
+        
         self.descriptionTextView.attributedText = self.viewModel.pageDescription
         self.descriptionTextView.sizeToFit()
-        self.descriptionTextViewHeightConstraint.constant = self.descriptionTextView.frame.size.height + 20
         
         if let urls = self.viewModel?.pageDescriptionImageURLs {
             self.imageContainer.maxWidth = self.imageContainer.frame.size.width
             self.imageContainer.imgURLs = urls
         }
+        
+        self.collectionView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {

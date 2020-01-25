@@ -18,13 +18,19 @@ class RTRSAboutViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         
         self.viewModel = RTRSNavigation.shared.viewModel(for: .about) as? RTRSAboutViewModel
+        self.setView()
+        
+        self.navigationController?.navigationBar.tintColor = .white
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setView), name: .aboutLoadedNotificationName, object: nil)
+    }
+    
+    @objc func setView() {
         self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
         self.imageView.pin_setImage(from: viewModel?.imageUrl)
         
         self.textView.delegate = self
         self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
-        
-        self.navigationController?.navigationBar.tintColor = .white
     }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
