@@ -85,7 +85,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
             
             DispatchQueue.main.async {
                 self.present(alert, animated: true, completion: {
-                    le  t gradientColor = UIColor.black
+                    let gradientColor = UIColor.black
                     let gradientColor2 = UIColor.darkGray
                     let preference = ToolTipPreferences()
                     preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
