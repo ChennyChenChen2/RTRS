@@ -70,7 +70,10 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         if !firstLaunchFinished {
             UserDefaults.standard.set(true, forKey: firstLaunchFinishedKey)
             let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Please trust the processor as the app loads for the first time.\nWould you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [weak self] (action) in
+                self?.showToolTip()
+            }))
+            
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
                 if #available(iOS 10.0, *) {
                     // For iOS 10 display notification (sent via APNS)
@@ -84,17 +87,21 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
             }))
             
             DispatchQueue.main.async {
-                self.present(alert, animated: true, completion: {
-                    let gradientColor = UIColor.black
-                    let gradientColor2 = UIColor.darkGray
-                    let preference = ToolTipPreferences()
-                    preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
-                    preference.drawing.arrow.tipCornerRadius = 0
-                    preference.drawing.title.color = .white
-                    preference.drawing.message.color = .white
-                    self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
-                })
+                self.present(alert, animated: true, completion: nil)
             }
+        }
+    }
+    
+    @objc private func showToolTip() {
+        DispatchQueue.main.async {
+            let gradientColor = UIColor.black
+            let gradientColor2 = UIColor.darkGray
+            let preference = ToolTipPreferences()
+            preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
+            preference.drawing.arrow.tipCornerRadius = 0
+            preference.drawing.title.color = .white
+            preference.drawing.message.color = .white
+            self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
         }
     }
     
@@ -160,10 +167,17 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         let cell = tableView.dequeueReusableCell(withIdentifier: RTRSHomeTableViewCell.kReuseId, for: indexPath) as! RTRSHomeTableViewCell
         if let items = self.viewModel?.items {
             let homeItem = items[indexPath.row]
-            if let text = homeItem.text, let url = homeItem.imageUrl,
-                let actionText = homeItem.actionText {
-                cell.titleLabel.text = text
-                cell.actionLabel.text = "\(actionText)"
+            if let url = homeItem.imageUrl {
+                if let text = homeItem.text {
+                    cell.titleLabel.text = text
+                } else {
+                    cell.titleLabel.text = ""
+                }
+                
+                if let actionText = homeItem.actionText {
+                    cell.actionLabel.text = "\(actionText)"
+                }
+                
                 cell.homeImageView.pin_setImage(from: url)
             }
         }

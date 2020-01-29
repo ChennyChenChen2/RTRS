@@ -131,44 +131,62 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
         do {
             var homeItems = [HomeItem]()
             
-            let imgElems = try doc.getElementsByClass("thumb-image")
-            let titleElems = try doc.getElementsByClass("sqs-block html-block sqs-block-html").filter({ (elem) -> Bool in
-                do {
-                    let hasH1 = try elem.getElementsByTag("h1").count > 0
-                    let hasH2 = try elem.getElementsByTag("h2").count > 0
-                    return hasH1 || hasH2
-                } catch {
-                    return false
-                }
-            })
-            let actionElems = try doc.getElementsByClass("sqs-block-button-element--large sqs-block-button-element")
+//            let imgElems = try doc.getElementsByClass("thumb-image")
+            let imgElems = try doc.getElementsByClass("sqs-block image-block sqs-block-image")
+//            let titleElems = try doc.getElementsByClass("sqs-block html-block sqs-block-html").filter({ (elem) -> Bool in
+//                do {
+//                    let hasH1 = try elem.getElementsByTag("h1").count > 0
+//                    let hasH2 = try elem.getElementsByTag("h2").count > 0
+//                    return hasH1 || hasH2
+//                } catch {
+//                    return false
+//                }
+//            })
+//            let actionElems = try doc.getElementsByClass("sqs-block-button-element--large sqs-block-button-element")
             
-            for i in 0..<actionElems.count {
-                let actionElem = actionElems[i]
-                if i < titleElems.count && i < imgElems.count {
-                    let titleElem = titleElems[i]
-                    let imgElem = imgElems[i]
-                    if let imgURL = URL(string: try imgElem.attr("data-src")),
-                    let actionText = try? actionElem.text(),
-                    let actionURL = URL(string: try actionElem.attr("href")) {
+            for i in 0..<imgElems.count {
+                let imgElemParent = imgElems[i]
+                let imgElemChild = try imgElemParent.getElementsByClass("thumb-image").first
+                
+                let actionSiblings = imgElemParent.siblingElements().filter { (elem) -> Bool in
+                    do {
+                        return try elem.getElementsByClass("sqs-block-button-element--large sqs-block-button-element").count > 0 && !elem.hasClass("row sqs-row")
+                    } catch {
+                        return false
+                    }
+                }
+                
+                let titleSiblings = imgElemParent.siblingElements().filter { (elem) -> Bool in
+                    return elem.hasClass("sqs-block html-block sqs-block-html")
+                }
+                
+                if let imgElem = imgElemChild {
+                    let titleElem = titleSiblings.first
+                    let actionParent = actionSiblings.first
+                    let actionElem = try? actionParent?.getElementsByClass("sqs-block-button-element--large sqs-block-button-element").first
+                    
+                    if let imgURL = URL(string: try imgElem.attr("data-src")) {
+                        let actionText = try? actionElem?.text()
+                        var actionURL: URL?
+                        if let actionElem = actionElem, let urlString = try? actionElem.attr("href"), let url = URL(string: urlString) {
+                            actionURL = url
+                        }
+                    
                         var titleElemPlaceholder: Element? = nil
-                        if let h2Elem = try titleElem.getElementsByTag("h2").first() {
+                        if let h2Elem = try titleElem?.getElementsByTag("h2").first() {
                             titleElemPlaceholder = h2Elem
-                        } else if let h1Elem = try titleElem.getElementsByTag("h1").first() {
+                        } else if let h1Elem = try titleElem?.getElementsByTag("h1").first() {
                             titleElemPlaceholder = h1Elem
                         }
-                        
-                        if let theTitleElem = titleElemPlaceholder {
-                            let title = NSAttributedString.attributedStringFrom(element: theTitleElem)
-                            if !title.string.contains("Squarespace") {
-                                let homeItem = HomeItem(imageUrl: imgURL, text: title.string, actionText: actionText, actionUrl: actionURL)
-                                homeItems.append(homeItem)
-                            }
+
+                        let title = try titleElemPlaceholder?.text()
+                        if (title != nil && !title!.string.contains("Squarespace")) || title == nil {
+                            let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: actionURL)
+                            homeItems.append(homeItem)
                         }
                     }
                 }
             }
-            
             self.items = homeItems
         } catch {
             print("Unable to parse home page HTML")
