@@ -40,7 +40,6 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         
         showFTUEIfNecessary()
         NotificationCenter.default.addObserver(self, selector: #selector(rotateRefreshButton), name: .LoadingBeganNotification, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .homeLoadedNotificationName, object: nil)
     }
     
@@ -68,13 +67,15 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     func showFTUEIfNecessary() {
         let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
         if !firstLaunchFinished {
-            UserDefaults.standard.set(true, forKey: firstLaunchFinishedKey)
             let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Please trust the processor as the app loads for the first time.\nWould you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [weak self] (action) in
-                self?.showToolTip()
+                guard let self = self else { return }
+                self.showToolTip()
+                UserDefaults.standard.set(true, forKey: self.firstLaunchFinishedKey)
             }))
             
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action) in
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [weak self] (action) in
+                guard let self = self else { return }
                 if #available(iOS 10.0, *) {
                     // For iOS 10 display notification (sent via APNS)
                     UNUserNotificationCenter.current().delegate = UIApplication.shared.delegate as! AppDelegate
@@ -84,6 +85,9 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     UIUserNotificationSettings(types: [.alert], categories: nil)
                     UIApplication.shared.registerUserNotificationSettings(settings)
                 }
+                
+                self.showToolTip()
+                UserDefaults.standard.set(true, forKey: self.firstLaunchFinishedKey)
             }))
             
             DispatchQueue.main.async {
@@ -93,15 +97,18 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     }
     
     @objc private func showToolTip() {
-        DispatchQueue.main.async {
-            let gradientColor = UIColor.black
-            let gradientColor2 = UIColor.darkGray
-            let preference = ToolTipPreferences()
-            preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
-            preference.drawing.arrow.tipCornerRadius = 0
-            preference.drawing.title.color = .white
-            preference.drawing.message.color = .white
-            self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
+        let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
+        if !firstLaunchFinished {
+            DispatchQueue.main.async {
+                let gradientColor = UIColor.black
+                let gradientColor2 = UIColor.darkGray
+                let preference = ToolTipPreferences()
+                preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
+                preference.drawing.arrow.tipCornerRadius = 0
+                preference.drawing.title.color = .white
+                preference.drawing.message.color = .white
+                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
+            }
         }
     }
     
@@ -159,7 +166,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         let homeItem = viewModelItems[indexPath.row]
         if let url = homeItem.actionUrl, let title = homeItem.text, let navVC = self.navigationController as? RTRSNavigationController {
             let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
-            RTRSDeepLinkHandler.route(payload: payload, navController: navVC)
+            RTRSDeepLinkHandler.route(payload: payload, navController: navVC, shouldOpenExternalWebBrowser: homeItem.shouldOpenExternalBrowser)
         }
     }
     

@@ -15,19 +15,22 @@ class HomeItem: NSObject, NSCoding {
     var text: String?
     var actionText: String?
     var actionUrl: URL?
+    var shouldOpenExternalBrowser: Bool
     
     enum CodingKeys: String {
         case imageUrl = "imageUrl"
         case text = "text"
         case actionText = "actionText"
         case actionUrl = "actionUrl"
+        case shouldOpenExternalBrowser = "shouldOpenExternalBrowser"
     }
     
-    required init(imageUrl: URL?, text: String?, actionText: String?, actionUrl: URL?) {
+    required init(imageUrl: URL?, text: String?, actionText: String?, actionUrl: URL?, shouldOpenExternalBrowser: Bool) {
         self.imageUrl = imageUrl
         self.text = text
         self.actionText = actionText
         self.actionUrl = actionUrl
+        self.shouldOpenExternalBrowser = shouldOpenExternalBrowser
     }
     
     func encode(with aCoder: NSCoder) {
@@ -35,6 +38,7 @@ class HomeItem: NSObject, NSCoding {
         aCoder.encode(self.text, forKey: CodingKeys.text.rawValue)
         aCoder.encode(self.actionText, forKey: CodingKeys.actionText.rawValue)
         aCoder.encode(self.actionUrl, forKey: CodingKeys.actionUrl.rawValue)
+        aCoder.encode(self.shouldOpenExternalBrowser, forKey: CodingKeys.actionUrl.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -42,8 +46,9 @@ class HomeItem: NSObject, NSCoding {
         let text = aDecoder.decodeObject(forKey: CodingKeys.text.rawValue) as? String
         let actionText = aDecoder.decodeObject(forKey: CodingKeys.actionText.rawValue) as? String
         let actionUrl = aDecoder.decodeObject(forKey: CodingKeys.actionUrl.rawValue) as? URL
+        let shouldOpenExternalBrowser = aDecoder.decodeObject(forKey: CodingKeys.shouldOpenExternalBrowser.rawValue) as? Bool
         
-        self.init(imageUrl: imageUrl, text: text, actionText: actionText, actionUrl: actionUrl)
+        self.init(imageUrl: imageUrl, text: text, actionText: actionText, actionUrl: actionUrl, shouldOpenExternalBrowser: shouldOpenExternalBrowser ?? false)
     }
 }
 
@@ -83,11 +88,13 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
         case items = "Items"
         case name = "Name"
         case announcement = "Announcement"
+        case ignoreTitles = "IgnoreTitles"
     }
     
     var items: [HomeItem]? = [HomeItem]()
     var name: String?
     var announcement: Announcement?
+    var ignoreTitles: [String] = []
     
     func pageName() -> String {
         return "Home"
@@ -105,21 +112,24 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
         aCoder.encode(self.items, forKey: CodingKeys.items.rawValue)
         aCoder.encode(self.name, forKey: CodingKeys.name.rawValue)
         aCoder.encode(self.announcement, forKey: CodingKeys.announcement.rawValue)
+        aCoder.encode(self.ignoreTitles, forKey: CodingKeys.ignoreTitles.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let items = aDecoder.decodeObject(forKey: CodingKeys.items.rawValue) as? [HomeItem]
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let announcement = aDecoder.decodeObject(forKey: CodingKeys.announcement.rawValue) as? Announcement
+        let ignoreTitles = aDecoder.decodeObject(forKey: CodingKeys.ignoreTitles.rawValue) as? [String]
         
-        self.init(doc: nil, items: items, name: name, announcement: announcement)
+        self.init(doc: nil, items: items, name: name, announcement: announcement, ignoreTitles: ignoreTitles ?? [])
     }
     
-    required init(doc: Document?, items: [HomeItem]?, name: String?, announcement: Announcement?) {
+    required init(doc: Document?, items: [HomeItem]?, name: String?, announcement: Announcement?, ignoreTitles: [String]) {
         super.init()
         self.items = items
         self.name = name
         self.announcement = announcement
+        self.ignoreTitles = ignoreTitles
         
         if let theDoc = doc {
             self.extractDataFromDoc(doc: theDoc, urls: nil)
@@ -181,7 +191,8 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
 
                         let title = try titleElemPlaceholder?.text()
                         if (title != nil && !title!.string.contains("Squarespace")) || title == nil {
-                            let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: actionURL)
+                            let shouldOpenExternalBrowser = title != nil ? self.ignoreTitles.contains(title!) : false
+                            let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: actionURL, shouldOpenExternalBrowser: shouldOpenExternalBrowser)
                             homeItems.append(homeItem)
                         }
                     }

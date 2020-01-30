@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ty9-Ln-5Mi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O8S-Jp-9LQ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -509,10 +509,29 @@
             </objects>
             <point key="canvasLocation" x="1494.2028985507247" y="2990.625"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="MeK-tc-VYb">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="O8S-Jp-9LQ" customClass="RTRSNavigationController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                    <nil key="simulatedTopBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5je-xI-YaD">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Ty9-Ln-5Mi" kind="relationship" relationship="rootViewController" id="cej-04-Ohc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VOD-0H-oSI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="512" y="139"/>
+        </scene>
         <!--Root Tab Controller-->
         <scene sceneID="Iab-g1-HhG">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tLF-sJ-U1T" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="Home" id="Ty9-Ln-5Mi" customClass="RootTabController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="DMD-cP-fEd"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8nn-Iu-WqO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -525,7 +544,6 @@
                         <segue destination="Ggk-yU-Rbc" kind="relationship" relationship="viewControllers" id="77Q-mO-bcl"/>
                     </connections>
                 </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tLF-sJ-U1T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1412" y="139"/>
         </scene>
@@ -751,6 +769,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="A9f-VC-kfr"/>
                     </view>
+                    <navigationItem key="navigationItem" id="zmy-nD-z2F"/>
                     <connections>
                         <outlet property="imageView" destination="9vg-vO-k0I" id="6If-Yi-7Pj"/>
                         <outlet property="textView" destination="JuH-Oj-EnN" id="Ne8-gI-eBF"/>

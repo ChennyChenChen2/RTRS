@@ -54,9 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        if let link = response.notification.request.content.userInfo["deepLink"] as? String, let url = URL(string: link), let title = response.notification.request.content.userInfo["deepLinkTitle"] as? String, let rootVC = self.window?.rootViewController as? RTRSNavigationController {
+        if let link = response.notification.request.content.userInfo["deepLink"] as? String, let url = URL(string: link), let title = response.notification.request.content.userInfo["deepLinkTitle"] as? String, let shouldOpenExternalBrowser = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? Bool, let rootVC = self.window?.rootViewController as? RTRSNavigationController {
             let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
-            RTRSDeepLinkHandler.route(payload: payload, navController: rootVC)
+            RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser)
         }
     }
     

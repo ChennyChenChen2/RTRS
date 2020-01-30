@@ -142,7 +142,7 @@ fileprivate class RTRSViewModelFactory {
         
         switch name {
         case RTRSScreenType.home.rawValue:
-            return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil)
+            return RTRSHomeViewModel(doc: doc, items: nil, name: name, announcement: nil, ignoreTitles: ignoreTitles ?? [])
         case RTRSScreenType.podSource.rawValue:
             return RTRSPodSourceViewModel(doc: doc, pods: nil, ignoreTitles: ignoreTitles)
         case RTRSScreenType.podcasts.rawValue:

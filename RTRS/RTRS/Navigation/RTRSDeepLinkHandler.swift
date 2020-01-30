@@ -61,8 +61,20 @@ class RTRSDeepLinkHandler: NSObject {
     }
     
     
-    static func route(payload: RTRSDeepLinkPayload, navController: RTRSNavigationController) {
+    static func route(payload: RTRSDeepLinkPayload, navController: RTRSNavigationController, shouldOpenExternalWebBrowser: Bool) {
         let url = payload.baseURL
+        
+        func openExternalWebBrowser() {
+            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "RTRSExternalWebViewController") as! RTRSExternalWebViewController
+            vc.name = payload.title
+            vc.url = payload.baseURL
+            navController.present(vc, animated: true, completion: nil)
+        }
+        
+        if shouldOpenExternalWebBrowser {
+            openExternalWebBrowser()
+        }
         
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
         
@@ -145,10 +157,7 @@ class RTRSDeepLinkHandler: NSObject {
                 }
             }
         } else {
-            let vc = storyboard.instantiateViewController(withIdentifier: "RTRSExternalWebViewController") as! RTRSExternalWebViewController
-            vc.name = payload.title
-            vc.url = payload.baseURL
-            navController.present(vc, animated: true, completion: nil)
+            openExternalWebBrowser()
         }
     }
     
@@ -166,7 +175,7 @@ class RTRSDeepLinkHandler: NSObject {
                             let longUrlString = expandDict["long_url"] as? String,
                                 let longUrl = URL(string: longUrlString) {
                                 let newPayload = RTRSDeepLinkPayload(baseURL: longUrl, title: payload.title)
-                                RTRSDeepLinkHandler.route(payload: newPayload, navController: navController)
+                                RTRSDeepLinkHandler.route(payload: newPayload, navController: navController, shouldOpenExternalWebBrowser: false)
                             }
                         }
                     }
