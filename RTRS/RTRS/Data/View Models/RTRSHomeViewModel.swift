@@ -177,23 +177,20 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                     
                     if let imgURL = URL(string: try imgElem.attr("data-src")) {
                         let actionText = try? actionElem?.text()
-                        var actionURL: URL?
-                        if let actionElem = actionElem, let urlString = try? actionElem.attr("href"), let url = URL(string: urlString) {
-                            actionURL = url
-                        }
-                    
-                        var titleElemPlaceholder: Element? = nil
-                        if let h2Elem = try titleElem?.getElementsByTag("h2").first() {
-                            titleElemPlaceholder = h2Elem
-                        } else if let h1Elem = try titleElem?.getElementsByTag("h1").first() {
-                            titleElemPlaceholder = h1Elem
-                        }
+                        if let theActionElem = actionElem, let urlString = try? theActionElem.attr("href"), let url = URL(string: urlString) {
+                            var titleElemPlaceholder: Element? = nil
+                            if let h2Elem = try titleElem?.getElementsByTag("h2").first() {
+                                titleElemPlaceholder = h2Elem
+                            } else if let h1Elem = try titleElem?.getElementsByTag("h1").first() {
+                                titleElemPlaceholder = h1Elem
+                            }
 
-                        let title = try titleElemPlaceholder?.text()
-                        if (title != nil && !title!.string.contains("Squarespace")) || title == nil {
-                            let shouldOpenExternalBrowser = title != nil ? self.ignoreTitles.contains(title!) : false
-                            let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: actionURL, shouldOpenExternalBrowser: shouldOpenExternalBrowser)
-                            homeItems.append(homeItem)
+                            let title = try titleElemPlaceholder?.text()
+                            if (title != nil && !title!.string.contains("Squarespace")) || title == nil {
+                                let shouldOpenExternalBrowser = title != nil ? self.ignoreTitles.contains(title!) : false
+                                let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: url, shouldOpenExternalBrowser: shouldOpenExternalBrowser)
+                                homeItems.append(homeItem)
+                            }
                         }
                     }
                 }
