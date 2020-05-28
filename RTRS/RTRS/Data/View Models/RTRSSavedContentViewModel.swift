@@ -38,7 +38,7 @@ class RTRSSavedContentViewModel: NSObject, RTRSViewModel, MultiContentViewModel 
         // Empty impl
     }
     
-    var content: [SingleContentViewModel] {
+    var content: [SingleContentViewModel?] {
         return RTRSPersistentStorage.getSavedContent()
     }
     

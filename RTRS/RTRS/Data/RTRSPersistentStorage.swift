@@ -99,7 +99,7 @@ class RTRSPersistentStorage: NSObject {
         let content = getSavedContent()
         
         return content.contains { (vm2) -> Bool in
-            if let title1 = vm.title, let title2 = vm2.title {
+            if let title1 = vm.title, let title2 = vm2?.title {
                 return title1 == title2
             } else {
                 return false
@@ -107,7 +107,7 @@ class RTRSPersistentStorage: NSObject {
         }
     }
     
-    class func getSavedContent() -> [SingleContentViewModel] {
+    class func getSavedContent() -> [SingleContentViewModel?] {
         var result = [SingleContentViewModel]()
         let type = RTRSScreenType.saved
         if let savedContentPath = getPathForType(type: type, specificName: nil),
@@ -132,7 +132,7 @@ class RTRSPersistentStorage: NSObject {
     
     class func getViewModel(type: RTRSScreenType, specificName: String? = nil) -> RTRSViewModel? {
         var path: URL?
-        if type == .pod || type == .auArticle {
+        if type == .pod || type == .auArticle || type == .normalColumnArticle {
             path = getPathForType(type: type, specificName: specificName)
         } else {
             path = getPathForType(type: type)

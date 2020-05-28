@@ -29,11 +29,14 @@ class RTRSOperationCoordinator {
                         return
                     }
                     
-                    if let name = viewModel?.loadedNotificationName() {
-                        NotificationCenter.default.post(name: name, object: nil)
-                    }
+                    if let theViewModel = viewModel, let type = RTRSScreenType(rawValue: theViewModel.pageName()) {
+                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
+                        if let name = viewModel?.loadedNotificationName() {
+                            NotificationCenter.default.post(name: name, object: nil)
+                        }
                     
-                    print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") successfully called custom completion")
+                        print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") successfully called custom completion")
+                    }
                     weakSelf.processedOperations = weakSelf.processedOperations + 1
                     if weakSelf.processedOperations == weakSelf.operationCount {
                         if let moreItems = dict["moreItems"] as? [String] {

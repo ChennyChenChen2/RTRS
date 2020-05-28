@@ -67,6 +67,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             
             self.displayedViaTabView = false
             if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
+                guard let vm = vm else { return false }
                 return vm.title == self.viewModel.title
             }) {
                 self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
@@ -283,7 +284,6 @@ class RTRSCollectionViewController: UIViewController, UICollectionViewDelegate {
                 scrollView.contentOffset = CGPoint(x: toValue, y: 0)
                 scrollView.layoutIfNeeded()
             }, completion: nil)
-
         } else {
             // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
@@ -340,28 +340,6 @@ class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
         let contentInset = collectionView.contentInset
         self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height - 1 - contentInset.top - contentInset.bottom)
     }
-     
-//    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-//
-//        guard let collectionView = self.collectionView else { return CGPoint.zero }
-//
-////        var offsetAdjustment = CGFloat.greatestFiniteMagnitude
-//        var offsetAdjustment: CGFloat = 0.0
-//        let horizontalOffset = proposedContentOffset.x + 5
-//
-//        let targetRect = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
-//
-//        if let attributes = super.layoutAttributesForElements(in: targetRect) {
-//            for attribute in attributes {
-//                let itemOffset = attribute.frame.origin.x
-////                if abs(itemOffset - horizontalOffset) < abs(offsetAdjustment) {
-//                offsetAdjustment = offsetAdjustment + itemOffset
-////                }
-//            }
-//        }
-//
-//        return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
-//    }
 }
 
 extension UICollectionView {

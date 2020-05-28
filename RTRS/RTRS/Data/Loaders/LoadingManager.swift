@@ -54,7 +54,7 @@ import FirebaseDatabase
                         }
                         
                         DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: .LoadingBeganNotification, object: nil)
+                            NotificationCenter.default.post(name: .loadingBeganNotification, object: nil)
                         }
                         
                         weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
@@ -63,7 +63,7 @@ import FirebaseDatabase
                             }
                             
                             DispatchQueue.main.async {
-                                NotificationCenter.default.post(name: .LoadingFinishedNotification, object: nil)
+                                NotificationCenter.default.post(name: .loadingFinishedNotification, object: nil)
                                 self?.isLoading = false
                             }
                         }
@@ -81,7 +81,8 @@ import FirebaseDatabase
                     }
                     
                     var configDict: [String: Any]?
-                    if error != nil {
+//                    if error != nil {
+                    if true {
                         if let config = getBundledConfig() {
                             doStartup(dict: config)
                         } else {
@@ -118,6 +119,6 @@ import FirebaseDatabase
 }
 
 extension Notification.Name {
-    static let LoadingBeganNotification = Notification.Name("LoadingBeganNotification")
-    static let LoadingFinishedNotification = Notification.Name("LoadingFinishedNotification")
+    static let loadingBeganNotification = Notification.Name("LoadingBeganNotification")
+    static let loadingFinishedNotification = Notification.Name("LoadingFinishedNotification")
 }

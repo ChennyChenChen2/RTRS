@@ -27,15 +27,17 @@ class RTRSOperation: Operation {
         super.init()
     }
     
+    // TODO: override `asynchronous`, `executing`, and `finished`, per "Methods to Override" docs! https://developer.apple.com/documentation/foundation/operation
     override func start() {
-        guard let firstUrl = self.urls.first else { return }
+//        guard let firstUrl = self.urls.first else { return }
+        print("RTRS beginning to load \(pageName)")
             
         func retrieveSavedDataIfAvailable() {
             if let type = RTRSScreenType(rawValue: self.pageName) {
                 var viewModel: RTRSViewModel?
                 
                 print("Retrieving \(type.rawValue) from saved data")
-                if type == .pod || type == .auArticle {
+                if type == .pod || type == .auArticle || type == .normalColumnArticle {
                     viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
                 } else {
                     viewModel = RTRSPersistentStorage.getViewModel(type: type)
@@ -101,32 +103,28 @@ class RTRSOperation: Operation {
                                 var deferredCompletion = false
                                
                                 if type == .au || type == .podcasts || type == .processPups {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name:     self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion)
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion)
                                     deferredCompletion = true
                                 } else {
                                     viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
                                 }
                                    
-                                if let theViewModel = viewModel {
-                                    DispatchQueue.main.async {
-                                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                                    }
-                                   
-                                    if !deferredCompletion {
-                                        self.customCompletion?(viewModel)
-                                    }
-                                } else {
-                                    retrieveSavedDataIfAvailable()
+                                if !deferredCompletion {
+                                    self.customCompletion?(viewModel)
                                 }
                             } else {
+                                // TODO: throw error for invalid page type...
+                                // Call to retrieveSavedDataIfAvailable won't do anything because of the invalid page type
                                 retrieveSavedDataIfAvailable()
                             }
                         }
                     } catch {
                         print("Error?")
+                        // TODO: create meaningful html parsing error
                         retrieveSavedDataIfAvailable()
                     }
                 } else {
+                    // Fall here if we've determined we don't need to update existing data
                     retrieveSavedDataIfAvailable()
                 }
             }
@@ -137,7 +135,6 @@ class RTRSOperation: Operation {
 }
 
 fileprivate class RTRSViewModelFactory {
-    
     class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil) -> RTRSViewModel? {
         
         switch name {
@@ -156,9 +153,11 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         case RTRSScreenType.newsletter.rawValue:
-            return RTRSNewsletterViewModel(name: name, url: urls!.first!)
+            guard let url = urls?.first else { return nil }
+            return RTRSNewsletterViewModel(name: name, url: url)
         case RTRSScreenType.shirts.rawValue:
-            return RTRSTshirtStoreViewModel(name: name, url: urls!.first!)
+            guard let url = urls?.first else { return nil }
+            return RTRSTshirtStoreViewModel(name: name, url: url)
         default:
             break
         }

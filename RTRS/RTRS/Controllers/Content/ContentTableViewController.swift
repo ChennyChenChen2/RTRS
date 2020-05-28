@@ -16,7 +16,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     fileprivate let cellReuseId = "ContentCell"
     fileprivate let articleSegueId = "AUArticleSegue"
     fileprivate let playerId = "PodcastPlayer"
-    fileprivate var filteredResults = [SingleContentViewModel]()
+    fileprivate var filteredResults = [SingleContentViewModel?]()
     fileprivate var clearAllButton: UIBarButtonItem?
     
     override func viewDidLoad() {
@@ -131,7 +131,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as! SingleContentCell
         
-        let viewModel = self.filteredResults[indexPath.row]
+        guard let viewModel = self.filteredResults[indexPath.row] else { return cell }
         cell.applyViewModel(viewModel: viewModel)
 
         return cell
@@ -203,6 +203,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
             if let cell = tableView.cellForRow(at: indexPath) as? SingleContentCell, let title = cell.contentTitleLabel.text {
 
                 if let viewModel = self.viewModel?.content.first(where: { (vm) -> Bool in
+                    guard let vm = vm else { return false }
                     return vm.title == title
                 }) as? RTRSSinglePodViewModel {
                     var vc: PodcastPlayerViewController!
@@ -252,7 +253,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         }
         
         self.filteredResults = articles.filter { (viewModel) -> Bool in
-            
+            guard let viewModel = viewModel else { return false }
             if let title = viewModel.title, title.lowercased().contains(searchText.lowercased()) {
                 return true
             } else if let description = viewModel.contentDescription?.lowercased(), description.contains(searchText.lowercased()) {

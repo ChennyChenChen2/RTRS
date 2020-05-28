@@ -10,7 +10,7 @@ import UIKit
 import SwiftSoup
 
 protocol MultiContentViewModel {
-    var content: [SingleContentViewModel] { get }
+    var content: [SingleContentViewModel?] { get }
 }
 
 class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
@@ -48,7 +48,7 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     }
 
     let name: String?
-    var content: [SingleContentViewModel]  = [SingleArticleViewModel]()
+    var content: [SingleContentViewModel?]  = [SingleArticleViewModel?]()
     var completion: ((RTRSViewModel?) -> ())?
 
     required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
@@ -61,58 +61,87 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
-        guard let theURLs = urls else { return }
-        
-        for url in theURLs {
-            do {
-                let htmlString = try String.init(contentsOf: url)
-                let doc = try SwiftSoup.parse(htmlString)
-                let postElements = try doc.getElementsByTag("article")
-                for i in 0..<postElements.count {
-                    let postElement = postElements[i]
-                    
-                    var theTitleElem: Element? = try? postElement.getElementsByClass("title").first()
-                    if theTitleElem == nil {
-                        theTitleElem = try? postElement.getElementsByClass("entry-title").first()
-                    }
-                    
-                    var theDateElem: Element? = try? postElement.getElementsByClass("date-author").first()
-                    if theDateElem == nil {
-                        theDateElem = try? postElement.getElementsByClass("date").first()
-                    }
-                    
-                    let imageElement = try postElement.getElementsByClass("squarespace-social-buttons inline-style")
-                    if let titleElement = theTitleElem,
-                        let aElement = try? titleElement.getElementsByTag("a").first(),
-                        let dateElement = theDateElem,
-                        let title = try? aElement.text(),
-                        let urlSuffix = try? aElement.attr("href"),
-                        let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
-                        let articleDescription = try? descriptionTextElement.text(),
-                        let imageAttribute = try? imageElement.attr("data-asset-url")
-                    {
-                        
-                        guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { continue }
-                        
-                        var dateString = ""
-                        if let newDate = try? dateElement.text() {
-                            dateString = newDate
-                        }
-                        
-                        let htmlString = try String.init(contentsOf: articleUrl)
-                        let articleDoc = try SwiftSoup.parse(htmlString)
-                        let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
-                        content.append(singleArticleViewModel)
-                    }
-                }
-            } catch {
-                print("Error parsing AU's Corner view model")
-                break
-            }
+        guard let theURLs = urls else {
+            self.completion?(self)
+            return
         }
         
-        print("FINISHED LOADING AU CORNER MULTI-ARTICLE")
-        self.completion?(self)
+        DispatchQueue.global().async {
+            let innerQueue = DispatchQueue(label: "com.rtrs.multiarticle")
+            for n in 0..<theURLs.count {
+                innerQueue.sync {
+                    do {
+                        let url = theURLs[n]
+                        let htmlString = try String.init(contentsOf: url)
+                        let doc = try SwiftSoup.parse(htmlString)
+                        let postElements = try doc.getElementsByTag("article")
+                        var batch = [SingleArticleViewModel?](repeating: nil, count: postElements.count)
+                        for i in 0..<postElements.count {
+                            innerQueue.async {
+                                let postElement = postElements[i]
+                                
+                                var theTitleElem: Element? = try? postElement.getElementsByClass("title").first()
+                                if theTitleElem == nil {
+                                    theTitleElem = try? postElement.getElementsByClass("entry-title").first()
+                                }
+                            
+                                var theDateElem: Element? = try? postElement.getElementsByClass("date-author").first()
+                                if theDateElem == nil {
+                                    theDateElem = try? postElement.getElementsByClass("date").first()
+                                }
+                            
+                                do {
+                                    let imageElement = try postElement.getElementsByClass("squarespace-social-buttons inline-style")
+                                    if let titleElement = theTitleElem,
+                                        let aElement = try? titleElement.getElementsByTag("a").first(),
+                                        let dateElement = theDateElem,
+                                        let title = try? aElement.text(),
+                                        let urlSuffix = try? aElement.attr("href"),
+                                        let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
+                                        let articleDescription = try? descriptionTextElement.text(),
+                                        let imageAttribute = try? imageElement.attr("data-asset-url")
+                                    {
+                                    
+                                        guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+                                            let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { return }
+                                    
+                                        var dateString = ""
+                                        if let newDate = try? dateElement.text() {
+                                            dateString = newDate
+                                        }
+                                    
+                                        let htmlString = try String.init(contentsOf: articleUrl)
+                                        let articleDoc = try SwiftSoup.parse(htmlString)
+                                        let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
+                                        batch[i] = singleArticleViewModel
+                                        
+        //                                    outerQueue.sync { [weak self] in
+        //                                        self?.content.append(singleArticleViewModel)
+
+                                        if i == postElements.count - 1 {
+                                            self.content.append(contentsOf: batch)
+                                            
+                                            if n == theURLs.count - 1 {
+                                                DispatchQueue.main.async {
+                                                    print("FINISHED LOADING \(self.pageName())")
+                                                    self.completion?(self)
+                                                    return
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch {
+                                    print("Error parsing \(self.pageName()) view model")
+                                    return
+                                }
+                            }
+                        }
+                    } catch {
+                        print("Error parsing \(self.pageName()) view model")
+                        return
+                    }
+                }
+            }
+        }
     }
 }

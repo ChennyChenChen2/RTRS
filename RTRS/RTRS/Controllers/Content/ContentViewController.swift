@@ -55,8 +55,8 @@ class ContentViewController: UIViewController {
         self.normalColumnView.rightAnchor.constraint(equalTo: self.normalColumnContainer.rightAnchor).isActive = true
         self.normalColumnView.bottomAnchor.constraint(equalTo: self.normalColumnContainer.bottomAnchor).isActive = true
             
-        self.normalColumnView.setNeedsDisplay()
-        self.view.setNeedsDisplay()
+//        self.normalColumnView.setNeedsDisplay()
+//        self.view.setNeedsDisplay()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -38,16 +38,13 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
     }
     
     func encode(with coder: NSCoder) {
-        coder.encode(self.pods, forKey: CodingKeys.pods.rawValue)
         coder.encode(self.podUrls, forKey: CodingKeys.podUrls.rawValue)
     }
     
-    var pods = [String: URL]() // TODO: Guess we don't need this anymore
     var podUrls = [URL]()
     var ignoreTitles: [String]
     
     required init(doc: Document?, pods: [String: URL]?, podUrls: [URL]? = nil, ignoreTitles: [String]?) {
-        self.pods = pods ?? [String: URL]()
         self.podUrls = podUrls ?? [URL]()
         self.ignoreTitles = ignoreTitles ?? [String]()
         super.init()

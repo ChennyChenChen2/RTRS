@@ -21,7 +21,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
+        self.viewModel = RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel
         
         self.view.setNeedsLayout()
         self.view.layoutIfNeeded()
@@ -39,7 +39,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         
         showFTUEIfNecessary()
-        NotificationCenter.default.addObserver(self, selector: #selector(rotateRefreshButton), name: .LoadingBeganNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(rotateRefreshButton), name: .loadingBeganNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .homeLoadedNotificationName, object: nil)
     }
     
@@ -136,13 +136,11 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         let popController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "refreshPopover") as! RefreshPopoverViewController
         popController.modalPresentationStyle = .popover
         
-        // set up the popover presentation controller
         popController.popoverPresentationController?.permittedArrowDirections = .any
         popController.popoverPresentationController?.delegate = self
         popController.popoverPresentationController?.sourceView = titleView
         popController.popoverPresentationController?.sourceRect = titleView.bounds
         
-        // present the popover
         self.present(popController, animated: true, completion: nil)
     }
     

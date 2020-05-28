@@ -63,7 +63,9 @@
                     "https://www.rightstorickysanchez.com/podcast?page=12",
                     "https://www.rightstorickysanchez.com/podcast?page=13",
                     "https://www.rightstorickysanchez.com/podcast?page=14",
-                    "https://www.rightstorickysanchez.com/podcast?page=15"]
+                    "https://www.rightstorickysanchez.com/podcast?page=15",
+                    "https://www.rightstorickysanchez.com/podcast?page=16",
+                    "https://www.rightstorickysanchez.com/podcast?page=17"]
         },
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
@@ -71,7 +73,9 @@
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=2",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=3",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=4",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=5"],
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=5",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=6",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=7"],
             "type": "contentlist",
         },
         {
@@ -98,6 +102,7 @@
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
         "ignoreTitles": [
+            "Big Announcement: Flip The Switch",
             "Important Announcement: He's Coming Over!",
             "The Nik Stauskas Interview (Ricky Rebroadcast)",
             "Hanging With Spencer Hawes and The Michael Carter-Williams Trade (Ricky Rebroadcast)",

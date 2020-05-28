@@ -34,8 +34,8 @@ class RefreshPopoverViewController: UIViewController {
             }
         })
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingDidBegin), name: .LoadingBeganNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .LoadingFinishedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingDidBegin), name: .loadingBeganNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .loadingFinishedNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {

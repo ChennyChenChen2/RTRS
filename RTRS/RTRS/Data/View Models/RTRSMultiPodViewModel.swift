@@ -44,7 +44,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     }
 
     let name: String?
-    var content: [SingleContentViewModel] = [RTRSSinglePodViewModel]()
+    var content: [SingleContentViewModel?] = [RTRSSinglePodViewModel?]()
     var completion: ((RTRSViewModel?) -> ())?
     var ignoreTitles: [String]?
 

@@ -55,7 +55,7 @@ PODS:
   - PINRemoteImage/FLAnimatedImage (2.1.4):
     - FLAnimatedImage (>= 1.0)
     - PINRemoteImage/Core
-  - Protobuf (3.11.2)
+  - Protobuf (3.11.4)
   - SwiftSoup (2.2.0)
 
 DEPENDENCIES:
@@ -109,7 +109,7 @@ SPEC CHECKSUMS:
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
-  Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
 PODFILE CHECKSUM: 551f729dae4df0edde0d0518185ed8002f42a90e
