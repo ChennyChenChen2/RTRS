@@ -15,7 +15,7 @@ import FirebaseDatabase
     static let shared = LoadingManager()
     let operationCoordinator = RTRSOperationCoordinator()
     var loadingMessages = [String]()
-    @objc var isLoading = false
+    @objc dynamic var isLoading = false
     
     static var cachedConfigPath: URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -26,7 +26,7 @@ import FirebaseDatabase
     func executeStartup() {
         guard let configURLString = Bundle.main.object(forInfoDictionaryKey: "RTRSConfigURL") as? String else {
                 // We'll show an error here, but really, it was definitely our fault, lol...
-                RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                 return
         }
         
@@ -41,7 +41,7 @@ import FirebaseDatabase
                 let url = URL(string: configURLStringWithTemplate)
                 
                 guard let configURL = url else {
-                    RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                    RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                     return
                 }
                 
@@ -59,7 +59,7 @@ import FirebaseDatabase
                         
                         weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
                             if !success {
-                                RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                                RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                             }
                             
                             DispatchQueue.main.async {
@@ -86,7 +86,7 @@ import FirebaseDatabase
                         if let config = getBundledConfig() {
                             doStartup(dict: config)
                         } else {
-                            RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                            RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                         }
                     } else {
                         if let data = data, let theDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
@@ -109,7 +109,7 @@ import FirebaseDatabase
                         if let dict = configDict {
                             doStartup(dict: dict)
                         } else {
-                            RTRSErrorHandler.showNetworkError(in: nil, completion: nil)
+                            RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                         }
                     }
                 }.resume()

@@ -55,7 +55,7 @@ class RTRSDeepLinkHandler: NSObject {
                 }
             }
         } catch {
-            RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
+            RTRSErrorHandler.showError(in: navController, type: .network, completion: nil)
             return
         }
     }
@@ -65,11 +65,13 @@ class RTRSDeepLinkHandler: NSObject {
         let url = payload.baseURL
         
         func openExternalWebBrowser() {
-            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "RTRSExternalWebViewController") as! RTRSExternalWebViewController
-            vc.name = payload.title
-            vc.url = payload.baseURL
-            navController.present(vc, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "RTRSExternalWebViewController") as! RTRSExternalWebViewController
+                vc.name = payload.title
+                vc.url = payload.baseURL
+                navController.present(vc, animated: true, completion: nil)
+            }
         }
         
         if shouldOpenExternalWebBrowser {
@@ -97,23 +99,27 @@ class RTRSDeepLinkHandler: NSObject {
                         return title == text
                     }
                     
-                    DispatchQueue.main.async {
-                        if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
-                             var vc: PodcastPlayerViewController!
-                            if let theVC = PodcastManager.shared.currentPodVC, let podTitle = podVM.title, let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
-                                 vc = theVC
-                             } else {
-                                vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
-                                 vc.viewModel = podVM
-                                 PodcastManager.shared.currentPodVC = vc
-                             }
-                            
+                    if let podVM = filteredVms.first as? RTRSSinglePodViewModel {
+                        var vc: PodcastPlayerViewController!
+                        if let theVC = PodcastManager.shared.currentPodVC,
+                           let podTitle = podVM.title,
+                           let currentPodTitle = PodcastManager.shared.title, podTitle == currentPodTitle {
+                             vc = theVC
+                        } else {
+                            vc = (storyboard.instantiateViewController(withIdentifier: "PodcastPlayer") as! PodcastPlayerViewController)
+                             vc.viewModel = podVM
+                             PodcastManager.shared.currentPodVC = vc
+                        }
+                        
+                        DispatchQueue.main.async {
                             navController.present(vc, animated: true, completion: nil)
                         }
                     }
+                } else {
+                    RTRSErrorHandler.showError(in: navController, type: .dataNotAvailable, completion: nil)
                 }
             } catch {
-                RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
+                RTRSErrorHandler.showError(in: navController, type: .network, completion: nil)
                 return
             }
         } else if url.path.contains("if-not-will-convey-as-two-second-rounders") {
@@ -181,7 +187,7 @@ class RTRSDeepLinkHandler: NSObject {
                     }
                 } else {
                     // TODO: Refactor out error handling stuff
-                    RTRSErrorHandler.showNetworkError(in: navController, completion: nil)
+                    RTRSErrorHandler.showError(in: navController, type: .network, completion: nil)
                 }
             }.resume()
         }

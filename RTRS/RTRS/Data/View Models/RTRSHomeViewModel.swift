@@ -11,10 +11,9 @@ import SwiftSoup
 
 class HomeItem: NSObject, NSCoding {
     
-    var imageUrl: URL?
+    var imageUrl: NSURL?
     var text: String?
-    var actionText: String?
-    var actionUrl: URL?
+    var actionUrl: NSURL?
     var shouldOpenExternalBrowser: Bool
     
     enum CodingKeys: String {
@@ -25,10 +24,9 @@ class HomeItem: NSObject, NSCoding {
         case shouldOpenExternalBrowser = "shouldOpenExternalBrowser"
     }
     
-    required init(imageUrl: URL?, text: String?, actionText: String?, actionUrl: URL?, shouldOpenExternalBrowser: Bool) {
+    required init(imageUrl: NSURL?, text: String?, actionUrl: NSURL?, shouldOpenExternalBrowser: Bool) {
         self.imageUrl = imageUrl
         self.text = text
-        self.actionText = actionText
         self.actionUrl = actionUrl
         self.shouldOpenExternalBrowser = shouldOpenExternalBrowser
     }
@@ -36,19 +34,17 @@ class HomeItem: NSObject, NSCoding {
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.imageUrl, forKey: CodingKeys.imageUrl.rawValue)
         aCoder.encode(self.text, forKey: CodingKeys.text.rawValue)
-        aCoder.encode(self.actionText, forKey: CodingKeys.actionText.rawValue)
         aCoder.encode(self.actionUrl, forKey: CodingKeys.actionUrl.rawValue)
-        aCoder.encode(self.shouldOpenExternalBrowser, forKey: CodingKeys.actionUrl.rawValue)
+        aCoder.encode(self.shouldOpenExternalBrowser, forKey: CodingKeys.shouldOpenExternalBrowser.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
-        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? URL
+        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? NSURL
         let text = aDecoder.decodeObject(forKey: CodingKeys.text.rawValue) as? String
-        let actionText = aDecoder.decodeObject(forKey: CodingKeys.actionText.rawValue) as? String
-        let actionUrl = aDecoder.decodeObject(forKey: CodingKeys.actionUrl.rawValue) as? URL
+        let actionUrl = aDecoder.decodeObject(forKey: CodingKeys.actionUrl.rawValue) as? NSURL
         let shouldOpenExternalBrowser = aDecoder.decodeObject(forKey: CodingKeys.shouldOpenExternalBrowser.rawValue) as? Bool
         
-        self.init(imageUrl: imageUrl, text: text, actionText: actionText, actionUrl: actionUrl, shouldOpenExternalBrowser: shouldOpenExternalBrowser ?? false)
+        self.init(imageUrl: imageUrl ?? nil, text: text, actionUrl: actionUrl ?? nil, shouldOpenExternalBrowser: shouldOpenExternalBrowser ?? false)
     }
 }
 
@@ -158,13 +154,13 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                 let imgElemParent = imgElems[i]
                 let imgElemChild = try imgElemParent.getElementsByClass("thumb-image").first
                 
-                let actionSiblings = imgElemParent.siblingElements().filter { (elem) -> Bool in
-                    do {
-                        return try elem.getElementsByClass("sqs-block-button-element--large sqs-block-button-element").count > 0 && !elem.hasClass("row sqs-row")
-                    } catch {
-                        return false
-                    }
-                }
+//                let actionSiblings = imgElemParent.siblingElements().filter { (elem) -> Bool in
+//                    do {
+//                        return try elem.getElementsByClass("sqs-block-button-element--large sqs-block-button-element").count > 0 && !elem.hasClass("row sqs-row")
+//                    } catch {
+//                        return false
+//                    }
+//                }
                 
                 let titleSiblings = imgElemParent.siblingElements().filter { (elem) -> Bool in
                     return elem.hasClass("sqs-block html-block sqs-block-html")
@@ -172,11 +168,10 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                 
                 if let imgElem = imgElemChild {
                     let titleElem = titleSiblings.first
-                    let actionParent = actionSiblings.first
-                    let actionElem = try? actionParent?.getElementsByClass("sqs-block-button-element--large sqs-block-button-element").first
+//                    let actionParent = actionSiblings.first
+                    let actionElem = try? titleElem?.getElementsByTag("a").first()
                     
                     if let imgURL = URL(string: try imgElem.attr("data-src")) {
-                        let actionText = try? actionElem?.text()
                         if let theActionElem = actionElem, let urlString = try? theActionElem.attr("href"), let url = URL(string: urlString) {
                             var titleElemPlaceholder: Element? = nil
                             if let h2Elem = try titleElem?.getElementsByTag("h2").first() {
@@ -186,9 +181,11 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                             }
 
                             let title = try titleElemPlaceholder?.text()
+                            let nsImgURL = imgURL as NSURL
+                            let nsActionURL = url as NSURL
                             if (title != nil && !title!.string.contains("Squarespace")) || title == nil {
                                 let shouldOpenExternalBrowser = title != nil ? self.ignoreTitles.contains(title!) : false
-                                let homeItem = HomeItem(imageUrl: imgURL, text: title, actionText: actionText, actionUrl: url, shouldOpenExternalBrowser: shouldOpenExternalBrowser)
+                                let homeItem = HomeItem(imageUrl: nsImgURL, text: title, actionUrl: nsActionURL, shouldOpenExternalBrowser: shouldOpenExternalBrowser)
                                 homeItems.append(homeItem)
                             }
                         }

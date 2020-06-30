@@ -92,7 +92,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
             
             self.body = bodyText
             
-            if let divElement = try doc.getElementsByClass("image-block-wrapper lightbox  has-aspect-ratio").first(),
+            if let divElement = try doc.getElementsByClass("image-block-wrapper").first(),
                 let imgElement = try divElement.getElementsByTag("img").first() {
                 let src = try imgElement.attr("src")
                 if let imageUrl = URL(string: src) {

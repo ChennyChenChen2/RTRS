@@ -22,12 +22,17 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
         
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.backgroundColor = .black
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .moreLoadedNotificationName, object: nil)
     }
     
     @objc private func loadingFinished() {
-        self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +53,10 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         // #warning Incomplete implementation, return the number of rows
         return (viewModel?.pages?.count ?? 0) + 1
     }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
@@ -55,6 +64,7 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         if indexPath.row == 0 {
             let noteCell = tableView.dequeueReusableCell(withIdentifier: self.notificationCellReuseId, for: indexPath) as! NotificationsTableViewCell
             noteCell.delegate = self
+            noteCell.cellImageView.image = UIImage(imageLiteralResourceName: "Notifications")
             UNUserNotificationCenter.current().getNotificationSettings { (settings) in
                 DispatchQueue.main.async {
                     noteCell.notificationSwitch.isOn = settings.authorizationStatus == .authorized
@@ -82,9 +92,9 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    
-    }
+//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//
+//    }
     
     func switchValueChanged(_ sender: UISwitch) {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in

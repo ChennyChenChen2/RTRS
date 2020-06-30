@@ -38,24 +38,32 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     
     private func determineViewModelType() {
         var name: Notification.Name?
-        if self.contentType == .au, let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
-            self.viewModel = theViewModel
+        if self.contentType == .au {
             self.navigationItem.title = "AU'S CORNER"
             name = .auLoadedNotificationName
-        } else if self.contentType == .normalColumn, let theViewModel = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
-            self.viewModel = theViewModel
+            if let theViewModel = RTRSNavigation.shared.viewModel(for: .au) as? MultiArticleViewModel {
+                self.viewModel = theViewModel
+            }
+        } else if self.contentType == .normalColumn {
             self.navigationItem.title = "SIXERS ADAM: NORMAL COLUMN"
             name = .normalColumnLoadedNotificationName
-        } else if self.contentType == .podcasts, let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
-            self.viewModel = theViewModel
+            if let theViewModel = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
+                self.viewModel = theViewModel
+            }
+        } else if self.contentType == .podcasts {
             self.navigationItem.title = "THE POD"
             name = .podLoadedNotificationName
-        } else if self.contentType == .saved, let theViewModel = RTRSNavigation.shared.viewModel(for: .saved) as? RTRSSavedContentViewModel {
-            self.viewModel = theViewModel
+            if let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
+                self.viewModel = theViewModel
+            }
+        } else if self.contentType == .saved {
             self.navigationItem.title = "SAVED"
-            
             self.clearAllButton = UIBarButtonItem(title: "Clear All", style: .plain, target: self, action: #selector(clearAllAction))
             self.navigationItem.rightBarButtonItem = self.clearAllButton
+            
+            if let theViewModel = RTRSNavigation.shared.viewModel(for: .saved) as? RTRSSavedContentViewModel {
+                self.viewModel = theViewModel
+            }
             
             NotificationCenter.default.addObserver(self, selector: #selector(savedContentUpdated), name: Notification.Name.SavedContentUpdated, object: nil)
         }

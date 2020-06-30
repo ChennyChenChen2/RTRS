@@ -14,7 +14,15 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var webViewContainerTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var webViewContainer: UIView!
-    fileprivate let webView = WKWebView()
+    fileprivate lazy var webView: WKWebView = {
+        let config = WKWebViewConfiguration()
+        config.allowsInlineMediaPlayback = true
+        config.allowsPictureInPictureMediaPlayback = true
+        
+        let view = WKWebView(frame: self.view.frame, configuration: config)
+        return view
+    }()
+    
     var url: URL?
     var name: String?
     
@@ -23,7 +31,9 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
         
         self.navigationItem.title = self.name
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-
+        
+        self.webView.configuration.allowsInlineMediaPlayback = true
+        
         if let theUrl = self.url {
             self.webView.navigationDelegate = self
             self.webView.load(URLRequest(url: theUrl))
@@ -47,7 +57,7 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        RTRSErrorHandler.showNetworkError(in: self) { [weak self] in
+        RTRSErrorHandler.showError(in: self, type: .network) { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }
     }

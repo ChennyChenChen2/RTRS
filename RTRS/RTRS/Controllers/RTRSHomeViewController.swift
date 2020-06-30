@@ -23,9 +23,6 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
 
         self.viewModel = RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel
         
-        self.view.setNeedsLayout()
-        self.view.layoutIfNeeded()
-        
         self.navigationItem.customizeNavBarForHome()
 
         let button = UIButton()
@@ -47,21 +44,16 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.setNeedsLayout()
-        self.navigationController?.navigationBar.layoutIfNeeded()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         AnalyticsUtils.logScreenView(self)
-        rotateRefreshButton()
     }
     
     @objc func loadingFinished() {
-        self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.viewModel = (RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel)
+            self.tableView.reloadData()
+        }
     }
     
     func showFTUEIfNecessary() {
@@ -107,17 +99,16 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                 preference.drawing.arrow.tipCornerRadius = 0
                 preference.drawing.title.color = .white
                 preference.drawing.message.color = .white
-                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "Tap here to fetch the latest data.", message: "The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
+                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "If the logo is spinning, data is being fetched.", message: "If you ever want to refresh the latest data, tap the logo. The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
             }
         }
     }
     
     @objc private func rotateRefreshButton() {
         if let titleView = self.navigationItem.titleView {
-            
             if self.refreshButtonShouldRotate {
                 titleView.isUserInteractionEnabled = false
-                let duration: TimeInterval = 5.0
+                let duration: TimeInterval = 1.0
                 UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: { [weak self] in
                     self?.navigationItem.titleView?.transform = titleView.transform.rotated(by: CGFloat(Float.pi))
                 }) { [weak self] finished in
@@ -145,7 +136,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 350
+        return UITableView.automaticDimension
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -163,7 +154,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         
         let homeItem = viewModelItems[indexPath.row]
         if let url = homeItem.actionUrl, let title = homeItem.text, let navVC = self.navigationController as? RTRSNavigationController {
-            let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
+            let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title)
             RTRSDeepLinkHandler.route(payload: payload, navController: navVC, shouldOpenExternalWebBrowser: homeItem.shouldOpenExternalBrowser)
         }
     }
@@ -179,11 +170,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     cell.titleLabel.text = ""
                 }
                 
-                if let actionText = homeItem.actionText {
-                    cell.actionLabel.text = "\(actionText)"
-                }
-                
-                cell.homeImageView.pin_setImage(from: url)
+                cell.homeImageView.pin_setImage(from: url as URL)
             }
         }
         
@@ -228,5 +215,4 @@ class RTRSHomeTableViewCell: UITableViewCell {
     static let kReuseId = "RTRSHomeCell"
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var homeImageView: UIImageView!
-    @IBOutlet weak var actionLabel: UILabel!
 }

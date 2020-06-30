@@ -12,6 +12,25 @@ import SwiftSoup
 
 class RTRSOperation: Operation {
     
+    enum State: String {
+        case Ready, Executing, Finished
+
+        fileprivate var keyPath: String {
+            return "is" + rawValue
+        }
+    }
+      
+    var state = State.Ready {
+        willSet {
+            willChangeValue(forKey: newValue.keyPath)
+            willChangeValue(forKey: state.keyPath)
+        }
+        didSet {
+            didChangeValue(forKey: oldValue.keyPath)
+            didChangeValue(forKey: state.keyPath)
+        }
+    }
+    
     let urls: [URL]
     let pageName: String
     let type: String
@@ -27,8 +46,37 @@ class RTRSOperation: Operation {
         super.init()
     }
     
-    // TODO: override `asynchronous`, `executing`, and `finished`, per "Methods to Override" docs! https://developer.apple.com/documentation/foundation/operation
     override func start() {
+        if isCancelled {
+          state = .Finished
+          return
+        }
+        
+        main()
+        state = .Executing
+    }
+    
+    override var isReady: Bool {
+        return super.isReady && state == .Ready
+    }
+    
+    override var isAsynchronous: Bool {
+        return true
+    }
+    
+    override var isExecuting: Bool {
+        return state == .Executing
+    }
+    
+    override var isFinished: Bool {
+      return state == .Finished
+    }
+    
+    override func cancel() {
+        state = .Finished
+    }
+    
+    override func main() {
 //        guard let firstUrl = self.urls.first else { return }
         print("RTRS beginning to load \(pageName)")
             
@@ -48,11 +96,13 @@ class RTRSOperation: Operation {
                         RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
                     }
                     self.customCompletion?(theViewModel)
+                    self.state = .Finished
                     return
                 }
             }
             
             self.customCompletion?(nil)
+            self.state = .Finished
         }
             
         var shouldUpdate = false
@@ -73,7 +123,6 @@ class RTRSOperation: Operation {
                 if lastUpdated != nil {
                     if updated != lastUpdated {
                         shouldUpdate = true
-                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
                     }
                 } else {
                     lastUpdated = headers["Etag"]
@@ -83,7 +132,6 @@ class RTRSOperation: Operation {
                     
                     if updated != lastUpdated {
                         shouldUpdate = true
-                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
                     }
                 }
             
@@ -110,7 +158,9 @@ class RTRSOperation: Operation {
                                 }
                                    
                                 if !deferredCompletion {
+                                    UserDefaults.standard.set(lastUpdated, forKey: keyName)
                                     self.customCompletion?(viewModel)
+                                    self.state = .Finished
                                 }
                             } else {
                                 // TODO: throw error for invalid page type...

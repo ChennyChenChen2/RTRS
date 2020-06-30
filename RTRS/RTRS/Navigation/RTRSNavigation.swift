@@ -81,11 +81,19 @@ class RTRSNavigation: NSObject {
     fileprivate var pages = [RTRSScreenType: RTRSViewModel]()
     
     func registerViewModel(viewModel: RTRSViewModel, for page: RTRSScreenType) {
-        pages[page] = viewModel
-        RTRSPersistentStorage.save(viewModel: viewModel, type: page)
+        DispatchQueue.main.async {
+            self.pages[page] = viewModel
+            RTRSPersistentStorage.save(viewModel: viewModel, type: page)
+        }
     }
     
     func viewModel(for page: RTRSScreenType) -> RTRSViewModel? {
-        return pages[page] ?? RTRSPersistentStorage.getViewModel(type: page)
+        if let vm = pages[page] {
+            return vm
+        } else {
+            let vm = RTRSPersistentStorage.getViewModel(type: page)
+            pages[page] = vm
+            return vm
+        }
     }
 }

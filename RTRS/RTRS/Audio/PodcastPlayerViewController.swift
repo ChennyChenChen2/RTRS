@@ -356,3 +356,42 @@ extension UICollectionView {
         return 0
     }
 }
+
+/*
+ TODO:
+ 
+ class VideoCollectionViewFlowLayout: UICollectionViewFlowLayout {
+     
+     override var minimumLineSpacing: CGFloat {
+         get {
+             return 0.0
+         } set {}
+     }
+     
+     override var minimumInteritemSpacing: CGFloat {
+         get {
+             return 0.0
+         } set {}
+     }
+     
+     override var sectionInset: UIEdgeInsets {
+         get {
+             return .zero
+         } set {}
+     }
+     
+     override var itemSize: CGSize {
+         get {
+             guard let collectionView = self.collectionView else { return .zero }
+             let contentInset = collectionView.contentInset
+             return CGSize(width: collectionView.frame.size.width - contentInset.left - contentInset.right, height: collectionView.frame.size.height - contentInset.top - contentInset.bottom - 1)
+         } set {}
+     }
+   
+     override func awakeFromNib() {
+         self.scrollDirection = .horizontal
+     }
+ }p
+ 
+ 
+ */

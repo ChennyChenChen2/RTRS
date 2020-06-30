@@ -17,6 +17,7 @@ class RTRSOperationCoordinator {
     
     func beginStartupProcess(dict: [String: Any], completionHandler: @escaping (Bool) -> ()) {
         self.operationQueue.maxConcurrentOperationCount = 100
+        self.processedOperations = 0
         
         if let pages = dict["pages"] as? [[String: Any]] {
             UserDefaults.standard.set(dict, forKey: RTRSUserDefaultsKeys.configStorage)

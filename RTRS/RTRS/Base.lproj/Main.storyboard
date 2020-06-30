@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O8S-Jp-9LQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="O8S-Jp-9LQ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -124,7 +124,7 @@ POD</string>
                         <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search by title, description, or date" id="QBW-ud-gQe">
-                            <rect key="frame" x="0.0" y="0.0" width="508" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <textInputTraits key="textInputTraits"/>
@@ -233,7 +233,7 @@ POD</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0VL-Nu-n0L">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8wu-f2-bDP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="217"/>
@@ -430,14 +430,14 @@ POD</string>
                                     <action selector="seekBarValueChanged:" destination="z1F-01-woh" eventType="valueChanged" id="K1e-S1-5PO"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFU-De-5aa">
-                                <rect key="frame" x="20" y="668" width="34" height="15"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFU-De-5aa">
+                                <rect key="frame" x="20" y="668" width="53" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99:99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TQ1-Rk-7XN">
-                                <rect key="frame" x="359" y="667" width="35" height="15"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99:99:99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TQ1-Rk-7XN">
+                                <rect key="frame" x="341" y="667" width="53" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -562,27 +562,27 @@ POD</string>
                         <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" rowHeight="55" id="6cd-56-Hzq" customClass="NotificationsTableViewCell" customModule="RTRS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="55"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationCell" id="6cd-56-Hzq" customClass="NotificationsTableViewCell" customModule="RTRS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="48.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6cd-56-Hzq" id="BB0-tB-HNz">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="48.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wfS-Vg-zWQ">
-                                            <rect key="frame" x="345" y="12" width="51" height="31"/>
+                                            <rect key="frame" x="345" y="9" width="51" height="31"/>
                                             <connections>
                                                 <action selector="switchValueChanged:" destination="6cd-56-Hzq" eventType="valueChanged" id="f9D-DI-81t"/>
                                             </connections>
                                         </switch>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Notifications" translatesAutoresizingMaskIntoConstraints="NO" id="0yx-Xc-Phz">
-                                            <rect key="frame" x="10" y="5" width="44" height="45"/>
+                                            <rect key="frame" x="10" y="5" width="44" height="38.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="44" id="fbQ-Ww-bCj"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yVm-ko-Lev">
-                                            <rect key="frame" x="62" y="17.5" width="97" height="20"/>
+                                            <rect key="frame" x="62" y="14.5" width="97" height="20"/>
                                             <fontDescription key="fontDescription" name="TrebuchetMS" family="Trebuchet MS" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -608,7 +608,7 @@ POD</string>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MoreCell" rowHeight="55" id="Z3I-F7-VEj">
-                                <rect key="frame" x="0.0" y="83" width="414" height="55"/>
+                                <rect key="frame" x="0.0" y="76.5" width="414" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Z3I-F7-VEj" id="Mvf-Nr-Tlv">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="55"/>
@@ -1081,11 +1081,11 @@ POD</string>
                         <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RTRSHomeCell" rowHeight="342" id="0W1-Yr-1IQ" customClass="RTRSHomeTableViewCell" customModule="RTRS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="342"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RTRSHomeCell" rowHeight="276" id="0W1-Yr-1IQ" customClass="RTRSHomeTableViewCell" customModule="RTRS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="276"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0W1-Yr-1IQ" id="D2e-vh-DJW">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="342"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="276"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="N14-Xb-dFx">
@@ -1103,23 +1103,13 @@ POD</string>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ACTION" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PAk-PG-gQ7">
-                                            <rect key="frame" x="182.5" y="277" width="49.5" height="56"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="56" id="hu0-mc-eDE"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="14"/>
-                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="VkA-nr-br9" secondAttribute="bottom" constant="7" id="AVP-eK-I7e"/>
                                         <constraint firstItem="VkA-nr-br9" firstAttribute="top" secondItem="N14-Xb-dFx" secondAttribute="bottom" constant="8" id="Tni-qd-9wz"/>
                                         <constraint firstItem="VkA-nr-br9" firstAttribute="leading" secondItem="D2e-vh-DJW" secondAttribute="leadingMargin" id="Wkk-QC-bHr"/>
                                         <constraint firstItem="N14-Xb-dFx" firstAttribute="top" secondItem="D2e-vh-DJW" secondAttribute="top" id="ZIy-99-ekQ"/>
                                         <constraint firstItem="VkA-nr-br9" firstAttribute="trailing" secondItem="D2e-vh-DJW" secondAttribute="trailingMargin" id="aom-ze-Gu9"/>
-                                        <constraint firstItem="PAk-PG-gQ7" firstAttribute="centerX" secondItem="D2e-vh-DJW" secondAttribute="centerX" id="cFQ-b5-EA2"/>
-                                        <constraint firstItem="PAk-PG-gQ7" firstAttribute="top" secondItem="VkA-nr-br9" secondAttribute="bottom" constant="8" id="xAd-PG-ofG"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1128,7 +1118,6 @@ POD</string>
                                     <constraint firstItem="N14-Xb-dFx" firstAttribute="leading" secondItem="0W1-Yr-1IQ" secondAttribute="leading" id="sLl-VB-ZbG"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="actionLabel" destination="PAk-PG-gQ7" id="FH5-Gu-mOx"/>
                                     <outlet property="homeImageView" destination="N14-Xb-dFx" id="6Zn-b8-Kq0"/>
                                     <outlet property="titleLabel" destination="VkA-nr-br9" id="nav-Yr-STm"/>
                                 </connections>
@@ -1143,11 +1132,11 @@ POD</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UON-Ax-pA4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-271" y="1592"/>
+            <point key="canvasLocation" x="-271.01449275362319" y="1591.7410714285713"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="BWH-bX-Mxo"/>
+        <segue reference="cqK-au-f3a"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
