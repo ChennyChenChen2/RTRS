@@ -69,31 +69,22 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
             return
         }
         
-        var batchDict = [Int: [SingleContentViewModel?]]()
+//        var batchDict = [Int: [SingleContentViewModel?]]()
+        var batchDict = ThreadSafeDict<Int, [SingleContentViewModel?]>()
         
         let concurrentQueue = DispatchQueue(label: "com.queue.concurrent", attributes: .concurrent)
         self.group.enter()
         for n in 0..<theURLs.count {
             concurrentQueue.async {
-                self.group.notify(queue: .main) {
-                    print("FINISHED LOADING \(self.pageName())")
-                    let batches = batchDict.sorted { $0.key < $1.key }
-                    for (_, v) in batches {
-                        self.content.append(contentsOf: v.compactMap { $0 })
-                    }
-                    
-                    self.completion?(self)
-                    return
-                }
-                
                 do {
+                    let innerQueue = DispatchQueue(label: "com.queue.inner", attributes: .concurrent)
                     let url = theURLs[n]
                     let htmlString = try String.init(contentsOf: url)
                     let doc = try SwiftSoup.parse(htmlString)
                     let postElements = try doc.getElementsByTag("article")
                     var batch = [SingleArticleViewModel?](repeating: nil, count: postElements.count)
                     for i in 0..<postElements.count {
-                        concurrentQueue.async {
+                        innerQueue.async {
                             let postElement = postElements[i]
                             
                             var theTitleElem: Element? = try? postElement.getElementsByClass("title").first()
@@ -130,16 +121,17 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                     let articleDoc = try SwiftSoup.parse(htmlString)
                                     let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
                                     batch[i] = singleArticleViewModel
-                                        
-            //                                    outerQueue.sync { [weak self] in
-            //                                        self?.content.append(singleArticleViewModel)
 
                                     if i == postElements.count - 1 {
-                                        batchDict[n] = batch
-                                        if n == theURLs.count - 1 {
-                                            self.group.leave()
+                                        batchDict.setValue(batch, for: n)
+                                        batchDict.count { (count) in
+                                            if count == theURLs.count {
+                                                self.group.leave()
+                                            }
                                         }
                                     }
+                                } else {
+                                    print("Something went wrong?")
                                 }
                             } catch {
                                 print("Error parsing \(self.pageName()) view model")
@@ -152,6 +144,47 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                     return
                 }
             }
+        }
+        
+        self.group.notify(queue: .main) {
+            print("FINISHED LOADING \(self.pageName())")
+            batchDict.dictRepresentation { (dict) in
+                let batches = dict.sorted { $0.key < $1.key }
+                for (_, v) in batches {
+                    self.content.append(contentsOf: v.compactMap { $0 })
+                }
+                
+                self.completion?(self)
+            }
+        }
+    }
+}
+
+struct ThreadSafeDict<Key: Hashable, Value> {
+    private var dict = [Key: Value]()
+    private let queue = DispatchQueue.global()
+    
+    func count(_ response: (Int)->()) {
+        queue.sync {
+            response(dict.count)
+        }
+    }
+    
+    func getValue(for key: Key, response: (Value?)->()) {
+        queue.sync {
+            response(dict[key])
+        }
+    }
+    
+    mutating func setValue(_ value: Value, for key: Key) {
+        queue.sync {
+            self.dict[key] = value
+        }
+    }
+    
+    func dictRepresentation(_ response: ([Key: Value])->()) {
+        queue.sync {
+            response(dict)
         }
     }
 }

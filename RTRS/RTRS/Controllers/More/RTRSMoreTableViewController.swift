@@ -102,7 +102,7 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
             if settings.authorizationStatus == .denied {
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                 
-                let alert = UIAlertController(title: "Notifications have been disabled for the Ricky app.", message: "If you would like to enable notifications, please navigate to the settings app to enable them.", preferredStyle: UIAlertController.Style.alert)
+                let alert = UIAlertController(title: "Notifications have been disabled.", message: "If you would like to enable notifications, please navigate to the settings app to enable them.", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                     sender.isOn = false
                 }))
