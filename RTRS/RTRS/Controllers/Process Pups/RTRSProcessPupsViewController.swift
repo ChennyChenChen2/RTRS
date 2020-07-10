@@ -73,8 +73,7 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
         let pup = self.viewModel.processPups[indexPath.row]
         if let url = pup.pupImageURLs?.first {
             cell.clipsToBounds = true
-//            cell.pupImageView.pin_setImage(from: url, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"))
-            cell.pupImageView.af_setImage(withURL: url)
+            cell.pupImageView.af.setImage(withURL: url, cacheKey: nil, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"), serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: false, completion: nil)
         }
         
         return cell

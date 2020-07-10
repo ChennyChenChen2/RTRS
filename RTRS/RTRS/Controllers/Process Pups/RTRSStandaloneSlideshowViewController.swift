@@ -35,12 +35,10 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
             guard let weakSelf = self, let name = pup.pupName, let otherName = weakSelf.currentPup.pupName else { return false }
             return name == otherName
         }) {
-            if let layout = self.collectionView.collectionViewLayout as? RTRSCustomCollectionViewFlowLayout {
-                let page: Int = index
-                let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
-                DispatchQueue.main.async {
-                    self.collectionView.setContentOffset(contentOffset, animated: false)
-                }
+            let page: Int = index
+            let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
+            DispatchQueue.main.async {
+                self.collectionView.setContentOffset(contentOffset, animated: false)
             }
         }
         
@@ -58,8 +56,12 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RTRSSlideshowPupCollectionViewCell.reuseIdentifier, for: indexPath) as! RTRSSlideshowPupCollectionViewCell
         let pup = self.viewModel.processPups[indexPath.row]
-//        cell.imageView.pin_setImage(from: pup.pupImageURLs!.first!)
-        cell.imageView.af_setImage(withURL: pup.pupImageURLs!.first!)
+        let url = pup.pupImageURLs!.first!
+        cell.imageView.af.setImage(withURL: url, cacheKey: url.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .noTransition, runImageTransitionIfCached: false) { (response) in
+            if let image = try? response.result.get() {
+                ImageCache.shared.cacheImage(image, identifier: url.absoluteString)
+            }
+        }
         
         return cell
     }

@@ -38,9 +38,8 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
         self.saveButton = button
         self.navigationItem.rightBarButtonItem = saveButton
         
-//        self.imageView.pin_setImage(from: self.viewModel?.imageUrl)
         if let url = self.viewModel?.imageUrl {
-            self.imageView.af_setImage(withURL: url)
+            self.imageView.af.setImage(withURL: url)
         }
         
         self.titleLabel.text = self.viewModel?.title

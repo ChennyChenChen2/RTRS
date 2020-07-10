@@ -58,10 +58,6 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.saveButton.setImage(RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
         if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
             
@@ -70,10 +66,35 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
                 guard let vm = vm else { return false }
                 return vm.title == self.viewModel.title
             }) {
-                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
+//                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
+                let page: Int = indexPath
+                let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
+                DispatchQueue.main.async {
+                    self.collectionView.setContentOffset(contentOffset, animated: false)
+                }
             }
         }
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        
+//        if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
+//            
+//            self.displayedViaTabView = false
+//            if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
+//                guard let vm = vm else { return false }
+//                return vm.title == self.viewModel.title
+//            }) {
+////                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
+//                let page: Int = indexPath
+//                let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
+//                DispatchQueue.main.async {
+//                    self.collectionView.setContentOffset(contentOffset, animated: false)
+//                }
+//            }
+//        }
+//    }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -189,14 +210,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             if let image = podCell.imageView.image {
                 PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
             } else if let imageUrl = singlePodViewModel.imageUrl {
-//                podCell.imageView.pin_setImage(from: imageUrl) { (result) in
-//                    if result.resultType != .none {
-//                        if let image = podCell.imageView.image {
-//                            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
-//                        }
-//                    }
-//                }
-                podCell.imageView.af_setImage(withURL: imageUrl, placeholderImage: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (result) in
+                podCell.imageView.af.setImage(withURL: imageUrl, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (result) in
                     if result.data != nil {
                         if let image = podCell.imageView.image {
                             PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
@@ -211,8 +225,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
         
         if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
-//            cell.imageView.pin_setImage(from: imageUrl)
-            cell.imageView.af_setImage(withURL: imageUrl)
+            cell.imageView.af.setImage(withURL: imageUrl)
         }
         
         return cell

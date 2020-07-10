@@ -27,9 +27,8 @@ class RTRSAboutViewController: UIViewController, UITextViewDelegate {
     
     @objc func setView() {
         self.textView.attributedText = self.viewModel?.body ?? NSAttributedString(string: "")
-//        self.imageView.pin_setImage(from: viewModel?.imageUrl)
         if let url = viewModel?.imageUrl {
-            self.imageView.af_setImage(withURL: url)
+            self.imageView.af.setImage(withURL: url)
         }
         
         self.textView.delegate = self

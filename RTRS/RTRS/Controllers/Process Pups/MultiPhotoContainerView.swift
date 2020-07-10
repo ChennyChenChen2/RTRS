@@ -44,15 +44,13 @@ class MultiPhotoContainerView: UIView {
         
         let horizontalSpacing: CGFloat = 5.0
         let imageWidth = self.maxWidth / CGFloat(self.imgURLs.count)
-//
-//        var complete = false
                 
         for i in 0..<self.imgURLs.count {
             let url = self.imgURLs[i]
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
             imageView.frame.size.width = imageWidth
-            imageView.af_setImage(withURL: url, placeholderImage: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { [weak self] (result) in
+            imageView.af.setImage(withURL: url, cacheKey: nil, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { [weak self] (result) in
                 guard let weakSelf = self, result.error == nil else { return }
                 imageView.sizeToFit()
                 

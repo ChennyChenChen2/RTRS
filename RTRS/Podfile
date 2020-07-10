@@ -6,7 +6,6 @@ def all_pods
   pod 'FLEX', '~> 2.4', :configurations => ['debug']
   pod 'SwiftSoup', '2.2.0'
   pod 'Atributika', '4.8.2'
-  pod 'AlamofireImage', '3.6.0'
   pod 'Firebase'
   pod 'Firebase/Analytics'
   pod 'Firebase/Messaging'

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -32,6 +32,7 @@
 		877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0A226A90BE00F061FA /* RTRSOperation.swift */; };
 		877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */; };
 		877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 877B3A0E226A932800F061FA /* RTRSConfig.json */; };
+		877F28F524B9207E00FE4F03 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = 877F28F424B9207E00FE4F03 /* AlamofireImage */; };
 		8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8785EF422264120B0011CF6C /* RTRSNavigation.swift */; };
 		8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */; };
 		8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */; };
@@ -139,6 +140,7 @@
 			files = (
 				399EB0CC8524EE9E14258147 /* Pods_RTRS.framework in Frameworks */,
 				8731FF7823596BA4008E2F6A /* AudioToolbox.framework in Frameworks */,
+				877F28F524B9207E00FE4F03 /* AlamofireImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +413,9 @@
 			dependencies = (
 			);
 			name = RTRS;
+			packageProductDependencies = (
+				877F28F424B9207E00FE4F03 /* AlamofireImage */,
+			);
 			productName = RTRS;
 			productReference = 87095A4D2263BC2B0081A540 /* RTRS.app */;
 			productType = "com.apple.product-type.application";
@@ -439,6 +444,9 @@
 				Base,
 			);
 			mainGroup = 87095A442263BC2B0081A540;
+			packageReferences = (
+				877F28F324B9207E00FE4F03 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
+			);
 			productRefGroup = 87095A4E2263BC2B0081A540 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -816,6 +824,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		877F28F324B9207E00FE4F03 /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		877F28F424B9207E00FE4F03 /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 877F28F324B9207E00FE4F03 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 87095A452263BC2B0081A540 /* Project object */;
 }

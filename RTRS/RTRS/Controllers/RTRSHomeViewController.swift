@@ -168,7 +168,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     cell.titleLabel.text = ""
                 }
                 
-                cell.homeImageView.af_setImage(withURL: url as URL)
+                cell.homeImageView.af.setImage(withURL: url as URL)
             }
         }
         
