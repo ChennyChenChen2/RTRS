@@ -140,7 +140,11 @@ class RTRSDeepLinkHandler: NSObject {
                         navController.present(vc, animated: true
                             , completion: nil)
                     }
+                } else {
+                    openExternalWebBrowser()
                 }
+            } else {
+                RTRSErrorHandler.showError(in: navController, type: .dataNotAvailable, completion: nil)
             }
         } else if url.path.contains("normal-column") {
             if let vm = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
@@ -160,7 +164,11 @@ class RTRSDeepLinkHandler: NSObject {
                         navController.present(vc, animated: true
                             , completion: nil)
                     }
+                } else {
+                    openExternalWebBrowser()
                 }
+            } else {
+                RTRSErrorHandler.showError(in: navController, type: .dataNotAvailable, completion: nil)
             }
         } else {
             openExternalWebBrowser()

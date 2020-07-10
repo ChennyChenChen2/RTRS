@@ -25,7 +25,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
         
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         determineViewModelType()
         
@@ -160,7 +160,6 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
      
      */
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
-        
         let saveAction = UITableViewRowAction(style: .normal, title: "Save") { [weak self] (action, path) in
             guard let weakSelf = self else { return }
             if let vm = weakSelf.viewModel?.content[path.row] {

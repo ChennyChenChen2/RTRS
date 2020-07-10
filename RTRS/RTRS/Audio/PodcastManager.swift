@@ -85,14 +85,6 @@ class PodcastManager: NSObject {
         self.dateString = dateString
         
         UIApplication.shared.beginReceivingRemoteControlEvents()
-        var nowPlayingInfo = [String:Any]()
-        nowPlayingInfo[MPMediaItemPropertyTitle] = title
-        nowPlayingInfo[MPMediaItemPropertyArtist] = "The Rights to Ricky Sanchez"
-        nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height), requestHandler: { (size) -> UIImage in
-            return image
-        })
-        
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback)
@@ -120,8 +112,11 @@ class PodcastManager: NSObject {
         })
         
         self.player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: nil, using: { [weak self] (time) in
-            if let weakSelf = self, let item = weakSelf.player?.currentItem {
+            if let weakSelf = self, let item = weakSelf.player?.currentItem, let player = weakSelf.player {
                 let duration = Float(item.duration.seconds)
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = item.currentTime().seconds
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackProgress] = (item.currentTime().seconds / item.asset.duration.seconds) as NSNumber
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
                 weakSelf.delegate?.podcastTimeDidUpdate(elapsed: time, position: Float(time.seconds) / duration)
                 if time.seconds == item.duration.seconds {
                     if let title = weakSelf.title {
@@ -132,6 +127,19 @@ class PodcastManager: NSObject {
                 }
             }
         })
+        
+        guard let player = self.player, let playerItem = player.currentItem else { return }
+        var nowPlayingInfo = [String:Any]()
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = playerItem.asset.duration.seconds
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
+        nowPlayingInfo[MPMediaItemPropertyTitle] = title
+        nowPlayingInfo[MPMediaItemPropertyArtist] = "The Rights to Ricky Sanchez"
+        nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height), requestHandler: { (size) -> UIImage in
+            return image
+        })
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         
         NotificationCenter.default.post(name: .PodcastManagerLoadedNewPod, object: nil)
     }
@@ -175,37 +183,35 @@ class PodcastManager: NSObject {
             return .success
         }
         
-        // Seek bar and rate changes are bonus
-//        commandCenter.changePlaybackPositionCommand.isEnabled = true
-//        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
-//            guard let weakSelf = self, let playbackEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
-//            if let currentItem = weakSelf.player?.currentItem {
-//                let location = playbackEvent.positionTime / currentItem.duration.seconds
-//                print("""
-//                ********
-//                ATTEMPTED TO SEEK:
-//                LOCATION: \(location)
-//                NEW POSITION: \(playbackEvent.positionTime)
-//                TOTAL DURATION: \(currentItem.duration.seconds)
-//                ********
-//                """)
-//                weakSelf.player?.pause()
-//                weakSelf.seek(location: location)
-//                weakSelf.player?.play()
-//                return .success
-//            }
-//
-//            return .commandFailed
-//        }
+        commandCenter.changePlaybackPositionCommand.isEnabled = true
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
+            guard let weakSelf = self, let playbackEvent = event as? MPChangePlaybackPositionCommandEvent else { return .commandFailed }
+            if let currentItem = weakSelf.player?.currentItem {
+                let location = playbackEvent.positionTime / currentItem.duration.seconds
+                print("""
+                ********
+                ATTEMPTED TO SEEK:
+                LOCATION: \(location)
+                NEW POSITION: \(playbackEvent.positionTime)
+                TOTAL DURATION: \(currentItem.duration.seconds)
+                ********
+                """)
+                weakSelf.seek(location: location)
+                return .success
+            }
+
+            return .commandFailed
+        }
         
-//        commandCenter.changePlaybackRateCommand.isEnabled = true
-//        commandCenter.changePlaybackRateCommand.supportedPlaybackRates = [0.5, 0.8, 1.0, 1.25, 1.5, 2.0, 3.0]
-//        commandCenter.changePlaybackRateCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
-//            guard let weakSelf = self, let playbackEvent = event as? MPChangePlaybackRateCommandEvent else { return .commandFailed }
-//            weakSelf.setRate(rate: playbackEvent.playbackRate)
-//
-//            return .success
-//        }
+        // TODO: Not showing for some reason...
+        commandCenter.changePlaybackRateCommand.isEnabled = true
+        commandCenter.changePlaybackRateCommand.supportedPlaybackRates = [0.5, 0.8, 1.0, 1.25, 1.5, 2.0, 3.0]
+        commandCenter.changePlaybackRateCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
+            guard let weakSelf = self, let playbackEvent = event as? MPChangePlaybackRateCommandEvent else { return .commandFailed }
+            weakSelf.setRate(rate: playbackEvent.playbackRate)
+
+            return .success
+        }
     }
 }
 

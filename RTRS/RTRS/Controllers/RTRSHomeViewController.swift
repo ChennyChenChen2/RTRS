@@ -22,8 +22,6 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         super.viewDidLoad()
 
         self.viewModel = RTRSNavigation.shared.viewModel(for: .home) as? RTRSHomeViewModel
-        
-        self.navigationItem.customizeNavBarForHome()
 
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "RickyLogoCutout"), for: .normal)
@@ -170,7 +168,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     cell.titleLabel.text = ""
                 }
                 
-                cell.homeImageView.pin_setImage(from: url as URL)
+                cell.homeImageView.af_setImage(withURL: url as URL)
             }
         }
         

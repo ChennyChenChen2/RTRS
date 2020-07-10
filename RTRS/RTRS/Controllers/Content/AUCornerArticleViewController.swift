@@ -34,10 +34,14 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
         self.scrollView.backgroundColor = .black
         self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
         
-        self.saveButton = UIBarButtonItem(title: RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) ? "Unsave" : "Save", style: .plain, target: self, action: #selector(saveAction))
+        let button = UIBarButtonItem(image: RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), style: .plain, target: self, action: #selector(saveAction))
+        self.saveButton = button
         self.navigationItem.rightBarButtonItem = saveButton
         
-        self.imageView.pin_setImage(from: self.viewModel?.imageUrl)
+//        self.imageView.pin_setImage(from: self.viewModel?.imageUrl)
+        if let url = self.viewModel?.imageUrl {
+            self.imageView.af_setImage(withURL: url)
+        }
         
         self.titleLabel.text = self.viewModel?.title
         self.titleLabel.textColor = .white
@@ -105,10 +109,10 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
         if let vm = self.viewModel {
             if RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) {
                 RTRSPersistentStorage.unsaveContent(vm)
-                self.saveButton.title = "Save"
+                self.saveButton.image = #imageLiteral(resourceName: "Heart-No-Fill")
             } else {
                 RTRSPersistentStorage.saveContent(vm)
-                self.saveButton.title = "Unsave"
+                self.saveButton.image = #imageLiteral(resourceName: "Heart-Fill")
             }
         }
     }

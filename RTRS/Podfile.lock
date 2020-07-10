@@ -1,4 +1,7 @@
 PODS:
+  - Alamofire (4.9.1)
+  - AlamofireImage (3.6.0):
+    - Alamofire (~> 4.9)
   - Atributika (4.8.2)
   - Firebase (4.13.0):
     - Firebase/Core (= 4.13.0)
@@ -32,7 +35,6 @@ PODS:
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - Protobuf (~> 3.5)
-  - FLAnimatedImage (1.0.12)
   - FLEX (2.4.0)
   - GoogleToolboxForMac/Defines (2.2.2)
   - GoogleToolboxForMac/Logger (2.2.2):
@@ -47,18 +49,11 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - PINCache (2.3)
-  - PINRemoteImage (2.1.4):
-    - PINRemoteImage/FLAnimatedImage (= 2.1.4)
-  - PINRemoteImage/Core (2.1.4):
-    - PINCache (>= 2.1)
-  - PINRemoteImage/FLAnimatedImage (2.1.4):
-    - FLAnimatedImage (>= 1.0)
-    - PINRemoteImage/Core
-  - Protobuf (3.12.0)
+  - Protobuf (3.11.4)
   - SwiftSoup (2.2.0)
 
 DEPENDENCIES:
+  - AlamofireImage
   - Atributika (= 4.8.2)
   - Firebase
   - Firebase/Analytics
@@ -68,11 +63,13 @@ DEPENDENCIES:
   - FLEX (~> 2.4)
   - MarqueeLabel
   - MKToolTip
-  - PINRemoteImage (= 2.1.4)
+  - Protobuf (= 3.11.4)
   - SwiftSoup (= 2.2.0)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - AlamofireImage
     - Atributika
     - Firebase
     - FirebaseAnalytics
@@ -80,19 +77,18 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseMessaging
-    - FLAnimatedImage
     - FLEX
     - GoogleToolboxForMac
     - leveldb-library
     - MarqueeLabel
     - MKToolTip
     - nanopb
-    - PINCache
-    - PINRemoteImage
     - Protobuf
     - SwiftSoup
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireImage: be9963c6582d68b39e89191f64c82a7d7bf40fdd
   Atributika: 7b3631032cf11f2197b352343e0bd1b783d8ca88
   Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
   FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
@@ -100,18 +96,15 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 5f0bc6134c5c237cf55f9e1249d406770a75eafd
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
-  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
   GoogleToolboxForMac: 800648f8b3127618c1b59c7f97684427630c5ea3
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   MarqueeLabel: f762aa681ae201f66c1d511858b171f75d83013a
   MKToolTip: 69509b1cada10f96bd9f4ab559a768e7c6557933
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
-  PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
-  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 551f729dae4df0edde0d0518185ed8002f42a90e
+PODFILE CHECKSUM: dd5f9f8493e6910edf1156f7977fe0fa2350fd76
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.7.4

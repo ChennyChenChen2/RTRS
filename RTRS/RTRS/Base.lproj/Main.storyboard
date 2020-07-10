@@ -317,7 +317,7 @@ POD</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-ej-5Y0">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cjk-ej-5Y0">
                                 <rect key="frame" x="0.0" y="109" width="414" height="402.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewLayout key="collectionViewLayout" id="Vax-Bp-pwJ" customClass="RTRSCustomCollectionViewFlowLayout" customModule="RTRS" customModuleProvider="target"/>
@@ -699,6 +699,12 @@ POD</string>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="A86-X1-8gS">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="Ais-zc-7KX" kind="relationship" relationship="rootViewController" id="lAz-K9-Xbr"/>
@@ -847,16 +853,16 @@ POD</string>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FZd-Iu-ADG">
                                                             <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="70" id="2g6-Ty-XFK"/>
-                                                                <constraint firstAttribute="width" constant="70" id="OR2-er-XPb"/>
+                                                                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="70" id="Gdr-lZ-0sv"/>
+                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="70" id="JAM-ES-Uso"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="FZd-Iu-ADG" firstAttribute="centerX" secondItem="BUs-DK-CoM" secondAttribute="centerX" id="0Mb-ec-jRN"/>
+                                                        <constraint firstAttribute="bottom" secondItem="FZd-Iu-ADG" secondAttribute="bottom" id="9L0-b7-Rlf"/>
                                                         <constraint firstItem="FZd-Iu-ADG" firstAttribute="leading" secondItem="BUs-DK-CoM" secondAttribute="leading" id="F9S-fm-hHa"/>
                                                         <constraint firstItem="FZd-Iu-ADG" firstAttribute="top" secondItem="BUs-DK-CoM" secondAttribute="top" id="S2w-QM-1ON"/>
-                                                        <constraint firstItem="FZd-Iu-ADG" firstAttribute="centerY" secondItem="BUs-DK-CoM" secondAttribute="centerY" id="SSy-tv-1e1"/>
+                                                        <constraint firstAttribute="trailing" secondItem="FZd-Iu-ADG" secondAttribute="trailing" id="o1Y-AL-dyr"/>
                                                     </constraints>
                                                 </collectionViewCellContentView>
                                                 <size key="customSize" width="70" height="70"/>
@@ -923,7 +929,7 @@ POD</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TVK-Ae-oOM">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TVK-Ae-oOM">
                                 <rect key="frame" x="0.0" y="84" width="414" height="414"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -1096,9 +1102,6 @@ POD</string>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TITLE" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkA-nr-br9">
                                             <rect key="frame" x="20" y="213" width="374" height="56"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="56" id="piI-Qy-fp9"/>
-                                            </constraints>
                                             <fontDescription key="fontDescription" name="TrebuchetMS-Bold" family="Trebuchet MS" pointSize="17"/>
                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <nil key="highlightedColor"/>

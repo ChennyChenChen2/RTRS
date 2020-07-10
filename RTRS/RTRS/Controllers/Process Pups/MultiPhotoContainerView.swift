@@ -52,7 +52,7 @@ class MultiPhotoContainerView: UIView {
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
             imageView.frame.size.width = imageWidth
-            imageView.pin_setImage(from: url) { [weak self] (result) in
+            imageView.af_setImage(withURL: url, placeholderImage: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { [weak self] (result) in
                 guard let weakSelf = self, result.error == nil else { return }
                 imageView.sizeToFit()
                 
@@ -77,6 +77,32 @@ class MultiPhotoContainerView: UIView {
                     weakSelf.sizeToFit()
                 }
             }
+            
+//            imageView.pin_setImage(from: url) { [weak self] (result) in
+//                guard let weakSelf = self, result.error == nil else { return }
+//                imageView.sizeToFit()
+//
+//                let aspectRatio = imageView.frame.size.width / imageView.frame.size.height
+//                let newHeight = imageWidth * (1 / aspectRatio)
+//
+//                imageView.frame = CGRect(x: 0, y: 0, width: imageWidth, height: newHeight)
+//                weakSelf.addSubview(imageView)
+//                weakSelf.imageViews.append(imageView)
+//                if i == weakSelf.imgURLs.count - 1 {
+//                    var prevImageView: UIImageView?
+//                    for imageView in weakSelf.imageViews {
+//                        if let pIV = prevImageView {
+//                            imageView.frame.origin.x = pIV.frame.origin.x + pIV.frame.size.width + horizontalSpacing
+//                        } else {
+//                            imageView.frame.origin.x = horizontalSpacing
+//                        }
+//
+//                        prevImageView = imageView
+//                    }
+//
+//                    weakSelf.sizeToFit()
+//                }
+//            }
         }
     }
     

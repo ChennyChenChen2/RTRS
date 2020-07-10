@@ -81,13 +81,13 @@
             "type": "contentlist",
         },
         {
-            "name": "Sixers Adam: Normal Column",
+            "name": "Sixers Adam Normal Column",
             "links": ["https://www.rightstorickysanchez.com/normal-column",
                     "https://www.rightstorickysanchez.com/normal-column?page=2"],
             "type": "contentlist"
         },
         {
-            "name": "Newsletter",
+            "name": "The Corner Three Newsletter",
             "link": "https://www.rightstorickysanchez.com/newsletter",
             "type": "externallink",
         },
@@ -123,6 +123,6 @@
     "moreItems": [
         "About",
         "Process Pups",
-        "Newsletter",
+        "The Corner Three Newsletter",
         "T-Shirt Store"]
 }

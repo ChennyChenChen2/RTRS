@@ -39,7 +39,7 @@ class RTRSPersistentStorage: NSObject {
     class func save(viewModel: RTRSViewModel, type: RTRSScreenType) {
         let codedData = NSKeyedArchiver.archivedData(withRootObject: viewModel)
         var path: URL?
-        if type == .pod || type == .auArticle {
+        if type == .pod || type == .auArticle || type == .normalColumnArticle {
             path = getPathForType(type: type, specificName: viewModel.pageName())
         } else {
             path = getPathForType(type: type)

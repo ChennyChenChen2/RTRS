@@ -82,7 +82,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
             }
             
             let jonHTML = """
-                <p>Jonathan Chen is the developer of this app. He works as an app developer and musician in New York City. You can follow him on Twitter <strong><a target="_blank" href="http://www.twitter.com/ChennyChen_Chen">@ChennyChen_Chen</a>.</strong></p>
+                <p>Jon Chen is the developer of this app. He works as an app developer and musician in New York City. You can follow him on Twitter <strong><a target="_blank" href="http://www.twitter.com/ChennyChen_Chen">@ChennyChen_Chen</a>.</strong></p>
             """
             let jonDoc = try SwiftSoup.parse(jonHTML)
             if let pElem = try jonDoc.select("p").first() {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PINRemoteImage
+import AlamofireImage
 
 class SingleContentCell: UITableViewCell {
 
@@ -22,7 +22,8 @@ class SingleContentCell: UITableViewCell {
         self.auTimestampLabel.text = viewModel.dateString
         
         if let imageUrl = viewModel.imageUrl {
-            self.previewImageView.pin_setImage(from: imageUrl)
+//            self.previewImageView.pin_setImage(from: imageUrl, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"))
+            self.previewImageView.af_setImage(withURL: imageUrl, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"), filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false, completion: nil)
         }
     }
     

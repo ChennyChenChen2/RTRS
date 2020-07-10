@@ -150,7 +150,7 @@ class RTRSOperation: Operation {
                                 var viewModel: RTRSViewModel?
                                 var deferredCompletion = false
                                
-                                if type == .au || type == .podcasts || type == .processPups {
+                                if type == .au || type == .podcasts || type == .processPups || type == .normalColumn {
                                     viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion)
                                     deferredCompletion = true
                                 } else {

@@ -83,6 +83,7 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                     let doc = try SwiftSoup.parse(htmlString)
                     let postElements = try doc.getElementsByTag("article")
                     var batch = [SingleArticleViewModel?](repeating: nil, count: postElements.count)
+                    var completed = 0
                     for i in 0..<postElements.count {
                         innerQueue.async {
                             let postElement = postElements[i]
@@ -110,7 +111,10 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 {
                                 
                                     guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-                                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else { return }
+                                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else {
+                                            print("error with URL encoding... offending URL suffix: \(urlSuffix)")
+                                            return
+                                    }
                                     
                                     var dateString = ""
                                     if let newDate = try? dateElement.text() {
@@ -122,7 +126,8 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                     let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
                                     batch[i] = singleArticleViewModel
 
-                                    if i == postElements.count - 1 {
+                                    completed += 1
+                                    if completed == postElements.count {
                                         batchDict.setValue(batch, for: n)
                                         batchDict.count { (count) in
                                             if count == theURLs.count {
@@ -133,14 +138,14 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 } else {
                                     print("Something went wrong?")
                                 }
-                            } catch {
-                                print("Error parsing \(self.pageName()) view model")
+                            } catch let error {
+                                print("Error parsing \(self.pageName()) view model: \(error.localizedDescription)")
                                 return
                             }
                         }
                     }
-                } catch {
-                    print("Error parsing \(self.pageName()) view model")
+                } catch let error {
+                    print("Error parsing \(self.pageName()) view model: \(error.localizedDescription)")
                     return
                 }
             }

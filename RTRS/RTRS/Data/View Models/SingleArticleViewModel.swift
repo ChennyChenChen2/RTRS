@@ -141,13 +141,16 @@ class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
                 
                 if let path = Bundle.main.path(forResource: "RTRS", ofType: "css"), let cssFileContents = try? String(contentsOfFile: path) {
                     cssString = cssFileContents
+                } else {
+                    // This is our fault...
+                    print("Cannot find RTRS.css")
                 }
                 
                 let htmlString = "<html><head><style>\(cssString)</style></head><body>\(divString)</body></html>"
                 self.htmlString = htmlString
             }
-        } catch {
-            print("Error parsing single article viewmodel")
+        } catch let error {
+            print("Error parsing single article viewmodel: \(error.localizedDescription)")
         }
     }
 }

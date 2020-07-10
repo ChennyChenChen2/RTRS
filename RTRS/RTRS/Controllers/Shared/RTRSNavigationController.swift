@@ -14,12 +14,8 @@ class RTRSNavigationController: UINavigationController {
         super.viewDidLoad()
         let appearanceProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [RTRSNavigationController.self])
         appearanceProxy.tintColor = .white
-        
+        appearanceProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
-    
-//    override var navigationBar: UINavigationBar {
-//        return RTRSNavigationBar()
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,26 +29,6 @@ class RTRSNavigationController: UINavigationController {
     fileprivate func defaultNavBarCustomization() {
         self.navigationBar.backgroundColor = .black
         self.navigationBar.barTintColor = .black
-        self.navigationBar.titleTextAttributes = [.font: Utils.defaultFontBold]
-        
-    }
-}
-
-extension UINavigationController {
-
-}
-
-
-extension UINavigationItem {
-    func customizeNavBarForHome() {
-        DispatchQueue.main.async {
-//            let imageView = UIImageView(image: #imageLiteral(resourceName: "Top-Nav-Image"))
-//            imageView.contentMode = .scaleAspectFit
-//            imageView.sizeToFit()
-//            self.titleView = imageView
-//            self.titleView?.sizeToFit()
-//            self.title = nil
-            
-        }
+        self.navigationBar.titleTextAttributes = [.font: Utils.defaultFontBold, NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 }
