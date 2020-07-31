@@ -38,28 +38,29 @@ class RTRSOperationCoordinator {
                     
                         print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") successfully called custom completion")
                     }
-                    weakSelf.processedOperations = weakSelf.processedOperations + 1
-                    if weakSelf.processedOperations == weakSelf.operationCount {
-                        if let moreItems = dict["moreItems"] as? [String] {
-                            var viewModels = [RTRSViewModel]()
-                            for item in moreItems {
-                                if let type = RTRSScreenType(rawValue: item),
-                                    let viewModel = RTRSNavigation.shared.viewModel(for: type) {
-                                    viewModels.append(viewModel)
-                                }
-                            }
-                            
-                            let savedContentVM = RTRSSavedContentViewModel()
-                            RTRSNavigation.shared.registerViewModel(viewModel: savedContentVM, for: .saved)
-                            viewModels.append(savedContentVM)
-                            
-                            let moreViewModel = RTRSMoreViewModel(pages: viewModels)
-                            RTRSNavigation.shared.registerViewModel(viewModel: moreViewModel, for: .more)
-                            if let name = moreViewModel.loadedNotificationName() {
-                                NotificationCenter.default.post(name: name, object: nil)
+                    
+                    if let moreItems = dict["moreItems"] as? [String] {
+                        var viewModels = [RTRSViewModel]()
+                        for item in moreItems {
+                            if let type = RTRSScreenType(rawValue: item),
+                                let viewModel = RTRSNavigation.shared.viewModel(for: type) {
+                                viewModels.append(viewModel)
                             }
                         }
                         
+                        let savedContentVM = RTRSSavedContentViewModel()
+                        RTRSNavigation.shared.registerViewModel(viewModel: savedContentVM, for: .saved)
+                        viewModels.append(savedContentVM)
+                        
+                        let moreViewModel = RTRSMoreViewModel(pages: viewModels)
+                        RTRSNavigation.shared.registerViewModel(viewModel: moreViewModel, for: .more)
+                        if let name = moreViewModel.loadedNotificationName() {
+                            NotificationCenter.default.post(name: name, object: nil)
+                        }
+                    }
+                    
+                    weakSelf.processedOperations = weakSelf.processedOperations + 1
+                    if weakSelf.processedOperations == weakSelf.operationCount {
                         print("LOADING COMPLETE")
                         completionHandler(true)
                     }

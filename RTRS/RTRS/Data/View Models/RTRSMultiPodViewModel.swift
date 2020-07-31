@@ -40,16 +40,18 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let pods = aDecoder.decodeObject(forKey: CodingKeys.pods.rawValue) as? [RTRSSinglePodViewModel]
         
-        self.init(urls: nil, name: name, pods: pods, ignoreTitles: nil, completionHandler: nil)
+        self.init(urls: nil, name: name, pods: pods, ignoreTitles: nil, completionHandler: nil, etag: nil)
     }
 
     let name: String?
+    let etag: String?
     var content: [SingleContentViewModel?] = [RTRSSinglePodViewModel?]()
     var completion: ((RTRSViewModel?) -> ())?
     var ignoreTitles: [String]?
 
-    required init(urls: [URL]?, name: String?, pods: [RTRSSinglePodViewModel]?, ignoreTitles: [String]?, completionHandler: ((RTRSViewModel?) -> ())?) {
+    required init(urls: [URL]?, name: String?, pods: [RTRSSinglePodViewModel]?, ignoreTitles: [String]?, completionHandler: ((RTRSViewModel?) -> ())?, etag: String?) {
         self.name = name
+        self.etag = etag
         self.content = pods ?? []
         self.completion = completionHandler
         self.ignoreTitles = ignoreTitles
@@ -90,6 +92,12 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                             continue
                         }
                         
+                        #if DEBUG
+                        if title == "Shake At The Point, and Larry Hughes On Iverson, LeBron, The Bubble and The Nelly Video" {
+                            continue
+                        }
+                        #endif
+                        
                         var theTitle = title
                         if let openBracketIndex = title.firstIndex(of: "["), let closeBracketIndex = title.firstIndex(of: "]") {
                             theTitle.removeSubrange(openBracketIndex...closeBracketIndex)
@@ -111,6 +119,10 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
         }
         
         print("FINISHED LOADING MULTI-POD")
+        if let etag = self.etag {
+            let keyName = "\(self.pageName())-\(RTRSUserDefaultsKeys.lastUpdated)"
+            UserDefaults.standard.set(etag, forKey: keyName)
+        }
         self.completion?(self)
     }
 }

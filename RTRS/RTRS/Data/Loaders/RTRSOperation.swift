@@ -150,8 +150,8 @@ class RTRSOperation: Operation {
                                 var viewModel: RTRSViewModel?
                                 var deferredCompletion = false
                                
-                                if type == .au || type == .podcasts || type == .processPups || type == .normalColumn {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion)
+                                if type == .au || type == .podcasts || type == .processPups || type == .normalColumn || type == .moc {
+                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated)
                                     deferredCompletion = true
                                 } else {
                                     viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
@@ -185,7 +185,7 @@ class RTRSOperation: Operation {
 }
 
 fileprivate class RTRSViewModelFactory {
-    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil) -> RTRSViewModel? {
+    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil, etag: String? = nil) -> RTRSViewModel? {
         
         switch name {
         case RTRSScreenType.home.rawValue:
@@ -193,13 +193,17 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.podSource.rawValue:
             return RTRSPodSourceViewModel(doc: doc, pods: nil, ignoreTitles: ignoreTitles)
         case RTRSScreenType.podcasts.rawValue:
-            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler)
+            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler, etag: etag)
         case RTRSScreenType.au.rawValue:
-            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
         case RTRSScreenType.normalColumn.rawValue:
-            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler)
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
+        case RTRSScreenType.moc.rawValue:
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
         case RTRSScreenType.processPups.rawValue:
-            return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler)
+            return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
+        case RTRSScreenType.abbie.rawValue:
+            return RTRSAbbieArtGalleryViewModel(doc: doc, entries: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
         case RTRSScreenType.about.rawValue:
             return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
         case RTRSScreenType.newsletter.rawValue:

@@ -65,5 +65,4 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         
         self.init(title: title, date: dateString, description: description, imageURL: imageUrl)
     }
-    
 }

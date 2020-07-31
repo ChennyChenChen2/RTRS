@@ -181,6 +181,13 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                             }
 
                             let title = try titleElemPlaceholder?.text()
+                            
+                            #if DEBUG
+                            if title == "LARRY HUGHES ON THE RICKY, AND SHAKE MILTON AT THE POINT" {
+                                continue
+                            }
+                            #endif
+                            
                             let nsImgURL = imgURL as NSURL
                             let nsActionURL = url as NSURL
                             if (title != nil && !title!.string.contains("Squarespace")) || title == nil {

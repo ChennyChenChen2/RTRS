@@ -1,5 +1,5 @@
 //
-//  AUCornerArticleViewController.swift
+//  ArticleViewController.swift
 //  RTRS
 //
 //  Created by Jonathan Chen on 9/8/19.
@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
+class ArticleViewController: UIViewController, WKNavigationDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -22,13 +22,16 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
     var dismissButton: UIButton?
     var saveButton: UIBarButtonItem!
     var viewModel: SingleArticleViewModel?
+    var column: String?
     var webView: WKWebView?
     var webViewContentObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let vm = self.viewModel else { return }
+        assert(self.viewModel != nil && self.column != nil, "View model and column cannot be nil")
+        guard let vm = self.viewModel, let title = vm.title, let column = column else { return }
+        AnalyticsUtils.logViewArticle(title, column: column)
         
         self.view.backgroundColor = .black
         self.scrollView.backgroundColor = .black
@@ -124,7 +127,8 @@ class AUCornerArticleViewController: UIViewController, WKNavigationDelegate {
                 return
             }
             
-            UIApplication.shared.open(url, options: [:]) { (success) in }
+//            UIApplication.shared.open(url, options: [:]) { (success) in }
+            RTRSExternalWebViewController.openExternalWebBrowser(self, url: url, name: url.absoluteString)
             decisionHandler(.cancel)
             return
         }

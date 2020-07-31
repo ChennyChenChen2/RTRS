@@ -14,6 +14,8 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
     fileprivate let notificationCellReuseId = "NotificationCell"
     fileprivate let externalBrowserSegueId = "externalweb"
     fileprivate let savedContentSegueId = "Saved"
+    fileprivate let gallerySegueId = "Gallery"
+    
     var viewModel: RTRSMoreViewModel?
     
     override func viewDidLoad() {
@@ -21,6 +23,10 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
         self.view.backgroundColor = .black
         self.tableView.backgroundColor = .black
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showDebug))
+        gesture.numberOfTapsRequired = 5
+        self.view.addGestureRecognizer(gesture)
         
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         self.navigationController?.navigationBar.tintColor = .white
@@ -32,6 +38,13 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         DispatchQueue.main.async {
             self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
             self.tableView.reloadData()
+        }
+    }
+    
+    @objc private func showDebug() {
+        let vc = DebugViewController(style: .grouped)
+        DispatchQueue.main.async {
+            self.navigationController?.present(vc, animated: true, completion: nil)
         }
     }
     
@@ -92,10 +105,6 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//
-//    }
-    
     func switchValueChanged(_ sender: UISwitch) {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             
@@ -141,6 +150,8 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
             let page = pages[indexPath.row - 1]
             if let _ = page.pageUrl() {
                 self.performSegue(withIdentifier: self.externalBrowserSegueId, sender: page)
+            } else if let type = RTRSScreenType(rawValue: page.pageName()), type == .processPups || type == .abbie {
+                self.performSegue(withIdentifier: gallerySegueId, sender: page)
             } else {
                 self.performSegue(withIdentifier: page.pageName(), sender: page)
             }
@@ -156,6 +167,10 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
                 vc.name = page.pageName()
             } else if id == self.savedContentSegueId, let vc = segue.destination as? ContentTableViewController {
                 vc.contentType = .saved
+            } else if let vc = segue.destination as? GalleryViewController {
+                if let type = RTRSScreenType(rawValue: page.pageName()) {
+                    vc.contentType = type
+                }
             }
         }
     }

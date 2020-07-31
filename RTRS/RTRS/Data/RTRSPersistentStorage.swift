@@ -153,7 +153,7 @@ class RTRSPersistentStorage: NSObject {
     
     private class func getPathForType(type: RTRSScreenType, specificName: String? = nil) -> URL? {
             switch type {
-            case .about, .advertise, .au, .normalColumn, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .shirts, .subscribe:
+            case .about, .advertise, .au, .normalColumn, .moc, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .abbie, .shirts, .subscribe:
                 do {
                     let fullPath = storageDir.appendingPathComponent("\(type.rawValue).rtrs")
                     if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
@@ -184,6 +184,26 @@ class RTRSPersistentStorage: NSObject {
                 break
             case .normalColumnArticle:
                 let dirPath = storageDir.appendingPathComponent("NormalColumn", isDirectory: true)
+                var isDir : ObjCBool = false
+                
+                do {
+                    if !FileManager.default.fileExists(atPath: dirPath.absoluteString, isDirectory:&isDir) {
+                        try FileManager.default.createDirectory(at: dirPath, withIntermediateDirectories: true, attributes: nil)
+                    }
+                    
+                    if let theSpecificName = specificName {
+                        let fullPath = dirPath.appendingPathComponent("\(theSpecificName).rtrs")
+                        if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
+                            FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
+                        }
+                        return fullPath
+                    }
+                } catch {
+                    print("Couldn't create directory for screen type: \(type.rawValue)")
+                }
+                break
+            case .mocArticle:
+                let dirPath = storageDir.appendingPathComponent("MOC", isDirectory: true)
                 var isDir : ObjCBool = false
                 
                 do {

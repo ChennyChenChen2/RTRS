@@ -16,7 +16,13 @@ protocol MultiContentViewModel {
 class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     
     func loadedNotificationName() -> Notification.Name? {
-        return (self.pageName() == "AU's Corner") ? .auLoadedNotificationName : .normalColumnLoadedNotificationName
+        guard let name = self.name else { return nil }
+        switch name {
+        case RTRSScreenType.au.rawValue: return .auLoadedNotificationName
+        case RTRSScreenType.normalColumn.rawValue: return .normalColumnLoadedNotificationName
+        case RTRSScreenType.moc.rawValue: return .mocLoadedNotificationName
+        default: return nil
+        }
     }
     
     func pageUrl() -> URL? {
@@ -24,7 +30,7 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     }
     
     func pageName() -> String {
-        return self.name ?? "AU's Corner"
+        return self.name ?? "If Not, Pick Will Convey As Two Second-Rounders"
     }
     
     func pageImage() -> UIImage {
@@ -45,19 +51,21 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [SingleArticleViewModel]
         
-        self.init(urls: nil, name: name, articles: articles, completionHandler: nil)
+        self.init(urls: nil, name: name, articles: articles, completionHandler: nil, etag: nil)
     }
 
     let name: String?
     var content: [SingleContentViewModel?]  = [SingleArticleViewModel]()
     var completion: ((RTRSViewModel?) -> ())?
+    let etag: String?
     
     private let group = DispatchGroup()
 
-    required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?) {
+    required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?, etag: String?) {
         self.name = name
         self.content = articles ?? []
         self.completion = completionHandler
+        self.etag = etag
         
         super.init()
         extractDataFromDoc(doc: nil, urls: urls)
@@ -157,6 +165,11 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                 let batches = dict.sorted { $0.key < $1.key }
                 for (_, v) in batches {
                     self.content.append(contentsOf: v.compactMap { $0 })
+                }
+
+                if let etag = self.etag {
+                    let keyName = "\(self.pageName())-\(RTRSUserDefaultsKeys.lastUpdated)"
+                    UserDefaults.standard.set(etag, forKey: keyName)
                 }
                 
                 self.completion?(self)

@@ -9,15 +9,16 @@
 import UIKit
 import SwiftSoup
 
-class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
-    var processPups: [ProcessPup] = [ProcessPup]()
+class RTRSProcessPupsViewModel: NSObject, GalleryViewModel {
+    let etag: String?
+    var entries: [GallerySingleEntry] = [ProcessPup]()
     var pageDescription: NSAttributedString?
     var pageDescriptionImageURLs: [URL]?
     var completion: ((RTRSViewModel?) -> ())?
     
     enum CodingKeys: String {
         case pageDescription = "pageDescription"
-        case processPups = "processPups"
+        case entries = "entries"
         case pageDescriptionImageURLs = "pageDescriptionURLs"
     }
     
@@ -37,8 +38,13 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                         let pElems = try row.getElementsByTag("p")
 
                         let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
-                            return NSAttributedString.attributedStringFrom(element: elem)
-                            })
+                            let attrString = NSAttributedString.attributedStringFrom(element: elem)
+                            let mutableString = NSMutableAttributedString(attributedString: attrString)
+                            let range = NSRange(location: 0, length: mutableString.length)
+                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
+                            return mutableString
+                        })
                         for string in aStrings {
                             buffer.append(string)
                         }
@@ -57,7 +63,12 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                     } else if  i == 1 {
                         let pElems = try row.getElementsByTag("p")
                         let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
-                            return NSAttributedString.attributedStringFrom(element: elem)
+                            let attrString = NSAttributedString.attributedStringFrom(element: elem)
+                            let mutableString = NSMutableAttributedString(attributedString: attrString)
+                            let range = NSRange(location: 0, length: mutableString.length)
+                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
+                            return mutableString
                             })
                         for string in aStrings {
                             buffer.append(string)
@@ -115,11 +126,16 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
                                 try brElem.replaceWith(pElem)
                             }
                             
-                            description.append(NSAttributedString.attributedStringFrom(element: descriptionElem))
+                            let attrString = NSAttributedString.attributedStringFrom(element: descriptionElem)
+                            let mutableString = NSMutableAttributedString(attributedString: attrString)
+                            let range = NSRange(location: 0, length: mutableString.length)
+                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
+                            description.append(mutableString)
                         }
                         
                         if let theName = name {
-                            self.processPups.append(ProcessPup(imageURLs: imgURLs, description: description, name: theName))
+                            self.entries.append(ProcessPup(imageURLs: imgURLs, description: description, name: theName))
                         }
                     }
                 }
@@ -129,11 +145,16 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
         }
         
         print("FINISHED LOADING PROCESS PUPS")
+        
+        if let etag = self.etag {
+            let keyName = "\(self.pageName())-\(RTRSUserDefaultsKeys.lastUpdated)"
+            UserDefaults.standard.set(etag, forKey: keyName)
+        }
         self.completion?(self)
     }
     
     func pageName() -> String {
-        return "Process Pups"
+        return RTRSScreenType.processPups.rawValue
     }
     
     func pageImage() -> UIImage {
@@ -151,22 +172,23 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     func encode(with coder: NSCoder) {
         coder.encode(self.pageDescription, forKey: CodingKeys.pageDescription.rawValue)
         coder.encode(self.pageDescriptionImageURLs, forKey: CodingKeys.pageDescriptionImageURLs.rawValue)
-        coder.encode(self.processPups, forKey: CodingKeys.processPups.rawValue)
+        coder.encode(self.entries, forKey: CodingKeys.entries.rawValue)
     }
     
     required convenience init?(coder: NSCoder) {
-        let pups = coder.decodeObject(forKey: CodingKeys.processPups.rawValue) as? [ProcessPup]
+        let pups = coder.decodeObject(forKey: CodingKeys.entries.rawValue) as? [ProcessPup]
         let description = coder.decodeObject(forKey: CodingKeys.pageDescription.rawValue) as? NSAttributedString
         let imageURLs = coder.decodeObject(forKey: CodingKeys.pageDescriptionImageURLs.rawValue) as? [URL]
         
-        self.init(doc: nil, pups: pups, description: description, imageURLs: imageURLs, completion: nil)
+        self.init(doc: nil, pups: pups, description: description, imageURLs: imageURLs, completion: nil, etag: nil)
     }
     
-    required init(doc: Document?, pups: [ProcessPup]?, description: NSAttributedString?, imageURLs: [URL]?, completion: ((RTRSViewModel?) -> ())?) {
-        self.processPups = pups ?? []
+    required init(doc: Document?, pups: [ProcessPup]?, description: NSAttributedString?, imageURLs: [URL]?, completion: ((RTRSViewModel?) -> ())?, etag: String?) {
+        self.entries = pups ?? []
         self.pageDescription = description
         self.pageDescriptionImageURLs = imageURLs
         self.completion = completion
+        self.etag = etag
         
         super.init()
         
@@ -174,11 +196,11 @@ class RTRSProcessPupsViewModel: NSObject, RTRSViewModel {
     }
 }
 
-class ProcessPup: NSObject, NSCoding {
+class ProcessPup: NSObject, NSCoding, GallerySingleEntry {
     
-    var pupImageURLs: [URL]? = [URL]()
-    var pupDescription: NSAttributedString?
-    var pupName: String?
+    var urls = [URL]()
+    var entryDescription: NSAttributedString?
+    var name: String?
     
     private enum CodingKeys: String, CodingKey {
         case pupImageURLs = "pupImageUrls"
@@ -187,9 +209,9 @@ class ProcessPup: NSObject, NSCoding {
     }
     
     init(imageURLs: [URL]?, description: NSAttributedString?, name: String?) {
-        self.pupImageURLs = imageURLs
-        self.pupDescription = description
-        self.pupName = name
+        self.urls = imageURLs ?? [URL]()
+        self.entryDescription = description
+        self.name = name
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -200,8 +222,8 @@ class ProcessPup: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.pupImageURLs, forKey: CodingKeys.pupImageURLs.rawValue)
-        aCoder.encode(self.pupDescription, forKey: CodingKeys.pupDescription.rawValue)
-        aCoder.encode(self.pupName, forKey: CodingKeys.pupName.rawValue)
+        aCoder.encode(self.urls, forKey: CodingKeys.pupImageURLs.rawValue)
+        aCoder.encode(self.entryDescription, forKey: CodingKeys.pupDescription.rawValue)
+        aCoder.encode(self.name, forKey: CodingKeys.pupName.rawValue)
     }
 }

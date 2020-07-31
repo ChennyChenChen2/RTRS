@@ -87,6 +87,11 @@
             "type": "contentlist"
         },
         {
+            "name": "The Good O'Connor (Mike)",
+            "links": ["https://www.rightstorickysanchez.com/the-good-oconnor-mike"],
+            "type": "contentlist"
+        },
+        {
             "name": "The Corner Three Newsletter",
             "link": "https://www.rightstorickysanchez.com/newsletter",
             "type": "externallink",
@@ -100,7 +105,12 @@
             "name": "T-Shirt Store",
             "link": "https://crackedbellphl.com/collections/rights-to-ricky-sanchez",
             "type": "externallink",
-        }
+        },
+        {
+            "name": "Abbie's Art Gallery",
+            "link": "https://www.rightstorickysanchez.com/abbies-art-gallery",
+            "type": "contentlist",
+        },
     ],
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
@@ -123,6 +133,7 @@
     "moreItems": [
         "About",
         "Process Pups",
+        "Abbie's Art Gallery",
         "The Corner Three Newsletter",
         "T-Shirt Store"]
 }

@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("**** FCM TOKEN: \(fcmToken)")
+        UserDefaults.standard.set(fcmToken, forKey: DebugStrings.fcmToken.rawValue)
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -57,14 +58,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if let link = response.notification.request.content.userInfo["deepLink"] as? String,
             let url = URL(string: link), let title = response.notification.request.content.userInfo["deepLinkTitle"] as? String,
             let rootVC = self.window?.rootViewController as? RTRSNavigationController {
+            
+            let podURLString = response.notification.request.content.userInfo["podURLString"] as? String
             let shouldOpenExternalBrowser = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? Bool
-            let payload = RTRSDeepLinkPayload(baseURL: url, title: title)
+            let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString)
             RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser ?? false)
         }
-    }
-    
-    func messaging(_ messaging: Messaging, didReceive remoteMessage: MessagingRemoteMessage) {
-        print("HERE")
+        
+        completionHandler()
     }
 }
 

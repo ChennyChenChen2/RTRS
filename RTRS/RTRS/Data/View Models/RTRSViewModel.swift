@@ -20,8 +20,10 @@ extension Notification.Name {
     static let podLoadedNotificationName = Notification.Name("podLoaded")
     static let auLoadedNotificationName = Notification.Name("auLoaded")
     static let normalColumnLoadedNotificationName = Notification.Name("normalColumn")
+    static let mocLoadedNotificationName = Notification.Name("mocLoaded")
     static let homeLoadedNotificationName = Notification.Name("homeLoaded")
     static let aboutLoadedNotificationName = Notification.Name("aboutLoaded")
     static let moreLoadedNotificationName = Notification.Name("moreLoaded")
     static let processPupsLoadedNotificationName = Notification.Name("processPupsLoaded")
+    static let abbieLoadedNotificationName = Notification.Name("abbieLoaded")
 }

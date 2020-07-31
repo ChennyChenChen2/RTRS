@@ -75,7 +75,12 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                 for pElem in pElems {
                     if !pElem.description.contains("Squarespace") && !pElem.description.contains("contact us") {
                         let attrString = NSAttributedString.attributedStringFrom(element: pElem)
-                        bodyText.append(attrString)
+                        let mutableString = NSMutableAttributedString(attributedString: attrString)
+                        let range = NSRange(location: 0, length: mutableString.length)
+                        mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+                        mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
+                        
+                        bodyText.append(mutableString)
                         bodyText.append(NSAttributedString(string: "\n"))
                     }
                 }
@@ -87,7 +92,11 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
             let jonDoc = try SwiftSoup.parse(jonHTML)
             if let pElem = try jonDoc.select("p").first() {
                 let attrString = NSAttributedString.attributedStringFrom(element: pElem)
-                bodyText.append(attrString)
+                let mutableString = NSMutableAttributedString(attributedString: attrString)
+                let range = NSRange(location: 0, length: mutableString.length)
+                mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
+                mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
+                bodyText.append(mutableString)
             }
             
             self.body = bodyText

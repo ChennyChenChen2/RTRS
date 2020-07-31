@@ -66,6 +66,12 @@ class RTRSPodSourceViewModel: NSObject, RTRSViewModel {
             for item in items {
                 if let titleElem = try item.getElementsByTag("title").first(), let linkElem = try item.getElementsByTag("enclosure").first(), let link = URL(string: try linkElem.attr("url")) {
                     if let title = try? titleElem.text(), !self.ignoreTitles.contains(title) {
+                        #if DEBUG
+                        if title == "Shake At The Point, and Larry Hughes On Iverson, LeBron, The Bubble and The Nelly Video" {
+                            continue
+                        }
+                        #endif
+                        
                         podUrls.append(link)
                     }
                 }

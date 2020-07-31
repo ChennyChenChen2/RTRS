@@ -13,8 +13,8 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
     @IBOutlet weak var pupNameLabel: UILabel!
     @IBOutlet weak var pupDescriptionTextView: UITextView!
     static let storyboardId = "standalonePups"
-    var viewModel: RTRSProcessPupsViewModel!
-    var currentPup: ProcessPup!
+    var viewModel: GalleryViewModel!
+    var currentPup: GallerySingleEntry!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,16 +23,18 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
     
     private func setDescriptionForCurrentPup() {
         let index = self.collectionView.indexOfMajorCell()
-        let pup = self.viewModel.processPups[index]
-        self.pupDescriptionTextView.attributedText = pup.pupDescription
-        self.pupNameLabel.text = pup.pupName
+        let pup = self.viewModel.entries[index]
+        if let description = pup.entryDescription {
+            self.pupDescriptionTextView.attributedText = description
+        }
+        self.pupNameLabel.text = pup.name
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let index = self.viewModel.processPups.firstIndex(where: { [weak self] (pup) -> Bool in
-            guard let weakSelf = self, let name = pup.pupName, let otherName = weakSelf.currentPup.pupName else { return false }
+        if let index = self.viewModel.entries.firstIndex(where: { [weak self] (pup) -> Bool in
+            guard let weakSelf = self, let name = pup.name, let otherName = weakSelf.currentPup.name else { return false }
             return name == otherName
         }) {
             let page: Int = index
@@ -50,13 +52,13 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.processPups.count
+        return self.viewModel.entries.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RTRSSlideshowPupCollectionViewCell.reuseIdentifier, for: indexPath) as! RTRSSlideshowPupCollectionViewCell
-        let pup = self.viewModel.processPups[indexPath.row]
-        let url = pup.pupImageURLs!.first!
+        let pup = self.viewModel.entries[indexPath.row]
+        let url = pup.urls.first!
         cell.imageView.af.setImage(withURL: url, cacheKey: url.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .noTransition, runImageTransitionIfCached: false) { (response) in
             if let image = try? response.result.get() {
                 ImageCache.shared.cacheImage(image, identifier: url.absoluteString)

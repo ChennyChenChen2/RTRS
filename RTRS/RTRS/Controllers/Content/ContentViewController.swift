@@ -18,6 +18,7 @@ class ContentViewController: UIViewController {
     
     fileprivate var normalColumnView: NormalColumnView!
     
+    fileprivate let mocSegueId = "MOC"
     fileprivate let auCornerSegueId = "AU's Corner"
     fileprivate let podSegueId = "The Pod"
     fileprivate let normalColumnSegueId = "Normal Column"
@@ -55,8 +56,11 @@ class ContentViewController: UIViewController {
         self.normalColumnView.rightAnchor.constraint(equalTo: self.normalColumnContainer.rightAnchor).isActive = true
         self.normalColumnView.bottomAnchor.constraint(equalTo: self.normalColumnContainer.bottomAnchor).isActive = true
             
-//        self.normalColumnView.setNeedsDisplay()
-//        self.view.setNeedsDisplay()
+        // MOC:
+        // TODO: apply gesture recognizer once content refresh page is applied
+        let mocRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(openMOC))
+        mocRecognizer.direction = .left
+        self.podView.addGestureRecognizer(mocRecognizer)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -66,10 +70,15 @@ class ContentViewController: UIViewController {
             }
         }
     }
-        
+    
     @objc fileprivate func openPods() {
         self.navigationController?.navigationBar.isHidden = false
         self.performSegue(withIdentifier: self.podSegueId, sender: nil)
+    }
+        
+    @objc fileprivate func openMOC() {
+        self.navigationController?.navigationBar.isHidden = false
+        self.performSegue(withIdentifier: self.mocSegueId, sender: nil)
     }
     
     @objc fileprivate func openAuCorner() {
@@ -85,10 +94,12 @@ class ContentViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let id = segue.identifier {
             let vc = segue.destination as! ContentTableViewController
-            if id == auCornerSegueId {
+            if id == self.auCornerSegueId {
                 vc.contentType = .au
             } else if id == self.normalColumnSegueId {
                 vc.contentType = .normalColumn
+            } else if id == self.mocSegueId {
+                vc.contentType = .moc
             } else {
                 vc.contentType = .podcasts
             }

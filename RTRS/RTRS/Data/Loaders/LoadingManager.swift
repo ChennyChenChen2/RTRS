@@ -80,9 +80,13 @@ import FirebaseDatabase
                         return nil
                     }
                     
+                    var isDebug = false
+                    #if DEBUG
+                    isDebug = true
+                    #endif
+                    
                     var configDict: [String: Any]?
-//                    if error != nil {
-                    if true {
+                    if error != nil || isDebug {
                         if let config = getBundledConfig() {
                             doStartup(dict: config)
                         } else {

@@ -31,10 +31,10 @@ class RTRSErrorHandler {
     
     // If nil is specified for viewController, display error in top VC
     class func showError(in viewController: UIViewController?, type: RTRSError, completion: (() -> ())?) {
-        let vc = viewController ?? (UIApplication.shared.keyWindow?.rootViewController as? RTRSNavigationController)?.topViewController
+        DispatchQueue.main.async {
+            let vc = viewController ?? (UIApplication.shared.keyWindow?.rootViewController as? RTRSNavigationController)?.topViewController
         
-        if let theVC = vc {
-            DispatchQueue.main.async {
+            if let theVC = vc {
                 let alert = UIAlertController(title: type.alertTitle, message: type.alertMessage, preferredStyle: .alert)
                 let action = UIAlertAction(title: "OK", style: .default, handler: { (action) in
                     completion?()

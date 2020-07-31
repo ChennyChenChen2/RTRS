@@ -35,10 +35,12 @@
 		877F28F524B9207E00FE4F03 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = 877F28F424B9207E00FE4F03 /* AlamofireImage */; };
 		8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8785EF422264120B0011CF6C /* RTRSNavigation.swift */; };
 		8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */; };
-		8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */; };
+		8788EA7D239D3ACF00C2CE82 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8788EA7C239D3ACF00C2CE82 /* GalleryViewController.swift */; };
 		878B4B3323903276000FD5AF /* RTRSProcessPupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */; };
 		878B4B352390C3F8000FD5AF /* ProcessPups.html in Resources */ = {isa = PBXBuildFile; fileRef = 878B4B342390C3F8000FD5AF /* ProcessPups.html */; };
 		878B4B372390C3FF000FD5AF /* PodSource.html in Resources */ = {isa = PBXBuildFile; fileRef = 878B4B362390C3FF000FD5AF /* PodSource.html */; };
+		8790658624C4C67E001B206F /* Abbie.html in Resources */ = {isa = PBXBuildFile; fileRef = 8790658524C4C67E001B206F /* Abbie.html */; };
+		8790658824C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */; };
 		8790C78D22DCF70800E8AE5C /* RTRSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790C78C22DCF70800E8AE5C /* RTRSNavigationController.swift */; };
 		8795C9B623299DD500D34C99 /* RTRS.css in Resources */ = {isa = PBXBuildFile; fileRef = 8795C9B52329999400D34C99 /* RTRS.css */; };
 		879CE1CF22E137FA002F58CB /* RTRSPersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */; };
@@ -59,9 +61,10 @@
 		87C3B5AE22EBCD0500560958 /* SingleArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AD22EBCD0500560958 /* SingleArticleViewModel.swift */; };
 		87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */; };
 		87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */; };
+		87EDD97F24BD3A1200CACF45 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EDD97E24BD3A1200CACF45 /* DebugViewController.swift */; };
 		87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */; };
 		87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */; };
-		87FA15712325BEF200EA8374 /* AUCornerArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */; };
+		87FA15712325BEF200EA8374 /* ArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FA15702325BEF200EA8374 /* ArticleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,10 +103,12 @@
 		877B3A0E226A932800F061FA /* RTRSConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RTRSConfig.json; sourceTree = SOURCE_ROOT; };
 		8785EF422264120B0011CF6C /* RTRSNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigation.swift; sourceTree = "<group>"; };
 		8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPhotoContainerView.swift; sourceTree = "<group>"; };
-		8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSProcessPupsViewController.swift; sourceTree = "<group>"; };
+		8788EA7C239D3ACF00C2CE82 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSProcessPupsViewModel.swift; sourceTree = "<group>"; };
 		878B4B342390C3F8000FD5AF /* ProcessPups.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ProcessPups.html; sourceTree = "<group>"; };
 		878B4B362390C3FF000FD5AF /* PodSource.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = PodSource.html; sourceTree = "<group>"; };
+		8790658524C4C67E001B206F /* Abbie.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Abbie.html; sourceTree = "<group>"; };
+		8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAbbieArtGalleryViewModel.swift; sourceTree = "<group>"; };
 		8790C78C22DCF70800E8AE5C /* RTRSNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationController.swift; sourceTree = "<group>"; };
 		8795C9B52329999400D34C99 /* RTRS.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = RTRS.css; sourceTree = "<group>"; };
 		879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPersistentStorage.swift; sourceTree = "<group>"; };
@@ -125,9 +130,10 @@
 		87C3B5AD22EBCD0500560958 /* SingleArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSViewModel.swift; sourceTree = "<group>"; };
 		87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationBar.swift; sourceTree = "<group>"; };
+		87EDD97E24BD3A1200CACF45 /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSStandaloneSlideshowViewController.swift; sourceTree = "<group>"; };
 		87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueObserver.swift; sourceTree = "<group>"; };
-		87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AUCornerArticleViewController.swift; sourceTree = "<group>"; };
+		87FA15702325BEF200EA8374 /* ArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleViewController.swift; sourceTree = "<group>"; };
 		AF1DB3465F792B361E3E82F6 /* Pods_RTRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RTRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75ACBB0ECF34B42056B0084 /* Pods-RTRS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.release.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.release.xcconfig"; sourceTree = "<group>"; };
 		FB2E3E34293CDA6B7B1DD506 /* Pods-RTRS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RTRS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RTRS/Pods-RTRS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -219,6 +225,7 @@
 				87C3B5A622EBC72E00560958 /* Content */,
 				87364F6222DFD11E00EDAB17 /* RTRSHomeViewController.swift */,
 				8709022523CAC220003104F7 /* RefreshPopoverViewController.swift */,
+				87EDD97E24BD3A1200CACF45 /* DebugViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -234,6 +241,7 @@
 				87A53C8023516D9E006822F2 /* AUCornerArticle.html */,
 				878B4B342390C3F8000FD5AF /* ProcessPups.html */,
 				878B4B362390C3FF000FD5AF /* PodSource.html */,
+				8790658524C4C67E001B206F /* Abbie.html */,
 			);
 			path = "Sample HTML";
 			sourceTree = "<group>";
@@ -296,7 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				8788EA7A239D35C600C2CE82 /* MultiPhotoContainerView.swift */,
-				8788EA7C239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift */,
+				8788EA7C239D3ACF00C2CE82 /* GalleryViewController.swift */,
 				87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */,
 			);
 			path = "Process Pups";
@@ -354,7 +362,7 @@
 			children = (
 				879CE1D222E13EFE002F58CB /* ContentViewController.swift */,
 				87C3B5A822EBC76F00560958 /* ContentTableViewController.swift */,
-				87FA15702325BEF200EA8374 /* AUCornerArticleViewController.swift */,
+				87FA15702325BEF200EA8374 /* ArticleViewController.swift */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -384,6 +392,7 @@
 				879F1E69236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift */,
 				879D25592387B6D900C1DA55 /* RTRSSavedContentViewModel.swift */,
 				878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */,
+				8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -463,6 +472,7 @@
 			files = (
 				8795C9B623299DD500D34C99 /* RTRS.css in Resources */,
 				878B4B372390C3FF000FD5AF /* PodSource.html in Resources */,
+				8790658624C4C67E001B206F /* Abbie.html in Resources */,
 				877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */,
 				878B4B352390C3F8000FD5AF /* ProcessPups.html in Resources */,
 				87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */,
@@ -522,8 +532,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				87FA15712325BEF200EA8374 /* AUCornerArticleViewController.swift in Sources */,
+				87FA15712325BEF200EA8374 /* ArticleViewController.swift in Sources */,
 				8790C78D22DCF70800E8AE5C /* RTRSNavigationController.swift in Sources */,
+				87EDD97F24BD3A1200CACF45 /* DebugViewController.swift in Sources */,
 				8739E88A2356C59A004CE6D8 /* PodcastPlayerViewController.swift in Sources */,
 				87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */,
 				87AA241E2349403F008C5907 /* RTRSPodSourceViewModel.swift in Sources */,
@@ -541,7 +552,7 @@
 				879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */,
 				87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */,
 				879D255A2387B6D900C1DA55 /* RTRSSavedContentViewModel.swift in Sources */,
-				8788EA7D239D3ACF00C2CE82 /* RTRSProcessPupsViewController.swift in Sources */,
+				8788EA7D239D3ACF00C2CE82 /* GalleryViewController.swift in Sources */,
 				877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */,
 				8709022623CAC220003104F7 /* RefreshPopoverViewController.swift in Sources */,
 				879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */,
@@ -554,6 +565,7 @@
 				87AA241C23483E49008C5907 /* RTRSSinglePodViewModel.swift in Sources */,
 				871D322A23AB048D0013CC4D /* RTRSErrorHandler.swift in Sources */,
 				877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */,
+				8790658824C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift in Sources */,
 				87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */,
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
 				879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */,

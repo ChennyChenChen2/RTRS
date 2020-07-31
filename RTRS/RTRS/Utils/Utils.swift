@@ -34,24 +34,10 @@ extension NSAttributedString {
      */
     
     static func attributedStringFrom(element: Element) -> NSAttributedString {
-        let strongStyle = Style("strong").font(Utils.defaultFontBold)
-        let pStyle = Style("p").foregroundColor(UIColor.white)
-        
-        var styles = [strongStyle, pStyle]
-        
-        // TODO: Find a way more securely assign hrefs to "a" tag text
-        if let aElem = try? element.getElementsByTag("a").first(),
-            let href = try? aElem.attr("href") {
-            let aStyle = Style("a").foregroundColor(UIColor.blue, .normal).underlineStyle(.patternDash).link(href)
-            styles.append(aStyle)
-        }
-        
         let html = element.description
-        let attrString = NSMutableAttributedString(attributedString: html.style(tags: styles).attributedString)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.paragraphSpacing = 20.0
-        attrString.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: NSRange(location: 0, length: attrString.length))
+        guard let data = html.data(using: .utf8, allowLossyConversion: false) else { return NSAttributedString(string: html) }
         
+        let attrString = try! NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
         return attrString
     }
 }

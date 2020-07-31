@@ -11,7 +11,13 @@ import UIKit
 class ContentTableViewController: UITableViewController, UISearchBarDelegate, LoggableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
-    var viewModel: MultiContentViewModel?
+    var viewModel: MultiContentViewModel? {
+        didSet {
+            if let vm = viewModel {
+                filteredResults = vm.content
+            }
+        }
+    }
     var contentType: RTRSScreenType!
     fileprivate let cellReuseId = "ContentCell"
     fileprivate let articleSegueId = "AUArticleSegue"
@@ -48,6 +54,12 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
             self.navigationItem.title = "SIXERS ADAM: NORMAL COLUMN"
             name = .normalColumnLoadedNotificationName
             if let theViewModel = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
+                self.viewModel = theViewModel
+            }
+        } else if self.contentType == .moc {
+            self.navigationItem.title = "The Good O'Connor (Mike)"
+            name = .mocLoadedNotificationName
+            if let theViewModel = RTRSNavigation.shared.viewModel(for: .moc) as? MultiArticleViewModel {
                 self.viewModel = theViewModel
             }
         } else if self.contentType == .podcasts {
@@ -232,9 +244,10 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let indexPath = sender as? IndexPath else { return }
-        let vc = segue.destination as! AUCornerArticleViewController
+        let vc = segue.destination as! ArticleViewController
         if indexPath.row < self.filteredResults.count {
             vc.viewModel = self.filteredResults[indexPath.row] as? SingleArticleViewModel
+            vc.column = self.contentType.rawValue
         }
     }
     

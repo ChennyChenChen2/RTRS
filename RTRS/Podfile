@@ -5,7 +5,7 @@ def all_pods
 
   pod 'FLEX', '~> 2.4', :configurations => ['debug']
   pod 'SwiftSoup', '2.2.0'
-  pod 'Atributika', '4.8.2'
+  pod 'Atributika', '4.9.8'
   pod 'Firebase'
   pod 'Firebase/Crashlytics'
   pod 'Firebase/Analytics'

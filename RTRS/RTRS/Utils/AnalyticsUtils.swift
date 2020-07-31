@@ -30,30 +30,30 @@ class AnalyticsUtils {
     }
     
     class func logViewProcessPup(_ name: String) {
-        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
-            AnalyticsParameterItemName: name,
+        Analytics.logEvent(name.analyticsString, parameters: [
+            AnalyticsParameterItemName: "ProcessPup",
             AnalyticsParameterItemID: "Process Pup"
         ])
     }
     
     class func logPodBegan(_ title: String) {
-        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
-            AnalyticsParameterItemName: title,
+        Analytics.logEvent(title.analyticsString, parameters: [
+            AnalyticsParameterItemName: "PodBegan",
             AnalyticsParameterItemID: "PodBegan"
         ])
     }
     
     class func logPodFinished(_ title: String) {
-        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
-            AnalyticsParameterItemName: title,
+        Analytics.logEvent(title.analyticsString, parameters: [
+            AnalyticsParameterItemName: "PodFinished",
             AnalyticsParameterItemID: "PodFinished"
         ])
     }
     
-    class func logViewAUArticle(_ title: String) {
-        Analytics.logEvent(AnalyticsEventViewItem, parameters: [
-            AnalyticsParameterItemName: title,
-            AnalyticsParameterItemID: "AU Article"
+    class func logViewArticle(_ title: String, column: String) {
+        Analytics.logEvent(title.analyticsString, parameters: [
+            AnalyticsParameterItemName: column,
+            AnalyticsParameterItemID: column
         ])
     }
     
@@ -62,5 +62,15 @@ class AnalyticsUtils {
             AnalyticsParameterItemName: vc.viewModelForLogging()!.pageName(),
             "Source View Controller": vc,
         ])
+    }
+}
+
+extension String {
+    var analyticsString: String {
+        let filtered = self.filter { $0.isLetter || $0.isNumber || $0 == "_" }
+        
+        
+        return String(filtered.prefix(40))
+    
     }
 }

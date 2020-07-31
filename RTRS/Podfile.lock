@@ -1,5 +1,5 @@
 PODS:
-  - Atributika (4.8.2)
+  - Atributika (4.9.8)
   - Firebase (6.27.1):
     - Firebase/Core (= 6.27.1)
   - Firebase/Analytics (6.27.1):
@@ -107,7 +107,7 @@ PODS:
   - SwiftSoup (2.2.0)
 
 DEPENDENCIES:
-  - Atributika (= 4.8.2)
+  - Atributika
   - Firebase
   - Firebase/Analytics
   - Firebase/Crashlytics
@@ -146,7 +146,7 @@ SPEC REPOS:
     - SwiftSoup
 
 SPEC CHECKSUMS:
-  Atributika: 7b3631032cf11f2197b352343e0bd1b783d8ca88
+  Atributika: 1835fb6279271febf85fc630a9a7f9fe588325a3
   Firebase: 919186c8e119dd9372a45fd1dd17a8a942bc1892
   FirebaseAnalytics: 5fa308e1b13f838d0f6dc74719ac2a72e8c5afc4
   FirebaseCore: 8cd4f8ea22075e0ee582849b1cf79d8816506085
@@ -169,6 +169,6 @@ SPEC CHECKSUMS:
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   SwiftSoup: 230991361c5ba249d140161860a3864a28b63860
 
-PODFILE CHECKSUM: 7962942715ba1b6594d81fbd04b1e90cca069f8a
+PODFILE CHECKSUM: 040d77d9f03539e08ee414633186367aa20ded8a
 
 COCOAPODS: 1.7.4

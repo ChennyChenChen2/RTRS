@@ -18,6 +18,11 @@ class MultiPhotoContainerView: UIView {
     
     var maxWidth: CGFloat
     private var imageViews: [UIImageView]
+    private var _intrinsicSize: CGSize = CGSize.zero
+    
+    override var intrinsicContentSize: CGSize {
+        return _intrinsicSize
+    }
     
     required init(urls: [URL], maxWidth: CGFloat) {
         self.imgURLs = urls
@@ -62,7 +67,17 @@ class MultiPhotoContainerView: UIView {
                 weakSelf.imageViews.append(imageView)
                 if i == weakSelf.imgURLs.count - 1 {
                     var prevImageView: UIImageView?
+                    var maxX: CGFloat = 0
+                    var maxY: CGFloat = 0
                     for imageView in weakSelf.imageViews {
+                        if maxX < imageView.frame.maxX {
+                            maxX = imageView.frame.maxX
+                        }
+                        
+                        if maxY < imageView.frame.maxY {
+                            maxY = imageView.frame.maxY
+                        }
+                        
                         if let pIV = prevImageView {
                             imageView.frame.origin.x = pIV.frame.origin.x + pIV.frame.size.width + horizontalSpacing
                         } else {
@@ -72,44 +87,11 @@ class MultiPhotoContainerView: UIView {
                         prevImageView = imageView
                     }
                     
-                    weakSelf.sizeToFit()
+                    weakSelf._intrinsicSize = CGSize(width: maxX, height: maxY)
+                    weakSelf.invalidateIntrinsicContentSize()
+                    print("HERE")
                 }
             }
-            
-//            imageView.pin_setImage(from: url) { [weak self] (result) in
-//                guard let weakSelf = self, result.error == nil else { return }
-//                imageView.sizeToFit()
-//
-//                let aspectRatio = imageView.frame.size.width / imageView.frame.size.height
-//                let newHeight = imageWidth * (1 / aspectRatio)
-//
-//                imageView.frame = CGRect(x: 0, y: 0, width: imageWidth, height: newHeight)
-//                weakSelf.addSubview(imageView)
-//                weakSelf.imageViews.append(imageView)
-//                if i == weakSelf.imgURLs.count - 1 {
-//                    var prevImageView: UIImageView?
-//                    for imageView in weakSelf.imageViews {
-//                        if let pIV = prevImageView {
-//                            imageView.frame.origin.x = pIV.frame.origin.x + pIV.frame.size.width + horizontalSpacing
-//                        } else {
-//                            imageView.frame.origin.x = horizontalSpacing
-//                        }
-//
-//                        prevImageView = imageView
-//                    }
-//
-//                    weakSelf.sizeToFit()
-//                }
-//            }
         }
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-
 }

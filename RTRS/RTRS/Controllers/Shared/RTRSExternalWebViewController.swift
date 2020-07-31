@@ -10,6 +10,16 @@ import UIKit
 import WebKit
 
 class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
+    
+    static func openExternalWebBrowser(_ controller: UIViewController, url: URL, name: String) {
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "RTRSExternalWebViewController") as! RTRSExternalWebViewController
+            vc.name = name
+            vc.url = url
+            controller.present(vc, animated: true, completion: nil)
+        }
+    }
 
     @IBOutlet weak var webViewContainerTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var dismissButton: UIButton!

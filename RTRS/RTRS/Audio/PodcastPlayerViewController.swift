@@ -60,41 +60,20 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         self.saveButton.setImage(RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
         
         if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
-            
             self.displayedViaTabView = false
             if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
                 guard let vm = vm else { return false }
                 return vm.title == self.viewModel.title
             }) {
-//                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
                 let page: Int = indexPath
                 let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
                 DispatchQueue.main.async {
                     self.collectionView.setContentOffset(contentOffset, animated: false)
+                    self.collectionView.reloadData()
                 }
             }
         }
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        
-//        if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
-//            
-//            self.displayedViaTabView = false
-//            if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
-//                guard let vm = vm else { return false }
-//                return vm.title == self.viewModel.title
-//            }) {
-////                self.collectionView.scrollToItem(at: IndexPath(row: indexPath, section: 0), at: .left, animated: false)
-//                let page: Int = indexPath
-//                let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
-//                DispatchQueue.main.async {
-//                    self.collectionView.setContentOffset(contentOffset, animated: false)
-//                }
-//            }
-//        }
-//    }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -210,13 +189,14 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             if let image = podCell.imageView.image {
                 PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
             } else if let imageUrl = singlePodViewModel.imageUrl {
-                podCell.imageView.af.setImage(withURL: imageUrl, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (result) in
-                    if result.data != nil {
-                        if let image = podCell.imageView.image {
-                            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
-                        }
+                podCell.imageView.af.setImage(withURL: imageUrl, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (response) in
+                    if let image = response.value {
+                        podCell.imageView.image = image
+                        PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
                     }
                 }
+            } else {
+                print("PodcastPlayerViewController cannot display image?")
             }
         }
     }
@@ -226,6 +206,8 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         
         if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
             cell.imageView.af.setImage(withURL: imageUrl)
+        } else {
+            print("HERE?")
         }
         
         return cell
@@ -265,53 +247,12 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
 }
 
 class RTRSCollectionViewController: UIViewController, UICollectionViewDelegate {
-//    private var indexOfCellBeforeDragging = 0
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.collectionView.delegate = self
     }
-    
-//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        self.indexOfCellBeforeDragging = self.collectionView.indexOfMajorCell()
-//    }
-//
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//
-//        guard let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-//
-//        // Stop scrollView sliding:
-//        targetContentOffset.pointee = scrollView.contentOffset
-//
-//        // calculate where scrollView should snap to:
-//        let indexOfMajorCell = self.collectionView.indexOfMajorCell()
-//
-//        // calculate conditions:
-//        let dataSourceCount = self.collectionView.numberOfItems(inSection: 0)
-//        let swipeVelocityThreshold: CGFloat = 0.3
-//        let hasEnoughVelocityToSlideToTheNextCell = self.indexOfCellBeforeDragging + 1 < dataSourceCount && velocity.x > swipeVelocityThreshold
-//        let hasEnoughVelocityToSlideToThePreviousCell = self.indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
-//        let majorCellIsTheCellBeforeDragging = indexOfMajorCell == self.indexOfCellBeforeDragging
-//        let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
-//
-//        if didUseSwipeToSkipCell {
-//
-//            let snapToIndex = self.indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
-//            let toValue = layout.itemSize.width * CGFloat(snapToIndex)
-//
-//            // Damping equal 1 => no oscillations => decay animation:
-//            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
-//                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
-//                scrollView.layoutIfNeeded()
-//            }, completion: nil)
-//        } else {
-//            // This is a much better way to scroll to a cell:
-//            let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
-//            self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-//        }
-//    }
-    
 }
 
 class PodcastCollectionViewCell: UICollectionViewCell {
@@ -354,18 +295,6 @@ fileprivate class TimestampFormatter {
         return result
     }
 }
-
-//class RTRSCustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
-//    override func awakeFromNib() {
-//        guard let collectionView = self.collectionView else { return }
-//        self.minimumInteritemSpacing = 0.0;
-//        self.minimumLineSpacing = 0.0;
-//        self.scrollDirection = .horizontal;
-//        self.sectionInset = UIEdgeInsets.zero
-//        let contentInset = collectionView.contentInset
-//        self.itemSize = CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height - 1 - contentInset.top - contentInset.bottom)
-//    }
-//}
 
 extension UICollectionView {
     func indexOfMajorCell() -> Int {

@@ -1,5 +1,5 @@
 //
-//  RTRSProcessPupsViewController.swift
+//  GalleryViewController.swift
 //  RTRS
 //
 //  Created by Jonathan Chen on 12/8/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
+class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -16,18 +16,22 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
     @IBOutlet weak var collectionView: ProcessPupCollectionView!
     @IBOutlet weak var descriptionTextViewHeightConstraint: NSLayoutConstraint!
     
-    var viewModel: RTRSProcessPupsViewModel!
+    var contentType: RTRSScreenType?
+    var viewModel: GalleryViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewModel = (RTRSNavigation.shared.viewModel(for: .processPups) as? RTRSProcessPupsViewModel)
+        guard let type = contentType else { return }
+        self.viewModel = (RTRSNavigation.shared.viewModel(for: type) as? GalleryViewModel)
+        self.navigationItem.title = type.rawValue
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.clipsToBounds = true
 
         self.descriptionTextView.backgroundColor = .black
+        self.descriptionTextView.smartQuotesType = .yes
         self.descriptionTextViewHeightConstraint.constant = self.descriptionTextView.frame.size.height + 20
 
         loadingFinished()
@@ -36,10 +40,10 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
     }
     
     @objc private func loadingFinished() {
-        self.viewModel = RTRSNavigation.shared.viewModel(for: .processPups) as? RTRSProcessPupsViewModel
+        guard let type = contentType else { return }
+        self.viewModel = (RTRSNavigation.shared.viewModel(for: type) as? GalleryViewModel)
         
         self.descriptionTextView.attributedText = self.viewModel.pageDescription
-        self.descriptionTextView.sizeToFit()
         
         if let urls = self.viewModel?.pageDescriptionImageURLs {
             self.imageContainer.maxWidth = self.imageContainer.frame.size.width
@@ -63,15 +67,15 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.processPups.count
+        return self.viewModel.entries.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RTRSProcessPupCollectionViewCell.reuseIdentifier, for: indexPath) as! RTRSProcessPupCollectionViewCell
         
-        let pup = self.viewModel.processPups[indexPath.row]
-        if let url = pup.pupImageURLs?.first {
+        let pup = self.viewModel.entries[indexPath.row]
+        if let url = pup.urls.first {
             cell.clipsToBounds = true
             cell.pupImageView.af.setImage(withURL: url, cacheKey: nil, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"), serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: false, completion: nil)
         }
@@ -80,8 +84,7 @@ class RTRSProcessPupsViewController: UIViewController, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let pup = self.viewModel.processPups[indexPath.row]
+        let pup = self.viewModel.entries[indexPath.row]
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: RTRSStandaloneSlideshowViewController.storyboardId) as! RTRSStandaloneSlideshowViewController

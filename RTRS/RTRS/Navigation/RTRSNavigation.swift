@@ -18,10 +18,13 @@ enum RTRSScreenType: String, Hashable {
     case au = "If Not, Pick Will Convey As Two Second-Rounders"
     case normalColumn = "Sixers Adam Normal Column"
     case normalColumnArticle = "Normal Column Article"
+    case moc = "The Good O'Connor (Mike)"
+    case mocArticle = "MOC Article"
     case auArticle = "AU Article"
     case newsletter = "The Corner Three Newsletter"
     case subscribe = "Subscribe"
     case processPups = "Process Pups"
+    case abbie = "Abbie's Art Gallery"
     case shirts = "T-Shirt Store"
     case events = "Events"
     case lotteryParty = "Lottery Party"
@@ -48,6 +51,10 @@ enum RTRSScreenType: String, Hashable {
             return "Sixers Adam Normal Column"
         case .normalColumnArticle:
             return "Normal Column Article"
+        case .moc:
+            return "The Good O'Connor (Mike)"
+        case .mocArticle:
+            return "MOC Article"
         case .auArticle:
             return "AU Article"
         case .newsletter:
@@ -56,6 +63,8 @@ enum RTRSScreenType: String, Hashable {
             return "Subscribe"
         case .processPups:
             return "Process Pups"
+        case .abbie:
+            return "Abbie's Art Gallery"
         case .shirts:
             return "T-Shirt Store"
         case .events:
