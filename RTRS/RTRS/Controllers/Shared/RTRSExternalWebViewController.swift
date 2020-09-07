@@ -40,7 +40,6 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
         
         self.navigationItem.title = self.name
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         
         self.webView.configuration.allowsInlineMediaPlayback = true
         
@@ -55,6 +54,18 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
         }
         
         self.webView.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 200, right: 0)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        self.navigationController?.navigationBar.barTintColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.tintColor = AppStyles.foregroundColor
+        self.navigationController?.navigationBar.backgroundColor = AppStyles.backgroundColor
+        self.webViewContainer.backgroundColor = AppStyles.backgroundColor
+        self.webView.backgroundColor = AppStyles.backgroundColor
+        self.dismissButton.tintColor = AppStyles.foregroundColor
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {

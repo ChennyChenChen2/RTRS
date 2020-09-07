@@ -15,12 +15,36 @@ class RootTabController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let itemAppearance = UITabBarItem.appearance(whenContainedInInstancesOf: [UITabBar.self])
-        let barAppearance = UITabBar.appearance(whenContainedInInstancesOf: [RootTabController.self])
-        
-        
+        self.styleTabBar()
+        NotificationCenter.default.addObserver(self, selector: #selector(styleTabBar), name: NSNotification.Name.darkModeUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showPlayerView), name: NSNotification.Name.PodcastManagerLoadedNewPod, object: nil)
+    }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return self.navigationController?.preferredStatusBarStyle ?? .default
+    }
+    
+    @objc func styleTabBar() {
+        DispatchQueue.main.async {
+            let barAppearance = UITabBar.appearance(whenContainedInInstancesOf: [RootTabController.self])
+            barAppearance.barTintColor = AppStyles.foregroundColor
+            
+            let itemAppearance = UITabBarItem.appearance(whenContainedInInstancesOf: [UITabBar.self])
+            itemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor], for: .normal)
+            itemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.systemBlue], for: .selected)
+            
+            if let items = self.tabBar.items {
+                for item in items {
+                    item.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor], for: .normal)
+                    item.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.systemBlue], for: .selected)
+                }
+            }
+            
+            self.tabBar.backgroundColor = AppStyles.backgroundColor
+            self.tabBar.barTintColor = AppStyles.backgroundColor
+            self.playerView?.layoutSubviews()
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
     }
     
     @objc func showPlayerView() {

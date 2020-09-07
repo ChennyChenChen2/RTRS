@@ -25,6 +25,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var rateButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var dismissButton: UIButton!
     
     var displayedViaTabView = false
     var viewModel: RTRSSinglePodViewModel!
@@ -57,7 +58,24 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.saveButton.setImage(RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.seekBar.minimumTrackTintColor = .blue
+        self.seekBar.maximumTrackTintColor = .gray
+        
+        self.backButton.tintColor = AppStyles.foregroundColor
+        self.forwardButton.tintColor = AppStyles.foregroundColor
+        self.playButton.tintColor = AppStyles.foregroundColor
+        self.rateButton.setTitleColor(AppStyles.foregroundColor, for: .normal)
+        self.loadingSpinner.color = AppStyles.foregroundColor
+        
+        self.durationLabel.textColor = AppStyles.foregroundColor
+        self.elapsedLabel.textColor = AppStyles.foregroundColor
+        self.dateLabel.textColor = AppStyles.foregroundColor
+        self.titleLabel.textColor = AppStyles.foregroundColor
+        
+        self.saveButton.setImage(AppStyles.likeIcon(for: self.viewModel), for: .normal)
+
+        self.dismissButton.tintColor = AppStyles.foregroundColor
         
         if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
             self.displayedViaTabView = false
@@ -103,11 +121,11 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBAction func saveButtonPresssed(_ sender: Any) {
         if RTRSPersistentStorage.contentIsAlreadySaved(vm: self.viewModel) {
             RTRSPersistentStorage.unsaveContent(self.viewModel)
-            self.saveButton.setImage(#imageLiteral(resourceName: "Heart-No-Fill"), for: .normal)
         } else {
             RTRSPersistentStorage.saveContent(self.viewModel)
-            self.saveButton.setImage(#imageLiteral(resourceName: "Heart-Fill"), for: .normal)
         }
+        
+        self.saveButton.setImage(AppStyles.likeIcon(for: self.viewModel), for: .normal)
     }
     
     @IBAction func seekBarValueChanged(_ sender: Any) {
@@ -181,6 +199,8 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             self.titleLabel.text = podTitle
             self.elapsedLabel.text = "00:00:00"
             self.dateLabel.text = podDate
+            
+            cell.contentView.backgroundColor = AppStyles.backgroundColor
             
             self.loadingSpinner.startAnimating()
             self.loadingSpinner.isHidden = false

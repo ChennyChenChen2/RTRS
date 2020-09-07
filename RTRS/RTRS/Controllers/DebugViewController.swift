@@ -7,54 +7,42 @@
 //
 
 import UIKit
+import MessageUI
 
 enum DebugStrings: String {
     case fcmToken
     case deviceInfo
     case osInfo
-    case sendBugReport
-    case crash
 }
 
-class DebugViewController: UITableViewController {
+class DebugViewController: UITableViewController, MFMailComposeViewControllerDelegate {
     
-    let infoDict: [DebugStrings: String] = [
+    static let bugReportInfoDict: [DebugStrings: String] = [
         .fcmToken: UserDefaults.standard.string(forKey: DebugStrings.fcmToken.rawValue) ?? "none",
-        .deviceInfo: UIDevice.current.localizedModel,
-        .osInfo: UIDevice.current.systemVersion
+        .deviceInfo: "\(UIDevice.current.localizedModel), iOS \(UIDevice.current.systemVersion)",
     ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "debugCell")
+        self.tableView.register(RightDetailCell.self, forCellReuseIdentifier: "debugCell")
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return infoDict.count
-        } else {
-            return 2
-        }
+        return DebugViewController.bugReportInfoDict.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "debugCell", for: indexPath)
         
         if indexPath.section == 0 {
-            let keys = Array<DebugStrings>(infoDict.keys)
+            let keys = Array<DebugStrings>(DebugViewController.bugReportInfoDict.keys)
             let key = keys[indexPath.row]
             cell.textLabel?.text = key.rawValue
-            cell.detailTextLabel?.text = infoDict[key]
-        } else {
-            if indexPath.row == 0 {
-                cell.textLabel?.text = "Submit bug report"
-            } else {
-                cell.textLabel?.text = "CRASH"
-            }
+            cell.detailTextLabel?.text = DebugViewController.bugReportInfoDict[key]
         }
         
         return cell
@@ -62,12 +50,31 @@ class DebugViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            let keys = Array<DebugStrings>(infoDict.keys)
-            
-            
+            let keys = Array<DebugStrings>(DebugViewController.bugReportInfoDict.keys)
+            let value = keys[indexPath.row]
+            UIPasteboard.general.string = value.rawValue
         } else {
-            
+            if indexPath.row == 0 {
+                if MFMailComposeViewController.canSendMail() {
+                    let mail = MFMailComposeViewController()
+                    mail.mailComposeDelegate = self
+                    mail.setToRecipients(["rtrsapp@gmail.com"])
+                    mail.setMessageBody("<p>You're so awesome!</p>", isHTML: true)
+
+                    present(mail, animated: true)
+                }
+            }
         }
     }
     
+}
+
+class RightDetailCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .value1, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

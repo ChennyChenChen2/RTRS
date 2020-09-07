@@ -25,5 +25,6 @@ extension Notification.Name {
     static let aboutLoadedNotificationName = Notification.Name("aboutLoaded")
     static let moreLoadedNotificationName = Notification.Name("moreLoaded")
     static let processPupsLoadedNotificationName = Notification.Name("processPupsLoaded")
+    static let goodDogClubLoadedNotificationName = Notification.Name("goodDogClubLoaded")
     static let abbieLoadedNotificationName = Notification.Name("abbieLoaded")
 }

@@ -20,7 +20,7 @@ protocol GalleryViewModel: RTRSViewModel {
 protocol GallerySingleEntry: NSObject {
     var urls: [URL] { get set }
     var name: String? { get set }
-    var entryDescription: NSAttributedString? { get set }
+    var entryDescriptionHTML: String? { get set }
 }
 
 class RTRSAbbieArtGalleryViewModel: NSObject, GalleryViewModel {
@@ -79,7 +79,7 @@ class RTRSAbbieArtGalleryViewModel: NSObject, GalleryViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Wroten")
+        return #imageLiteral(resourceName: "Joel")
     }
     
     func pageUrl() -> URL? {
@@ -116,7 +116,7 @@ class RTRSAbbieArtGalleryViewModel: NSObject, GalleryViewModel {
 
 class AbbieSingleEntry: NSObject, NSCoding, GallerySingleEntry {
     var urls = [URL]()
-    var entryDescription: NSAttributedString?
+    var entryDescriptionHTML: String?
     var name: String?
     
     private enum CodingKeys: String, CodingKey {
@@ -125,22 +125,22 @@ class AbbieSingleEntry: NSObject, NSCoding, GallerySingleEntry {
         case name = "name"
     }
     
-    init(imageURLs: [URL]?, description: NSAttributedString?, name: String?) {
+    init(imageURLs: [URL]?, description: String?, name: String?) {
         self.urls = imageURLs ?? [URL]()
-        self.entryDescription = description
+        self.entryDescriptionHTML = description
         self.name = name
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let pupImageURLs = aDecoder.decodeObject(forKey: CodingKeys.imageUrls.rawValue) as? [URL]
-        let pupDescription = aDecoder.decodeObject(forKey: CodingKeys.description.rawValue) as? NSAttributedString
+        let pupDescription = aDecoder.decodeObject(forKey: CodingKeys.description.rawValue) as? String
         let pupName = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         self.init(imageURLs: pupImageURLs, description: pupDescription, name: pupName)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.urls, forKey: CodingKeys.imageUrls.rawValue)
-        aCoder.encode(self.entryDescription, forKey: CodingKeys.description.rawValue)
+        aCoder.encode(self.entryDescriptionHTML, forKey: CodingKeys.description.rawValue)
         aCoder.encode(self.name, forKey: CodingKeys.name.rawValue)
     }
 }

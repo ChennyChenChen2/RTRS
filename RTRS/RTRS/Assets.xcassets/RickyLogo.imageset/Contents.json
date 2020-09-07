@@ -1,13 +1,33 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "filename" : "Screen Shot 2019-04-17 at 9.29.05 PM.pdf"
+      "filename" : "Screen Shot 2019-04-17 at 9.29.05 PM.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "light"
+        }
+      ],
+      "filename" : "convert.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Screen Shot 2019-04-17 at 9.29.05 PM-1.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   },
   "properties" : {
     "preserves-vector-representation" : true

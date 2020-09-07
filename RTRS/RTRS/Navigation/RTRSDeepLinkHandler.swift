@@ -167,6 +167,31 @@ class RTRSDeepLinkHandler: NSObject {
             } else {
                 RTRSErrorHandler.showError(in: navController, type: .dataNotAvailable, completion: nil)
             }
+        } else if url.path.contains("the-good-oconnor-mike") {
+            if let vm = RTRSNavigation.shared.viewModel(for: .moc) as? MultiArticleViewModel {
+                let articles = vm.content.filter({ (vm) -> Bool in
+                    guard let articleVm = vm as? SingleArticleViewModel, let articleUrl = articleVm.baseURL else { return false }
+                    let vmPath = articleUrl.lastPathComponent
+                    let urlPath = url.lastPathComponent
+                    
+                    return vmPath == urlPath
+                })
+                
+                if articles.count > 0, let article = articles.first as? SingleArticleViewModel {
+                    DispatchQueue.main.async {
+                        let vc = storyboard.instantiateViewController(withIdentifier: "SingleArticle") as! ArticleViewController
+                        vc.viewModel = article
+                        vc.column = "The Good O'Connor (Mike)"
+                        
+                        navController.present(vc, animated: true
+                            , completion: nil)
+                    }
+                } else {
+                    RTRSExternalWebViewController.openExternalWebBrowser(navController, url: payload.baseURL, name: payload.title)
+                }
+            } else {
+                RTRSErrorHandler.showError(in: navController, type: .dataNotAvailable, completion: nil)
+            }
         } else if url.path.contains("normal-column") {
             if let vm = RTRSNavigation.shared.viewModel(for: .normalColumn) as? MultiArticleViewModel {
                 let articles = vm.content.filter({ (vm) -> Bool in

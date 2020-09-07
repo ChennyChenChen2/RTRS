@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { (success, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (success, error) in
             
         }
     }

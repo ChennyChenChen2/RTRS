@@ -77,7 +77,6 @@ class RTRSOperation: Operation {
     }
     
     override func main() {
-//        guard let firstUrl = self.urls.first else { return }
         print("RTRS beginning to load \(pageName)")
             
         func retrieveSavedDataIfAvailable() {
@@ -150,7 +149,7 @@ class RTRSOperation: Operation {
                                 var viewModel: RTRSViewModel?
                                 var deferredCompletion = false
                                
-                                if type == .au || type == .podcasts || type == .processPups || type == .normalColumn || type == .moc {
+                                if type == .au || type == .podcasts || type == .normalColumn || type == .moc {
                                     viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated)
                                     deferredCompletion = true
                                 } else {
@@ -202,10 +201,12 @@ fileprivate class RTRSViewModelFactory {
             return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
         case RTRSScreenType.processPups.rawValue:
             return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
+        case RTRSScreenType.goodDogClub.rawValue:
+            return RTRSGoodBoyClubViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
         case RTRSScreenType.abbie.rawValue:
             return RTRSAbbieArtGalleryViewModel(doc: doc, entries: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
         case RTRSScreenType.about.rawValue:
-            return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, body: nil)
+            return RTRSAboutViewModel(doc: doc, name: name, imageUrl: nil, bodyHTML: nil)
         case RTRSScreenType.newsletter.rawValue:
             guard let url = urls?.first else { return nil }
             return RTRSNewsletterViewModel(name: name, url: url)

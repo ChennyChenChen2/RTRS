@@ -10,11 +10,11 @@ import UIKit
 
 class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
 
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var imageContainer: MultiPhotoContainerView!
-    @IBOutlet weak var collectionView: ProcessPupCollectionView!
-    @IBOutlet weak var descriptionTextViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var descriptionTextView: UITextView?
+    @IBOutlet weak var imageContainer: MultiPhotoContainerView?
+    @IBOutlet weak var collectionView: ProcessPupCollectionView?
+    @IBOutlet weak var galleryTitleLabel: UILabel!
+    @IBOutlet weak var imageContainerHeightConstraint: NSLayoutConstraint!
     
     var contentType: RTRSScreenType?
     var viewModel: GalleryViewModel!
@@ -26,44 +26,72 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.viewModel = (RTRSNavigation.shared.viewModel(for: type) as? GalleryViewModel)
         self.navigationItem.title = type.rawValue
         
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.clipsToBounds = true
+        self.collectionView?.delegate = self
+        self.collectionView?.dataSource = self
+        self.collectionView?.clipsToBounds = true
 
-        self.descriptionTextView.backgroundColor = .black
-        self.descriptionTextView.smartQuotesType = .yes
-        self.descriptionTextViewHeightConstraint.constant = self.descriptionTextView.frame.size.height + 20
+        self.descriptionTextView?.smartQuotesType = .yes
 
         loadingFinished()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .processPupsLoadedNotificationName, object: nil)
+        switch contentType {
+        case .abbie:
+            NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .abbieLoadedNotificationName, object: nil)
+        case .processPups:
+            NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .processPupsLoadedNotificationName, object: nil)
+        case .goodDogClub:
+            NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .processPupsLoadedNotificationName, object: nil)
+        default: break
+        }
     }
     
     @objc private func loadingFinished() {
         guard let type = contentType else { return }
         self.viewModel = (RTRSNavigation.shared.viewModel(for: type) as? GalleryViewModel)
         
-        self.descriptionTextView.attributedText = self.viewModel.pageDescription
+        self.descriptionTextView?.attributedText = self.viewModel.pageDescription
         
-        if let urls = self.viewModel?.pageDescriptionImageURLs {
-            self.imageContainer.maxWidth = self.imageContainer.frame.size.width
-            self.imageContainer.imgURLs = urls
+        if let urls = self.viewModel?.pageDescriptionImageURLs, let imageContainer = self.imageContainer {
+            imageContainer.maxWidth = imageContainer.frame.size.width
+            self.imageContainer?.imgURLs = urls
         }
         
-        self.collectionView.reloadData()
+        self.collectionView?.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationController?.navigationBar.tintColor = AppStyles.foregroundColor
+        self.navigationController?.navigationBar.barTintColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        
+        self.view.backgroundColor = AppStyles.backgroundColor
+        
+        self.galleryTitleLabel.textColor = AppStyles.foregroundColor
+        
+        self.descriptionTextView?.backgroundColor = AppStyles.backgroundColor
+        self.descriptionTextView?.textColor = AppStyles.foregroundColor
+        self.descriptionTextView?.linkTextAttributes = [.foregroundColor: AppStyles.foregroundColor]
+        
+        self.imageContainer?.backgroundColor = AppStyles.backgroundColor
+        self.collectionView?.backgroundColor = AppStyles.backgroundColor
+        
+        if PodcastManager.shared.playerViewIsShowing {
+            self.collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        let contentHeight: CGFloat = self.descriptionTextView.frame.size.height + 8.0 + self.imageContainer.frame.size.height + 8.0 + self.collectionView.frame.size.height
-        self.scrollView.contentSize = CGSize(width: self.view.frame.size.width, height: contentHeight + 150.0)
+        
+        if self.viewModel.pageDescription == nil {
+            self.descriptionTextView?.removeFromSuperview()
+        }
+        
+        if self.viewModel.pageDescriptionImageURLs == nil || self.viewModel.pageDescriptionImageURLs!.count == 0 {
+            self.imageContainerHeightConstraint?.constant = 0
+            self.imageContainer?.removeFromSuperview()
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,12 +117,10 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: RTRSStandaloneSlideshowViewController.storyboardId) as! RTRSStandaloneSlideshowViewController
         vc.viewModel = self.viewModel
-        vc.currentPup = pup
+        vc.currentEntry = pup
         
         self.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true) {
-            
-        }
+        self.present(vc, animated: true, completion: nil)
     }
 }
 

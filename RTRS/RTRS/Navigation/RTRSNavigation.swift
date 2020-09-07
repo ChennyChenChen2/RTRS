@@ -24,6 +24,7 @@ enum RTRSScreenType: String, Hashable {
     case newsletter = "The Corner Three Newsletter"
     case subscribe = "Subscribe"
     case processPups = "Process Pups"
+    case goodDogClub = "By Nature Good Boy Good Girl Club"
     case abbie = "Abbie's Art Gallery"
     case shirts = "T-Shirt Store"
     case events = "Events"
@@ -32,55 +33,6 @@ enum RTRSScreenType: String, Hashable {
     case advertise = "Advertise"
     case more = "More"
     case saved = "Saved"
-    
-    var rawValue: String {
-        switch self {
-        case .home:
-            return "Home"
-        case .about:
-            return "About"
-        case .podcasts:
-            return "The Pod"
-        case .pod:
-            return "A Pod"
-        case .podSource:
-            return "Pod Source"
-        case .au:
-            return "If Not, Pick Will Convey As Two Second-Rounders"
-        case .normalColumn:
-            return "Sixers Adam Normal Column"
-        case .normalColumnArticle:
-            return "Normal Column Article"
-        case .moc:
-            return "The Good O'Connor (Mike)"
-        case .mocArticle:
-            return "MOC Article"
-        case .auArticle:
-            return "AU Article"
-        case .newsletter:
-            return "The Corner Three Newsletter"
-        case .subscribe:
-            return "Subscribe"
-        case .processPups:
-            return "Process Pups"
-        case .abbie:
-            return "Abbie's Art Gallery"
-        case .shirts:
-            return "T-Shirt Store"
-        case .events:
-            return "Events"
-        case .lotteryParty:
-            return "Lottery Party"
-        case .contact:
-            return "Contact"
-        case .advertise:
-            return "Advertise"
-        case .more:
-            return "More"
-        case .saved:
-            return "Saved"
-        }
-    }
 }
 
 class RTRSNavigation: NSObject {

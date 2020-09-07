@@ -29,18 +29,18 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
     enum CodingKeys: String {
         case name = "Name"
         case image = "Image"
-        case body = "Body"
+        case bodyHTML = "BodyHTML"
     }
 
     var name: String?
     var imageUrl: URL?
-    var body: NSAttributedString?
+    var bodyHTML: String?
     
-    init(doc: Document?, name: String?, imageUrl: URL?, body: NSAttributedString?) {
+    init(doc: Document?, name: String?, imageUrl: URL?, bodyHTML: String?) {
         super.init()
         self.name = name
         self.imageUrl = imageUrl
-        self.body = body
+        self.bodyHTML = bodyHTML
         
         self.extractDataFromDoc(doc: doc, urls: nil)
     }
@@ -48,21 +48,21 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
     required convenience init?(coder aDecoder: NSCoder) {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? URL
-        let body = aDecoder.decodeObject(forKey: CodingKeys.body.rawValue) as? NSAttributedString
+        let bodyHTML = aDecoder.decodeObject(forKey: CodingKeys.bodyHTML.rawValue) as? String
         
-        self.init(doc: nil, name: name, imageUrl: imageUrl, body: body)
+        self.init(doc: nil, name: name, imageUrl: imageUrl, bodyHTML: bodyHTML)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.name, forKey: CodingKeys.name.rawValue)
         aCoder.encode(self.imageUrl, forKey: CodingKeys.image.rawValue)
-        aCoder.encode(self.body, forKey: CodingKeys.body.rawValue)
+        aCoder.encode(self.bodyHTML, forKey: CodingKeys.bodyHTML.rawValue)
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
         guard let doc = doc else { return }
         do {
-            let bodyText = NSMutableAttributedString(string: "")
+            var bodyText = ""
             let contentDivElements = try doc.getElementsByClass("sqs-block html-block sqs-block-html")
             
             for element in contentDivElements {
@@ -74,14 +74,8 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                 let pElems = try element.getElementsByTag("p")
                 for pElem in pElems {
                     if !pElem.description.contains("Squarespace") && !pElem.description.contains("contact us") {
-                        let attrString = NSAttributedString.attributedStringFrom(element: pElem)
-                        let mutableString = NSMutableAttributedString(attributedString: attrString)
-                        let range = NSRange(location: 0, length: mutableString.length)
-                        mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
-                        mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
-                        
-                        bodyText.append(mutableString)
-                        bodyText.append(NSAttributedString(string: "\n"))
+                        bodyText.append(try pElem.html())
+                        bodyText.append("</br></br>")
                     }
                 }
             }
@@ -89,17 +83,8 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
             let jonHTML = """
                 <p>Jon Chen is the developer of this app. He works as an app developer and musician in New York City. You can follow him on Twitter <strong><a target="_blank" href="http://www.twitter.com/ChennyChen_Chen">@ChennyChen_Chen</a>.</strong></p>
             """
-            let jonDoc = try SwiftSoup.parse(jonHTML)
-            if let pElem = try jonDoc.select("p").first() {
-                let attrString = NSAttributedString.attributedStringFrom(element: pElem)
-                let mutableString = NSMutableAttributedString(attributedString: attrString)
-                let range = NSRange(location: 0, length: mutableString.length)
-                mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
-                mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
-                bodyText.append(mutableString)
-            }
             
-            self.body = bodyText
+            self.bodyHTML = bodyText + jonHTML
             
             if let divElement = try doc.getElementsByClass("image-block-wrapper").first(),
                 let imgElement = try divElement.getElementsByTag("img").first() {
@@ -108,8 +93,8 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                     self.imageUrl = imageUrl
                 }
             }
-        } catch {
-            print("Error parsing about view model")
+        } catch let error {
+            print("Error parsing about view model: \(error)")
         }
     }
 }

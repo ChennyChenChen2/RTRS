@@ -66,7 +66,8 @@
                     "https://www.rightstorickysanchez.com/podcast?page=15",
                     "https://www.rightstorickysanchez.com/podcast?page=16",
                     "https://www.rightstorickysanchez.com/podcast?page=17",
-                    "https://www.rightstorickysanchez.com/podcast?page=18"]
+                    "https://www.rightstorickysanchez.com/podcast?page=18",
+                    "https://www.rightstorickysanchez.com/podcast?page=19"]
         },
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
@@ -98,8 +99,13 @@
         },
         {
             "name": "Process Pups",
-            "link": "https://www.rightstorickysanchez.com/processpups",
+            "link": "https://www.rightstorickysanchez.com/process-pups",
             "type": "contentlist",
+        },
+        {
+            "name": "By Nature Good Boy Good Girl Club",
+            "link": "https://www.rightstorickysanchez.com/good-boygirl-club",
+            "type": "contentlist"
         },
         {
             "name": "T-Shirt Store",
@@ -132,7 +138,6 @@
     },
     "moreItems": [
         "About",
-        "Process Pups",
         "Abbie's Art Gallery",
         "The Corner Three Newsletter",
         "T-Shirt Store"]

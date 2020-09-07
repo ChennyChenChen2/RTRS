@@ -27,118 +27,26 @@ class RTRSProcessPupsViewModel: NSObject, GalleryViewModel {
         self.pageDescriptionImageURLs = [URL]()
         
         do {
-            if let pageWrapperElem = try theDoc.getElementById("pageWrapper") {
-                let rowElems = try pageWrapperElem.getElementsByClass("sqs-block html-block sqs-block-html")
-                let buffer = NSMutableAttributedString()
-                for i in 0..<rowElems.count {
-                    let row = rowElems[i]
+            let slideElems = try theDoc.getElementsByClass("slide")
+            for slide in slideElems {
+                guard let imgElem = try? slide.getElementsByTag("img"),
+                let imgURLString = try? imgElem.attr("data-src"),
+                    let imgURL = URL(string: imgURLString) else { continue }
+                
+                var name: String?
+                var description: String?
+                
+                if let metaElem = try? slide.getElementsByClass("slide-meta").first() {
+                    if let titleElem = try? metaElem.getElementsByClass("title").first() {
+                        name = try titleElem.text()
+                    }
                     
-                    if i == 0 {
-                        // First element, we need description and image URLs
-                        let pElems = try row.getElementsByTag("p")
-
-                        let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
-                            let attrString = NSAttributedString.attributedStringFrom(element: elem)
-                            let mutableString = NSMutableAttributedString(attributedString: attrString)
-                            let range = NSRange(location: 0, length: mutableString.length)
-                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
-                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
-                            return mutableString
-                        })
-                        for string in aStrings {
-                            buffer.append(string)
-                        }
-                        
-                        if let parent = row.parent() {
-                            let imgElems = try parent.getElementsByTag("img")
-                            let filteredElems = imgElems.filter { (elem) -> Bool in
-                                return elem.hasClass("thumb-image")
-                            }
-                            for imgElem in filteredElems {
-                                if let url = URL(string: try imgElem.attr("data-src")) {
-                                    self.pageDescriptionImageURLs?.append(url)
-                                }
-                            }
-                        }
-                    } else if  i == 1 {
-                        let pElems = try row.getElementsByTag("p")
-                        let aStrings = pElems.compactMap({ (elem) -> NSAttributedString? in
-                            let attrString = NSAttributedString.attributedStringFrom(element: elem)
-                            let mutableString = NSMutableAttributedString(attributedString: attrString)
-                            let range = NSRange(location: 0, length: mutableString.length)
-                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
-                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
-                            return mutableString
-                            })
-                        for string in aStrings {
-                            buffer.append(string)
-                        }
-                        self.pageDescription = buffer
-                        continue
-                    } else {
-                        var imgURLs = [URL]()
-                        var name: String?
-                        let description = NSMutableAttributedString()
-                        
-                        let parents = row.parents()
-                        var parentDiv: Element?
-                        
-                        for p in parents {
-                            if try p.className() == "row sqs-row" {
-                                parentDiv = p
-                                break
-                            }
-                        }
-                        
-                        if let parent = parentDiv {
-                            let imgElems = try parent.getElementsByTag("img")
-                            let filteredElems = imgElems.filter { (elem) -> Bool in
-                                return elem.hasClass("thumb-image")
-                            }
-                            for imgElem in filteredElems {
-                                if let url = URL(string: try imgElem.attr("data-src")) {
-                                    imgURLs.append(url)
-                                }
-                            }
-                        }
-                        
-                        var nElem: Element?
-                        if let e = try row.getElementsByTag("h3").first() {
-                            nElem = e
-                        } else if let e = try row.getElementsByTag("h2").first() {
-                            nElem = e
-                        } else if let e = try row.getElementsByTag("h1").first() {
-                            nElem = e
-                        }
-                        
-                        if let nameElem = nElem {
-                            name = try nameElem.text()
-                        }
-                        
-                        let descriptionElems = try row.getElementsByTag("p")
-                        for descriptionElem in descriptionElems {
-                            let brElems = try descriptionElem.select("br")
-                            // Replace <br> with spaces
-                            for brElem in brElems {
-                                let pHTML = "<p> </p>"
-                                let pDoc = try SwiftSoup.parse(pHTML)
-                                let pElem = try pDoc.select("p").first()!
-                                try brElem.replaceWith(pElem)
-                            }
-                            
-                            let attrString = NSAttributedString.attributedStringFrom(element: descriptionElem)
-                            let mutableString = NSMutableAttributedString(attributedString: attrString)
-                            let range = NSRange(location: 0, length: mutableString.length)
-                            mutableString.addAttribute(.foregroundColor, value: UIColor.white, range: range)
-                            mutableString.addAttribute(.font, value: Utils.defaultFont, range: range)
-                            description.append(mutableString)
-                        }
-                        
-                        if let theName = name {
-                            self.entries.append(ProcessPup(imageURLs: imgURLs, description: description, name: theName))
-                        }
+                    if let descriptionElem = try? metaElem.getElementsByClass("description").first() {
+                        description = descriptionElem.description
                     }
                 }
+                
+                self.entries.append(ProcessPup(imageURLs: [imgURL], descriptionHTML: description, name: name))
             }
         } catch let error {
             print("Error parsing Process Pups View Model: \(error.localizedDescription)")
@@ -158,7 +66,7 @@ class RTRSProcessPupsViewModel: NSObject, GalleryViewModel {
     }
     
     func pageImage() -> UIImage {
-        return #imageLiteral(resourceName: "Joel")
+        return #imageLiteral(resourceName: "ProcessPups")
     }
     
     func pageUrl() -> URL? {
@@ -199,7 +107,7 @@ class RTRSProcessPupsViewModel: NSObject, GalleryViewModel {
 class ProcessPup: NSObject, NSCoding, GallerySingleEntry {
     
     var urls = [URL]()
-    var entryDescription: NSAttributedString?
+    var entryDescriptionHTML: String?
     var name: String?
     
     private enum CodingKeys: String, CodingKey {
@@ -208,22 +116,22 @@ class ProcessPup: NSObject, NSCoding, GallerySingleEntry {
         case pupName = "pupName"
     }
     
-    init(imageURLs: [URL]?, description: NSAttributedString?, name: String?) {
+    init(imageURLs: [URL]?, descriptionHTML: String?, name: String?) {
         self.urls = imageURLs ?? [URL]()
-        self.entryDescription = description
+        self.entryDescriptionHTML = descriptionHTML
         self.name = name
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         let pupImageURLs = aDecoder.decodeObject(forKey: CodingKeys.pupImageURLs.rawValue) as? [URL]
-        let pupDescription = aDecoder.decodeObject(forKey: CodingKeys.pupDescription.rawValue) as? NSAttributedString
+        let pupDescription = aDecoder.decodeObject(forKey: CodingKeys.pupDescription.rawValue) as? String
         let pupName = aDecoder.decodeObject(forKey: CodingKeys.pupName.rawValue) as? String
-        self.init(imageURLs: pupImageURLs, description: pupDescription, name: pupName)
+        self.init(imageURLs: pupImageURLs, descriptionHTML: pupDescription, name: pupName)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.urls, forKey: CodingKeys.pupImageURLs.rawValue)
-        aCoder.encode(self.entryDescription, forKey: CodingKeys.pupDescription.rawValue)
+        aCoder.encode(self.entryDescriptionHTML, forKey: CodingKeys.pupDescription.rawValue)
         aCoder.encode(self.name, forKey: CodingKeys.pupName.rawValue)
     }
 }

@@ -27,9 +27,8 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         button.setImage(#imageLiteral(resourceName: "RickyLogoCutout"), for: .normal)
         button.addTarget(self, action: #selector(openRefreshView), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit
-        button.frame.size = CGSize(width: 50.0, height: 50.0)
+        button.frame.size = CGSize(width: 40.0, height: 40.0)
         self.navigationItem.titleView = button
-        self.view.backgroundColor = .black
         
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         
@@ -40,6 +39,22 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.backgroundColor = AppStyles.backgroundColor
+        
+        let barAppearance = UINavigationBar.appearance(whenContainedInInstancesOf: [RTRSHomeViewController.self])
+        barAppearance.barTintColor = AppStyles.backgroundColor
+        
+        self.navigationController?.navigationBar.tintColor = AppStyles.backgroundColor
+        self.tableView.reloadData()
+        self.setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return self.navigationController?.preferredStatusBarStyle ?? .default
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,6 +138,9 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     @objc private func openRefreshView() {
         guard let titleView = self.navigationItem.titleView else { return }
         let popController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "refreshPopover") as! RefreshPopoverViewController
+        popController.view.backgroundColor = AppStyles.backgroundColor
+        popController.loadingLabel.textColor = AppStyles.foregroundColor
+        
         popController.modalPresentationStyle = .popover
         
         popController.popoverPresentationController?.permittedArrowDirections = .any
@@ -164,6 +182,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
             if let url = homeItem.imageUrl {
                 if let text = homeItem.text {
                     cell.titleLabel.text = text
+                    cell.titleLabel.textColor = AppStyles.foregroundColor
                 } else {
                     cell.titleLabel.text = ""
                 }
@@ -171,6 +190,8 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                 cell.homeImageView.af.setImage(withURL: url as URL)
             }
         }
+        
+        cell.backgroundColor = AppStyles.backgroundColor
         
         return cell
     }

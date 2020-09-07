@@ -34,8 +34,11 @@ extension NSAttributedString {
      */
     
     static func attributedStringFrom(element: Element) -> NSAttributedString {
-        let html = element.description
-        guard let data = html.data(using: .utf8, allowLossyConversion: false) else { return NSAttributedString(string: html) }
+        return attributedStringFrom(htmlString: element.description)
+    }
+    
+    static func attributedStringFrom(htmlString: String) -> NSAttributedString {
+        guard let data = htmlString.data(using: .utf8, allowLossyConversion: false) else { return NSAttributedString(string: htmlString) }
         
         let attrString = try! NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
         return attrString

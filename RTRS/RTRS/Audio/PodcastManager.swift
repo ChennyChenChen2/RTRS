@@ -29,6 +29,10 @@ class PodcastManager: NSObject {
     var currentPodVC: PodcastPlayerViewController?
     var tabPlayerView: TabBarPlayerView?
     
+    var playerViewIsShowing: Bool {
+        return self.tabPlayerView != nil
+    }
+    
     var isPlaying: Bool {
         if let player = self.player {
             return player.rate > 0
@@ -240,8 +244,8 @@ class TabBarPlayerView: UIView {
         self.dateLabel = MarqueeLabel()
         
         super.init(frame: frame)
-        self.backgroundColor = .black
-        self.layer.borderColor = UIColor.darkGray.cgColor
+        self.backgroundColor = AppStyles.backgroundColor
+        self.layer.borderColor = AppStyles.foregroundColor.cgColor
         self.layer.borderWidth = 1.0
     }
     
@@ -251,6 +255,9 @@ class TabBarPlayerView: UIView {
     
     override func layoutSubviews() {
         let manager = PodcastManager.shared
+        
+        self.backgroundColor = AppStyles.backgroundColor
+        self.layer.borderColor = AppStyles.foregroundColor.cgColor
         if let title = manager.title, let dateString = manager.dateString {
             for subview in self.subviews {
                 subview.removeFromSuperview()
@@ -258,7 +265,7 @@ class TabBarPlayerView: UIView {
             
             self.titleLabel = MarqueeLabel()
             self.titleLabel.text = "\(title). "
-            self.titleLabel.textColor = .white
+            self.titleLabel.textColor = AppStyles.foregroundColor
             self.titleLabel.font = Utils.defaultFontBold
             self.titleLabel.sizeToFit()
             self.titleLabel.frame.size.width = self.frame.size.width * 0.75
@@ -266,7 +273,7 @@ class TabBarPlayerView: UIView {
             
             self.dateLabel = MarqueeLabel()
             self.dateLabel.text = dateString
-            self.dateLabel.textColor = .white
+            self.dateLabel.textColor = AppStyles.foregroundColor
             self.dateLabel.font = Utils.defaultFont
             self.dateLabel.sizeToFit()
             self.dateLabel.frame.size.width = self.frame.size.width * 0.75
@@ -276,6 +283,7 @@ class TabBarPlayerView: UIView {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
             self.playPauseButton.frame = CGRect(x: self.frame.size.width - 50, y: (self.frame.size.height / 2) - 12, width: 25, height: 25)
             self.playPauseButton.addTarget(self, action: #selector(playerViewPlayPauseAction), for: .touchUpInside)
+            self.playPauseButton.tintColor = AppStyles.foregroundColor
             
             self.addSubview(self.titleLabel)
             self.addSubview(self.dateLabel)

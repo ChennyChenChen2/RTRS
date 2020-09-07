@@ -10,7 +10,6 @@ import UIKit
 import WebKit
 
 class ArticleViewController: UIViewController, WKNavigationDelegate {
-    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -21,6 +20,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     
     var dismissButton: UIButton?
     var saveButton: UIBarButtonItem!
+    var textSizeButton: UIBarButtonItem!
     var viewModel: SingleArticleViewModel?
     var column: String?
     var webView: WKWebView?
@@ -33,13 +33,15 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         guard let vm = self.viewModel, let title = vm.title, let column = column else { return }
         AnalyticsUtils.logViewArticle(title, column: column)
         
-        self.view.backgroundColor = .black
-        self.scrollView.backgroundColor = .black
         self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
         
-        let button = UIBarButtonItem(image: RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) ? #imageLiteral(resourceName: "Heart-Fill") : #imageLiteral(resourceName: "Heart-No-Fill"), style: .plain, target: self, action: #selector(saveAction))
-        self.saveButton = button
-        self.navigationItem.rightBarButtonItem = saveButton
+        let saveButton = UIBarButtonItem(image: AppStyles.likeIcon(for: vm), style: .plain, target: self, action: #selector(saveAction))
+        self.saveButton = saveButton
+        
+        let textSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextSize-Light"), style: .plain, target: self, action: #selector(textSizeChangeAction))
+        self.textSizeButton = textSizeButton
+        
+        self.navigationItem.rightBarButtonItems = [saveButton, textSizeButton]
         
         if let url = self.viewModel?.imageUrl {
             self.imageView.af.setImage(withURL: url)
@@ -61,9 +63,6 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         self.webView?.translatesAutoresizingMaskIntoConstraints = false
         self.webView?.navigationDelegate = self
         self.webViewContainer.addSubview(self.webView!)
-        if let htmlString = self.viewModel?.htmlString, let baseURL = self.viewModel?.baseURL {
-            self.webView?.loadHTMLString(htmlString, baseURL: baseURL)
-        }
         
         if let webView = self.webView {
             self.webViewContentObservation = webView.observe(\WKWebView.scrollView.contentSize, changeHandler: { [weak self] (object, change) in
@@ -87,6 +86,71 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         } else {
             self.scrollViewTopConstraint.constant = 0
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.webViewContainer.backgroundColor = AppStyles.backgroundColor
+        self.scrollView.backgroundColor = AppStyles.backgroundColor
+        
+        self.dismissButton?.tintColor = AppStyles.foregroundColor
+        self.textSizeButton.tintColor = AppStyles.foregroundColor
+        
+        if let vm = self.viewModel {
+            self.saveButton.image = AppStyles.likeIcon(for: vm)
+        }
+        
+        self.titleLabel.textColor = AppStyles.foregroundColor
+        self.titleLabel.backgroundColor = AppStyles.backgroundColor
+        self.titleLabel.layer.borderColor = AppStyles.foregroundColor.cgColor
+        self.titleLabel.layer.backgroundColor = AppStyles.backgroundColor.cgColor
+        
+        if UserDefaults.standard.double(forKey: Font.textSizeDefaultsKey) == 0 {
+            UserDefaults.standard.set(TextSize.medium.size, forKey: Font.textSizeDefaultsKey)
+        }
+        
+        self.loadContent()
+    }
+    
+    private func htmlWithCSS(_ templateHTML: String) -> String {
+        let cssPlaceholder = "{{CSS_PLACEHOLDER}}"
+        var cssString = ""
+        
+        if let path = Bundle.main.path(forResource: "RTRS", ofType: "css"), let cssFileContents = try? String(contentsOfFile: path) {
+            let fontSizePlaceholder = "{{FONT_SIZE_PLACEHOLDER}}"
+            let fontSize = "\(UserDefaults.standard.double(forKey: Font.textSizeDefaultsKey))"
+            var css = cssFileContents.replacingOccurrences(of: fontSizePlaceholder, with: fontSize)
+            
+            let bgColorPlaceholder = "{{BG_COLOR_PLACEHOLDER}}"
+            let bgColor = AppStyles.darkModeEnabled ? "black" : "white"
+            css = css.replacingOccurrences(of: bgColorPlaceholder, with: bgColor)
+            
+            let fontColorPlaceholder = "{{FONT_COLOR_PLACEHOLDER}}"
+            let fontColor = AppStyles.darkModeEnabled ? "white" : "black"
+            css = css.replacingOccurrences(of: fontColorPlaceholder, with: fontColor)
+            
+            cssString = css
+        } else {
+            // This is our fault...
+            print("Cannot find RTRS.css")
+        }
+        
+        return templateHTML.replacingOccurrences(of: cssPlaceholder, with: cssString)
+    }
+    
+    private func loadContent() {
+        if let htmlString = self.viewModel?.htmlString, let baseURL = self.viewModel?.baseURL {
+            let htmlPlusCSS = htmlWithCSS(htmlString)
+            self.webView?.loadHTMLString(htmlPlusCSS, baseURL: baseURL)
+        }
+    }
+    
+    @objc private func contentSizeDidChange(_ obj: Any) {
+        self.loadContent()
     }
     
     @objc func dismissAction() {
@@ -94,6 +158,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         self.webViewContentObservation = nil
     }
     
@@ -111,11 +176,17 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         if let vm = self.viewModel {
             if RTRSPersistentStorage.contentIsAlreadySaved(vm: vm) {
                 RTRSPersistentStorage.unsaveContent(vm)
-                self.saveButton.image = #imageLiteral(resourceName: "Heart-No-Fill")
             } else {
                 RTRSPersistentStorage.saveContent(vm)
-                self.saveButton.image = #imageLiteral(resourceName: "Heart-Fill")
             }
+            
+            self.saveButton.image = AppStyles.likeIcon(for: vm)
+        }
+    }
+    
+    @objc func textSizeChangeAction() {
+        Font.presentTextSizeSheet(in: self) {
+            self.loadContent()
         }
     }
     
@@ -127,7 +198,6 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
                 return
             }
             
-//            UIApplication.shared.open(url, options: [:]) { (success) in }
             RTRSExternalWebViewController.openExternalWebBrowser(self, url: url, name: url.absoluteString)
             decisionHandler(.cancel)
             return

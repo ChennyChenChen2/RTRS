@@ -13,8 +13,15 @@ class RTRSNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let appearanceProxy = UINavigationBar.appearance(whenContainedInInstancesOf: [RTRSNavigationController.self])
-        appearanceProxy.tintColor = .white
-        appearanceProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        appearanceProxy.tintColor = AppStyles.foregroundColor
+        appearanceProxy.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(styleForDarkMode), name: .darkModeUpdated, object: nil)
+    }
+    
+    @objc private func styleForDarkMode() {
+        self.setNeedsStatusBarAppearanceUpdate()
+        defaultNavBarCustomization()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -23,12 +30,18 @@ class RTRSNavigationController: UINavigationController {
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
-        return .lightContent
+        if #available(iOS 13.0, *) {
+            return AppStyles.darkModeEnabled ? .lightContent : .darkContent
+        } else {
+            return AppStyles.darkModeEnabled ? .lightContent : .default
+        }
     }
     
     fileprivate func defaultNavBarCustomization() {
-        self.navigationBar.backgroundColor = .black
-        self.navigationBar.barTintColor = .black
-        self.navigationBar.titleTextAttributes = [.font: Utils.defaultFontBold, NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.navigationBar.backgroundColor = AppStyles.backgroundColor
+        self.navigationBar.barTintColor = AppStyles.backgroundColor
+        self.navigationBar.tintColor = AppStyles.foregroundColor
+        self.navigationBar.titleTextAttributes = [.font: Utils.defaultFontBold, NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 }

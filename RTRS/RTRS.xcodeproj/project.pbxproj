@@ -27,8 +27,10 @@
 		8746130D230877CC00C57400 /* RTRSMoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */; };
 		8746130F2308818C00C57400 /* RTRSAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8746130E2308818C00C57400 /* RTRSAboutViewController.swift */; };
 		874613112308E15800C57400 /* RTRSHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874613102308E15800C57400 /* RTRSHomeViewModel.swift */; };
+		8750446424D72C2B00667522 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8750446324D72C2B00667522 /* Style.swift */; };
 		875566CB22FB8B6100C8070A /* SingleContentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CA22FB8B6100C8070A /* SingleContentCell.swift */; };
 		875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */; };
+		8770F31924D3A3EF0075D1C2 /* ricky.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8770F31824D3A3EF0075D1C2 /* ricky.aiff */; };
 		877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0A226A90BE00F061FA /* RTRSOperation.swift */; };
 		877B3A0D226A913C00F061FA /* RTRSOperationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */; };
 		877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 877B3A0E226A932800F061FA /* RTRSConfig.json */; };
@@ -43,6 +45,8 @@
 		8790658824C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */; };
 		8790C78D22DCF70800E8AE5C /* RTRSNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8790C78C22DCF70800E8AE5C /* RTRSNavigationController.swift */; };
 		8795C9B623299DD500D34C99 /* RTRS.css in Resources */ = {isa = PBXBuildFile; fileRef = 8795C9B52329999400D34C99 /* RTRS.css */; };
+		879C845F25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */; };
+		879C846225051C74004E0520 /* DogStuffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C846125051C74004E0520 /* DogStuffViewController.swift */; };
 		879CE1CF22E137FA002F58CB /* RTRSPersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */; };
 		879CE1D122E1381B002F58CB /* RTRSPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D022E1381B002F58CB /* RTRSPage.swift */; };
 		879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D222E13EFE002F58CB /* ContentViewController.swift */; };
@@ -61,6 +65,7 @@
 		87C3B5AE22EBCD0500560958 /* SingleArticleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AD22EBCD0500560958 /* SingleArticleViewModel.swift */; };
 		87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */; };
 		87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */; };
+		87E4B82B24D5D10A00DD0CC4 /* AppSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E4B82A24D5D10A00DD0CC4 /* AppSettingsViewController.swift */; };
 		87EDD97F24BD3A1200CACF45 /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87EDD97E24BD3A1200CACF45 /* DebugViewController.swift */; };
 		87F0483623A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */; };
 		87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */; };
@@ -96,8 +101,11 @@
 		8748DDC42318B390008630FB /* RTRS.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRS.html; sourceTree = "<group>"; };
 		8748DDC52318B390008630FB /* RTRSHome.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRSHome.html; sourceTree = "<group>"; };
 		8748DDC72318B390008630FB /* RTRSHome2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = RTRSHome2.html; sourceTree = "<group>"; };
+		8750446324D72C2B00667522 /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		87534DCC24EC2AA800FD3D02 /* Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
 		875566CA22FB8B6100C8070A /* SingleContentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleContentCell.swift; sourceTree = "<group>"; };
 		875566CD22FBA06E00C8070A /* RTRSAboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAboutViewModel.swift; sourceTree = "<group>"; };
+		8770F31824D3A3EF0075D1C2 /* ricky.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ricky.aiff; sourceTree = "<group>"; };
 		877B3A0A226A90BE00F061FA /* RTRSOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperation.swift; sourceTree = "<group>"; };
 		877B3A0C226A913C00F061FA /* RTRSOperationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSOperationCoordinator.swift; sourceTree = "<group>"; };
 		877B3A0E226A932800F061FA /* RTRSConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RTRSConfig.json; sourceTree = SOURCE_ROOT; };
@@ -111,6 +119,9 @@
 		8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSAbbieArtGalleryViewModel.swift; sourceTree = "<group>"; };
 		8790C78C22DCF70800E8AE5C /* RTRSNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationController.swift; sourceTree = "<group>"; };
 		8795C9B52329999400D34C99 /* RTRS.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = RTRS.css; sourceTree = "<group>"; };
+		879C845D25043B76004E0520 /* Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
+		879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSGoodBoyClubViewModel.swift; sourceTree = "<group>"; };
+		879C846125051C74004E0520 /* DogStuffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogStuffViewController.swift; sourceTree = "<group>"; };
 		879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPersistentStorage.swift; sourceTree = "<group>"; };
 		879CE1D022E1381B002F58CB /* RTRSPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPage.swift; sourceTree = "<group>"; };
 		879CE1D222E13EFE002F58CB /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +141,7 @@
 		87C3B5AD22EBCD0500560958 /* SingleArticleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleArticleViewModel.swift; sourceTree = "<group>"; };
 		87C3B5AF22EBD9EF00560958 /* RTRSViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSViewModel.swift; sourceTree = "<group>"; };
 		87D5F6A92321F1AC0041C4DE /* RTRSNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSNavigationBar.swift; sourceTree = "<group>"; };
+		87E4B82A24D5D10A00DD0CC4 /* AppSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsViewController.swift; sourceTree = "<group>"; };
 		87EDD97E24BD3A1200CACF45 /* DebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
 		87F0483523A82EB40029ED82 /* RTRSStandaloneSlideshowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSStandaloneSlideshowViewController.swift; sourceTree = "<group>"; };
 		87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueObserver.swift; sourceTree = "<group>"; };
@@ -192,6 +204,7 @@
 		87095A4F2263BC2B0081A540 /* RTRS */ = {
 			isa = PBXGroup;
 			children = (
+				879C845D25043B76004E0520 /* Location.gpx */,
 				8736B192233FE1CB008DA87A /* RTRS.entitlements */,
 				87A53C8223555A67006822F2 /* Audio */,
 				8795C9B42329995200D34C99 /* HTML Templates */,
@@ -210,6 +223,7 @@
 				87095A592263BC2C0081A540 /* LaunchScreen.storyboard */,
 				87095A5C2263BC2C0081A540 /* Info.plist */,
 				8739E8872356C4D7004CE6D8 /* Podfile */,
+				8770F31824D3A3EF0075D1C2 /* ricky.aiff */,
 				877B3A0E226A932800F061FA /* RTRSConfig.json */,
 				8736B195233FE8C8008DA87A /* GoogleService-Info.plist */,
 			);
@@ -219,7 +233,7 @@
 		8727B8B822D7D2A8001713AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8788EA79239D35A200C2CE82 /* Process Pups */,
+				879C846025051C09004E0520 /* Dog Stuff */,
 				8746130B230877AB00C57400 /* More */,
 				87C3B5A722EBC73700560958 /* Shared */,
 				87C3B5A622EBC72E00560958 /* Content */,
@@ -251,6 +265,7 @@
 			children = (
 				8746130E2308818C00C57400 /* RTRSAboutViewController.swift */,
 				8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */,
+				87E4B82A24D5D10A00DD0CC4 /* AppSettingsViewController.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -318,6 +333,15 @@
 			path = "HTML Templates";
 			sourceTree = "<group>";
 		};
+		879C846025051C09004E0520 /* Dog Stuff */ = {
+			isa = PBXGroup;
+			children = (
+				8788EA79239D35A200C2CE82 /* Process Pups */,
+				879C846125051C74004E0520 /* DogStuffViewController.swift */,
+			);
+			path = "Dog Stuff";
+			sourceTree = "<group>";
+		};
 		879CE1CD22E137D6002F58CB /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -351,8 +375,10 @@
 			children = (
 				87B95F5E2267FEFC008AC7C9 /* Utils.swift */,
 				87F9FD7B235F6A3B00AFD0B4 /* KeyValueObserver.swift */,
+				87534DCC24EC2AA800FD3D02 /* Location.gpx */,
 				871D322923AB048D0013CC4D /* RTRSErrorHandler.swift */,
 				871D322B23AB22700013CC4D /* AnalyticsUtils.swift */,
+				8750446324D72C2B00667522 /* Style.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -393,6 +419,7 @@
 				879D25592387B6D900C1DA55 /* RTRSSavedContentViewModel.swift */,
 				878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */,
 				8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */,
+				879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -476,6 +503,7 @@
 				877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */,
 				878B4B352390C3F8000FD5AF /* ProcessPups.html in Resources */,
 				87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */,
+				8770F31924D3A3EF0075D1C2 /* ricky.aiff in Resources */,
 				87095A582263BC2C0081A540 /* Assets.xcassets in Resources */,
 				8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */,
 				8739E8882356C4D7004CE6D8 /* Podfile in Resources */,
@@ -541,12 +569,16 @@
 				8727B8BA22D7D2C8001713AF /* LoadingManager.swift in Sources */,
 				8788EA7B239D35C600C2CE82 /* MultiPhotoContainerView.swift in Sources */,
 				878B4B3323903276000FD5AF /* RTRSProcessPupsViewModel.swift in Sources */,
+				879C845F25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift in Sources */,
 				87AA241A23483E35008C5907 /* RTRSMultiPodViewModel.swift in Sources */,
 				875566CE22FBA06E00C8070A /* RTRSAboutViewModel.swift in Sources */,
 				879CE1D822E14A93002F58CB /* RTRSAuCornerTransition.swift in Sources */,
 				87C3B5B022EBD9EF00560958 /* RTRSViewModel.swift in Sources */,
+				87E4B82B24D5D10A00DD0CC4 /* AppSettingsViewController.swift in Sources */,
 				8746130D230877CC00C57400 /* RTRSMoreTableViewController.swift in Sources */,
 				8745B745232A8B93003A2351 /* RTRSDeepLinkHandler.swift in Sources */,
+				8750446424D72C2B00667522 /* Style.swift in Sources */,
+				879C846225051C74004E0520 /* DogStuffViewController.swift in Sources */,
 				8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */,
 				87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */,
 				879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */,

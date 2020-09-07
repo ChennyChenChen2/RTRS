@@ -30,9 +30,6 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
 
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
-        
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        
         determineViewModelType()
         
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
@@ -116,10 +113,17 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyles.foregroundColor
+        UISearchBar.appearance().barTintColor = AppStyles.backgroundColor
         
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.barTintColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.tintColor = AppStyles.foregroundColor
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        
         savedContentUpdated()
+        self.tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -8,30 +8,32 @@
 
 import UIKit
 
-class RTRSMoreTableViewController: UITableViewController, NotificationCellDelegate {
+#if DEBUG
+import FLEX
+#endif
+
+class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegate {
 
     fileprivate let cellReuseId = "MoreCell"
     fileprivate let notificationCellReuseId = "NotificationCell"
     fileprivate let externalBrowserSegueId = "externalweb"
     fileprivate let savedContentSegueId = "Saved"
+    fileprivate let appSettingsSegueId = "AppSettings"
     fileprivate let gallerySegueId = "Gallery"
+    fileprivate let dogStuffSegueId = "DogStuff"
     
     var viewModel: RTRSMoreViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.viewModel = RTRSNavigation.shared.viewModel(for: .more) as? RTRSMoreViewModel
-        self.view.backgroundColor = .black
-        self.tableView.backgroundColor = .black
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(showDebug))
         gesture.numberOfTapsRequired = 5
         self.view.addGestureRecognizer(gesture)
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.backgroundColor = .black
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .moreLoadedNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(styleForDarkMode), name: .darkModeUpdated, object: nil)
     }
     
     @objc private func loadingFinished() {
@@ -41,30 +43,44 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         }
     }
     
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return AppStyles.darkModeEnabled ? .lightContent : .default
+    }
+    
     @objc private func showDebug() {
         let vc = DebugViewController(style: .grouped)
         DispatchQueue.main.async {
             self.navigationController?.present(vc, animated: true, completion: nil)
         }
+        
+        #if DEBUG
+        FLEXManager.shared()?.showExplorer()
+        #endif
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.backgroundColor = .black
+        styleForDarkMode()
+    }
+    
+    @objc private func styleForDarkMode() {
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppStyles.foregroundColor]
+        self.navigationController?.navigationBar.barTintColor = AppStyles.backgroundColor
+        self.navigationController?.navigationBar.tintColor = AppStyles.foregroundColor
+        self.navigationController?.navigationBar.backgroundColor = AppStyles.backgroundColor
+        
+        self.tableView.backgroundColor = AppStyles.backgroundColor
+        self.tableView.reloadData()
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return (viewModel?.pages?.count ?? 0) + 1
+        return (viewModel?.pages?.count ?? 0) + 3 // 3 = Notifications, app settings, dog stuff
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -75,9 +91,19 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
         var cell: UITableViewCell!
         
         if indexPath.row == 0 {
-            let noteCell = tableView.dequeueReusableCell(withIdentifier: self.notificationCellReuseId, for: indexPath) as! NotificationsTableViewCell
+            // First row == notifications
+            let noteCell = tableView.dequeueReusableCell(withIdentifier: self.notificationCellReuseId, for: indexPath) as! RightSwitchTableViewCell
             noteCell.delegate = self
-            noteCell.cellImageView.image = UIImage(imageLiteralResourceName: "Notifications")
+            noteCell.titleLabel.textColor = AppStyles.foregroundColor
+            noteCell.cellImageView?.image = UIImage(imageLiteralResourceName: "Notifications")
+            noteCell.onForeground = { (cell) in
+                UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                    DispatchQueue.main.async {
+                        cell.notificationSwitch.isOn = settings.authorizationStatus == .authorized
+                    }
+                }
+            }
+            
             UNUserNotificationCenter.current().getNotificationSettings { (settings) in
                 DispatchQueue.main.async {
                     noteCell.notificationSwitch.isOn = settings.authorizationStatus == .authorized
@@ -85,22 +111,33 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
             }
             
             cell = noteCell
+        } else if indexPath.row == 1 {
+            // Second row = dog stuff
+            cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
+            cell.textLabel?.text = "Dog Stuff"
+            cell.imageView?.image = AppStyles.dogStuffIcon
+        } else if indexPath.row == self.tableView.numberOfRows(inSection: 0) - 1 {
+            // Last row = app settings
+            cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
+            cell.textLabel?.text = "App Settings"
+            cell.imageView?.image = AppStyles.settingsIcon
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
             
             if let vm = self.viewModel, let pages = vm.pages {
-                if indexPath.row == pages.count + 1 {
+                if indexPath.row == pages.count + 2 {
                     cell.textLabel?.text = "Saved"
                     cell.imageView?.image = #imageLiteral(resourceName: "Top-Nav-Image")
                 } else {
-                    let page = pages[indexPath.row - 1]
+                    let page = pages[indexPath.row - 2]
                     cell.textLabel?.text = page.pageName()
                     cell.imageView?.image = page.pageImage()
                 }
             }
         }
         
-        cell.textLabel?.textColor = .white
+        cell.contentView.backgroundColor = AppStyles.backgroundColor
+        cell.textLabel?.textColor = AppStyles.foregroundColor
 
         return cell
     }
@@ -131,7 +168,7 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
                     }
                 } else {
                     let settings: UIUserNotificationSettings =
-                    UIUserNotificationSettings(types: [.alert], categories: nil)
+                        UIUserNotificationSettings(types: [.alert, .sound], categories: nil)
                     DispatchQueue.main.async {
                         UIApplication.shared.registerUserNotificationSettings(settings)
                     }
@@ -147,7 +184,20 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let pages = self.viewModel?.pages, indexPath.row - 1 >= 0 {
-            let page = pages[indexPath.row - 1]
+            if indexPath.row == self.tableView.numberOfRows(inSection: 0) - 1 {
+                self.performSegue(withIdentifier: self.appSettingsSegueId, sender: nil)
+                return
+            } else if indexPath.row == 1 {
+                self.performSegue(withIdentifier: dogStuffSegueId, sender: nil)
+                return
+            }
+            
+            guard indexPath.row - 2 >= 0 else {
+                print("INVALID INDEX PATH: \(indexPath)")
+                return
+            }
+            
+            let page = pages[indexPath.row - 2]
             if let _ = page.pageUrl() {
                 self.performSegue(withIdentifier: self.externalBrowserSegueId, sender: page)
             } else if let type = RTRSScreenType(rawValue: page.pageName()), type == .processPups || type == .abbie {
@@ -176,20 +226,23 @@ class RTRSMoreTableViewController: UITableViewController, NotificationCellDelega
     }
 }
 
-protocol NotificationCellDelegate: UIViewController {
+protocol RightSwitchCellDelegate: UIViewController {
     func switchValueChanged(_ sender: UISwitch)
 }
 
-class NotificationsTableViewCell: UITableViewCell {
+class RightSwitchTableViewCell: UITableViewCell {
     
     @IBOutlet weak var notificationSwitch: UISwitch!
-    @IBOutlet weak var cellImageView: UIImageView!
-    weak var delegate: NotificationCellDelegate?
+    @IBOutlet weak var cellImageView: UIImageView?
+    @IBOutlet weak var titleLabel: UILabel!
+    weak var delegate: RightSwitchCellDelegate?
+    var onForeground: ((RightSwitchTableViewCell)->())?
     
     override func prepareForReuse() {
         super.prepareForReuse()
         NotificationCenter.default.removeObserver(self)
-        cellImageView.image = nil
+        cellImageView?.image = nil
+        onForeground = nil
     }
     
     required init?(coder: NSCoder) {
@@ -198,15 +251,10 @@ class NotificationsTableViewCell: UITableViewCell {
     }
     
     @objc func willEnterForeground() {
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            DispatchQueue.main.async { [weak self] in
-                self?.notificationSwitch.isOn = settings.authorizationStatus == .authorized
-            }
-        }
+        onForeground?(self)
     }
     
     @IBAction func switchValueChanged(_ sender: UISwitch) {
         self.delegate?.switchValueChanged(sender)
     }
-    
 }

@@ -137,16 +137,7 @@ class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
                 
                 let divString = try divElem.html()
                 
-                var cssString = ""
-                
-                if let path = Bundle.main.path(forResource: "RTRS", ofType: "css"), let cssFileContents = try? String(contentsOfFile: path) {
-                    cssString = cssFileContents
-                } else {
-                    // This is our fault...
-                    print("Cannot find RTRS.css")
-                }
-                
-                let htmlString = "<html><head><style>\(cssString)</style></head><body>\(divString)</body></html>"
+                let htmlString = "<html><head><style>{{CSS_PLACEHOLDER}}</style></head><body>\(divString)</body></html>"
                 self.htmlString = htmlString
             }
         } catch let error {

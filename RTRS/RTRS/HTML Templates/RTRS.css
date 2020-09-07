@@ -1,5 +1,8 @@
 body {
-    background-color: black;
+    background-color: {{BG_COLOR_PLACEHOLDER}};
+    font: -apple-system-tall-body;
+    -webkit-text-size-adjust: none;
+    font-size: {{FONT_SIZE_PLACEHOLDER}}em;
 }
 
 img {
@@ -8,16 +11,25 @@ img {
     margin-right: auto;
 }
 
+span {
+    font: -apple-system-short-caption1;
+    -webkit-text-size-adjust: none;
+    font-size: 1.0em;
+}
+
 p {
-    font-size: 24px;
-    color: white;
+    color: {{FONT_COLOR_PLACEHOLDER}};
+    font: -apple-system-tall-body;
+    -webkit-text-size-adjust: none;
+    font-size: {{FONT_SIZE_PLACEHOLDER}}em;
 }
 
 a {
-    color: white;
-    font-size: 24px;
+    color: {{FONT_COLOR_PLACEHOLDER}};
     font-weight: bold;
-    text-align: center;
+    font: -apple-system-tall-body;
+    -webkit-text-size-adjust: none;
+    font-size: 1.0em;
 }
 
 twitter-widget {
