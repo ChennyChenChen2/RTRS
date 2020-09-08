@@ -55,7 +55,7 @@ class RTRSAboutViewController: UIViewController, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         if let navController = self.navigationController as? RTRSNavigationController {
-            let payload = RTRSDeepLinkPayload(baseURL: URL, title: URL.absoluteString, podURLString: nil)
+            let payload = RTRSDeepLinkPayload(baseURL: URL, title: URL.absoluteString, podURLString: nil, sharingURLString: nil)
             RTRSDeepLinkHandler.route(payload: payload, navController: navController, shouldOpenExternalWebBrowser: true)
         }
         

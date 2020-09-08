@@ -22,24 +22,27 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
     let dateString: String?
     let contentDescription: String?
     let imageUrl: URL?
+    let sharingUrl: URL?
     
     enum CodingKeys: String {
         case title = "title"
         case description = "description"
         case imageUrl = "imageUrl"
         case dateString = "dateString"
+        case sharingUrl = "sharingUrl"
     }
     
-    required init(title: String?, date: String?, description: String?, imageURL: URL?) {
+    required init(title: String?, date: String?, description: String?, imageURL: URL?, sharingUrl: URL?) {
         self.title = title
         self.dateString = date
         self.contentDescription = description
         self.imageUrl = imageURL
+        self.sharingUrl = sharingUrl
         super.init()
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
-            
+        
     }
     
     func pageName() -> String {
@@ -55,6 +58,7 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         aCoder.encode(self.contentDescription, forKey: CodingKeys.description.rawValue)
         aCoder.encode(self.dateString, forKey: CodingKeys.dateString.rawValue)
         aCoder.encode(self.imageUrl, forKey: CodingKeys.imageUrl.rawValue)
+        aCoder.encode(self.sharingUrl, forKey: CodingKeys.sharingUrl.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -62,7 +66,8 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         let description = aDecoder.decodeObject(forKey: CodingKeys.description.rawValue) as? String
         let dateString = aDecoder.decodeObject(forKey: CodingKeys.dateString.rawValue) as? String
         let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? URL
+        let sharingUrl = aDecoder.decodeObject(forKey: CodingKeys.sharingUrl.rawValue) as? URL
         
-        self.init(title: title, date: dateString, description: description, imageURL: imageUrl)
+        self.init(title: title, date: dateString, description: description, imageURL: imageUrl, sharingUrl: sharingUrl)
     }
 }

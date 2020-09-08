@@ -153,7 +153,7 @@ class RTRSPersistentStorage: NSObject {
     
     private class func getPathForType(type: RTRSScreenType, specificName: String? = nil) -> URL? {
             switch type {
-            case .about, .advertise, .au, .normalColumn, .moc, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .abbie, .goodDogClub, .shirts, .subscribe:
+            case .about, .au, .normalColumn, .moc, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .abbie, .goodDogClub, .shirts, .sponsors, .subscribe:
                 do {
                     let pathComponent = "\(type.rawValue).rtrs"
                     let path = pathComponent.replacingOccurrences(of: " ", with: "")

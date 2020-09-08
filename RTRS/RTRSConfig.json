@@ -117,6 +117,11 @@
             "link": "https://www.rightstorickysanchez.com/abbies-art-gallery",
             "type": "contentlist",
         },
+        {
+            "name": "Sponsors",
+            "link": "https://www.rightstorickysanchez.com/advertise",
+            "type": "contentlist"
+        }
     ],
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
@@ -139,6 +144,7 @@
     "moreItems": [
         "About",
         "Abbie's Art Gallery",
+        "Sponsors",
         "The Corner Three Newsletter",
         "T-Shirt Store"]
 }

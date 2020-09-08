@@ -30,6 +30,10 @@ enum AppStyles {
         return darkModeEnabled ? #imageLiteral(resourceName: "Dog-Stuff-Light") : #imageLiteral(resourceName: "Dog-Stuff-Dark")
     }
     
+    static var shareIcon: UIImage {
+        return darkModeEnabled ? #imageLiteral(resourceName: "Share-Light") : #imageLiteral(resourceName: "Share-Dark")
+    }
+    
     private static var likeIconUnfilled: UIImage {
         return darkModeEnabled ? #imageLiteral(resourceName: "Heart-No-Fill-Light") : #imageLiteral(resourceName: "Heart-No-Fill-Dark")
     }

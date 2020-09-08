@@ -170,7 +170,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         
         let homeItem = viewModelItems[indexPath.row]
         if let url = homeItem.actionUrl, let title = homeItem.text, let navVC = self.navigationController as? RTRSNavigationController {
-            let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title, podURLString: nil)
+            let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title, podURLString: nil, sharingURLString: nil)
             RTRSDeepLinkHandler.route(payload: payload, navController: navVC, shouldOpenExternalWebBrowser: homeItem.shouldOpenExternalBrowser)
         }
     }

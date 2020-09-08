@@ -47,6 +47,10 @@
 		8795C9B623299DD500D34C99 /* RTRS.css in Resources */ = {isa = PBXBuildFile; fileRef = 8795C9B52329999400D34C99 /* RTRS.css */; };
 		879C845F25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */; };
 		879C846225051C74004E0520 /* DogStuffViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C846125051C74004E0520 /* DogStuffViewController.swift */; };
+		879C84642505CE8C004E0520 /* Sponsors.html in Resources */ = {isa = PBXBuildFile; fileRef = 879C84632505CE8C004E0520 /* Sponsors.html */; };
+		879C84662506587E004E0520 /* RTRSSponsorsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C84652506587E004E0520 /* RTRSSponsorsViewModels.swift */; };
+		879C846825066747004E0520 /* SponsorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879C846725066747004E0520 /* SponsorsViewController.swift */; };
+		879C846A2506D61B004E0520 /* SinglePod.html in Resources */ = {isa = PBXBuildFile; fileRef = 879C84692506D61B004E0520 /* SinglePod.html */; };
 		879CE1CF22E137FA002F58CB /* RTRSPersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */; };
 		879CE1D122E1381B002F58CB /* RTRSPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D022E1381B002F58CB /* RTRSPage.swift */; };
 		879CE1D322E13EFE002F58CB /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879CE1D222E13EFE002F58CB /* ContentViewController.swift */; };
@@ -122,6 +126,10 @@
 		879C845D25043B76004E0520 /* Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
 		879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSGoodBoyClubViewModel.swift; sourceTree = "<group>"; };
 		879C846125051C74004E0520 /* DogStuffViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogStuffViewController.swift; sourceTree = "<group>"; };
+		879C84632505CE8C004E0520 /* Sponsors.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Sponsors.html; sourceTree = "<group>"; };
+		879C84652506587E004E0520 /* RTRSSponsorsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSSponsorsViewModels.swift; sourceTree = "<group>"; };
+		879C846725066747004E0520 /* SponsorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsorsViewController.swift; sourceTree = "<group>"; };
+		879C84692506D61B004E0520 /* SinglePod.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SinglePod.html; sourceTree = "<group>"; };
 		879CE1CE22E137FA002F58CB /* RTRSPersistentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPersistentStorage.swift; sourceTree = "<group>"; };
 		879CE1D022E1381B002F58CB /* RTRSPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RTRSPage.swift; sourceTree = "<group>"; };
 		879CE1D222E13EFE002F58CB /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
@@ -256,6 +264,8 @@
 				878B4B342390C3F8000FD5AF /* ProcessPups.html */,
 				878B4B362390C3FF000FD5AF /* PodSource.html */,
 				8790658524C4C67E001B206F /* Abbie.html */,
+				879C84632505CE8C004E0520 /* Sponsors.html */,
+				879C84692506D61B004E0520 /* SinglePod.html */,
 			);
 			path = "Sample HTML";
 			sourceTree = "<group>";
@@ -266,6 +276,7 @@
 				8746130E2308818C00C57400 /* RTRSAboutViewController.swift */,
 				8746130C230877CC00C57400 /* RTRSMoreTableViewController.swift */,
 				87E4B82A24D5D10A00DD0CC4 /* AppSettingsViewController.swift */,
+				879C846725066747004E0520 /* SponsorsViewController.swift */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -420,6 +431,7 @@
 				878B4B3223903276000FD5AF /* RTRSProcessPupsViewModel.swift */,
 				8790658724C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift */,
 				879C845E25043D7F004E0520 /* RTRSGoodBoyClubViewModel.swift */,
+				879C84652506587E004E0520 /* RTRSSponsorsViewModels.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -500,12 +512,14 @@
 				8795C9B623299DD500D34C99 /* RTRS.css in Resources */,
 				878B4B372390C3FF000FD5AF /* PodSource.html in Resources */,
 				8790658624C4C67E001B206F /* Abbie.html in Resources */,
+				879C84642505CE8C004E0520 /* Sponsors.html in Resources */,
 				877B3A0F226A932800F061FA /* RTRSConfig.json in Resources */,
 				878B4B352390C3F8000FD5AF /* ProcessPups.html in Resources */,
 				87095A5B2263BC2C0081A540 /* LaunchScreen.storyboard in Resources */,
 				8770F31924D3A3EF0075D1C2 /* ricky.aiff in Resources */,
 				87095A582263BC2C0081A540 /* Assets.xcassets in Resources */,
 				8736B196233FE8C8008DA87A /* GoogleService-Info.plist in Resources */,
+				879C846A2506D61B004E0520 /* SinglePod.html in Resources */,
 				8739E8882356C4D7004CE6D8 /* Podfile in Resources */,
 				87095A562263BC2B0081A540 /* Main.storyboard in Resources */,
 			);
@@ -582,6 +596,7 @@
 				8785EF432264120B0011CF6C /* RTRSNavigation.swift in Sources */,
 				87F9FD7C235F6A3B00AFD0B4 /* KeyValueObserver.swift in Sources */,
 				879F1E6A236CF96800DEE6C7 /* RTRSNewsletterViewModel.swift in Sources */,
+				879C84662506587E004E0520 /* RTRSSponsorsViewModels.swift in Sources */,
 				87A53C8423555A8D006822F2 /* PodcastManager.swift in Sources */,
 				879D255A2387B6D900C1DA55 /* RTRSSavedContentViewModel.swift in Sources */,
 				8788EA7D239D3ACF00C2CE82 /* GalleryViewController.swift in Sources */,
@@ -599,6 +614,7 @@
 				877B3A0B226A90BE00F061FA /* RTRSOperation.swift in Sources */,
 				8790658824C4CB04001B206F /* RTRSAbbieArtGalleryViewModel.swift in Sources */,
 				87D5F6AA2321F1AC0041C4DE /* RTRSNavigationBar.swift in Sources */,
+				879C846825066747004E0520 /* SponsorsViewController.swift in Sources */,
 				87095A512263BC2B0081A540 /* AppDelegate.swift in Sources */,
 				879CE1D622E1490F002F58CB /* RTRSTransittionCoordinator.swift in Sources */,
 				875566CB22FB8B6100C8070A /* SingleContentCell.swift in Sources */,

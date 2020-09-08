@@ -84,6 +84,8 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                         let aElement = try? titleElement.getElementsByTag("a").first(),
                         let dateElement = theDateElem,
                         let title = try? aElement.text(),
+                        let sharingUrlString = try? aElement.attr("href"),
+                        let sharingUrl = URL(string: "https://www.rightstorickysanchez.com\(sharingUrlString)"),
                         let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
                         let podDescription = try? descriptionTextElement.text(),
                         let imageAttribute = try? imageElement.attr("data-asset-url")
@@ -109,7 +111,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                             dateString = newDate
                         }
                         
-                        let singleViewModel = RTRSSinglePodViewModel(title: theTitle, date: dateString, description: podDescription, imageURL: URL(string: imageAttribute))
+                        let singleViewModel = RTRSSinglePodViewModel(title: theTitle, date: dateString, description: podDescription, imageURL: URL(string: imageAttribute), sharingUrl: sharingUrl)
                         self.content.append(singleViewModel)
                     }
                 }

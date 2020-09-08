@@ -27,4 +27,5 @@ extension Notification.Name {
     static let processPupsLoadedNotificationName = Notification.Name("processPupsLoaded")
     static let goodDogClubLoadedNotificationName = Notification.Name("goodDogClubLoaded")
     static let abbieLoadedNotificationName = Notification.Name("abbieLoaded")
+    static let sponsorsLoadedNotificationName = Notification.Name("sponsorsLoaded")
 }

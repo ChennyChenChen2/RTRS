@@ -30,7 +30,7 @@ enum RTRSScreenType: String, Hashable {
     case events = "Events"
     case lotteryParty = "Lottery Party"
     case contact = "Contact"
-    case advertise = "Advertise"
+    case sponsors = "Sponsors"
     case more = "More"
     case saved = "Saved"
 }

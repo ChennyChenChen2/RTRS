@@ -213,6 +213,8 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.shirts.rawValue:
             guard let url = urls?.first else { return nil }
             return RTRSTshirtStoreViewModel(name: name, url: url)
+        case RTRSScreenType.sponsors.rawValue:
+            return RTRSSponsorsViewModel(doc: doc, sponsorDescription: nil, sponsors: nil)
         default:
             break
         }

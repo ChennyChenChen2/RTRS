@@ -13,11 +13,13 @@ struct RTRSDeepLinkPayload {
     let baseURL: URL
     let title: String
     let podURLString: String?
+    let sharingURLString: String?
     
-    init(baseURL: URL, title: String, podURLString: String?) {
+    init(baseURL: URL, title: String, podURLString: String?, sharingURLString: String?) {
         self.baseURL = baseURL
         self.title = title
         self.podURLString = podURLString
+        self.sharingURLString = sharingURLString
     }
 }
 
@@ -117,7 +119,7 @@ class RTRSDeepLinkHandler: NSObject {
                     } else {
                         guard let podSourceVM = RTRSNavigation.shared.viewModel(for: .podSource) as? RTRSPodSourceViewModel, let podURLString = payload.podURLString, let podURL = URL(string: podURLString) else { return }
                         
-                        let podVM = RTRSSinglePodViewModel(title: text, date: date, description: description, imageURL: imgUrl)
+                        let podVM = RTRSSinglePodViewModel(title: text, date: date, description: description, imageURL: imgUrl, sharingUrl: podURL)
                         vm.content.insert(podVM, at: 0)
                         RTRSPersistentStorage.save(viewModel: podVM, type: .podcasts)
                         
@@ -242,7 +244,7 @@ class RTRSDeepLinkHandler: NSObject {
                         let theData = try? JSONSerialization.jsonObject(with: unwrappedData, options: .allowFragments) as?  [String: Any],
                         let longUrlString = theData["long_url"] as? String,
                         let longUrl = URL(string: longUrlString) {
-                        let newPayload = RTRSDeepLinkPayload(baseURL: longUrl, title: payload.title, podURLString: payload.podURLString)
+                        let newPayload = RTRSDeepLinkPayload(baseURL: longUrl, title: payload.title, podURLString: payload.podURLString, sharingURLString: payload.sharingURLString)
                         RTRSDeepLinkHandler.route(payload: newPayload, navController: navController, shouldOpenExternalWebBrowser: false)
                     }
                 } else {

@@ -60,8 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let rootVC = self.window?.rootViewController as? RTRSNavigationController {
             
             let podURLString = response.notification.request.content.userInfo["podURLString"] as? String
+            let sharingURLString = response.notification.request.content.userInfo["podSharingURLString"] as? String
             let shouldOpenExternalBrowser = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? Bool
-            let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString)
+            let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString, sharingURLString: sharingURLString)
             RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser ?? false)
         }
         

@@ -15,7 +15,7 @@
 	<key>RTRSBaseURL</key>
 	<string>https://www.rightstorickysanchez.com/</string>
 	<key>CFBundleVersion</key>
-	<string>1.08</string>
+	<string>1.09</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

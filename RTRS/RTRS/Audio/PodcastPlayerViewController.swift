@@ -26,6 +26,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBOutlet weak var rateButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var dismissButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
     
     var displayedViaTabView = false
     var viewModel: RTRSSinglePodViewModel!
@@ -65,6 +66,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         self.backButton.tintColor = AppStyles.foregroundColor
         self.forwardButton.tintColor = AppStyles.foregroundColor
         self.playButton.tintColor = AppStyles.foregroundColor
+        self.shareButton.tintColor = AppStyles.foregroundColor
         self.rateButton.setTitleColor(AppStyles.foregroundColor, for: .normal)
         self.loadingSpinner.color = AppStyles.foregroundColor
         
@@ -74,6 +76,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         self.titleLabel.textColor = AppStyles.foregroundColor
         
         self.saveButton.setImage(AppStyles.likeIcon(for: self.viewModel), for: .normal)
+        self.shareButton.setImage(AppStyles.shareIcon, for: .normal)
 
         self.dismissButton.tintColor = AppStyles.foregroundColor
         
@@ -91,6 +94,19 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
                 }
             }
         }
+    }
+    
+    @IBAction func shareAction() {
+         guard let url = viewModel?.sharingUrl else { return }
+
+        // set up activity view controller
+        let itemToShare = [ url ]
+        
+        let activityViewController = UIActivityViewController(activityItems: itemToShare, applicationActivities: [])
+        activityViewController.popoverPresentationController?.sourceView = self.view
+
+        // present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
@@ -191,7 +207,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row],
+        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel,
             let podDate = singlePodViewModel.dateString,
             let podUrl = self.sourceViewModel?.podUrls[indexPath.row],
             let podTitle = singlePodViewModel.title,
@@ -199,6 +215,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             self.titleLabel.text = podTitle
             self.elapsedLabel.text = "00:00:00"
             self.dateLabel.text = podDate
+            self.viewModel = singlePodViewModel
             
             cell.contentView.backgroundColor = AppStyles.backgroundColor
             

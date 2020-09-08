@@ -21,6 +21,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     var dismissButton: UIButton?
     var saveButton: UIBarButtonItem!
     var textSizeButton: UIBarButtonItem!
+    var shareButton: UIBarButtonItem!
     var viewModel: SingleArticleViewModel?
     var column: String?
     var webView: WKWebView?
@@ -38,10 +39,13 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         let saveButton = UIBarButtonItem(image: AppStyles.likeIcon(for: vm), style: .plain, target: self, action: #selector(saveAction))
         self.saveButton = saveButton
         
-        let textSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextSize-Light"), style: .plain, target: self, action: #selector(textSizeChangeAction))
+        let textSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextSize-Dark"), style: .plain, target: self, action: #selector(textSizeChangeAction))
         self.textSizeButton = textSizeButton
         
-        self.navigationItem.rightBarButtonItems = [saveButton, textSizeButton]
+        let shareButton = UIBarButtonItem(image: AppStyles.shareIcon, style: .plain, target: self, action: #selector(shareAction))
+        self.shareButton = shareButton
+        
+        self.navigationItem.rightBarButtonItems = [shareButton, saveButton, textSizeButton]
         
         if let url = self.viewModel?.imageUrl {
             self.imageView.af.setImage(withURL: url)
@@ -99,6 +103,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         
         self.dismissButton?.tintColor = AppStyles.foregroundColor
         self.textSizeButton.tintColor = AppStyles.foregroundColor
+        self.shareButton.tintColor = AppStyles.foregroundColor
         
         if let vm = self.viewModel {
             self.saveButton.image = AppStyles.likeIcon(for: vm)
@@ -147,6 +152,18 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
             let htmlPlusCSS = htmlWithCSS(htmlString)
             self.webView?.loadHTMLString(htmlPlusCSS, baseURL: baseURL)
         }
+    }
+    
+    @objc private func shareAction() {
+        guard let url = viewModel?.baseURL else { return }
+
+       // set up activity view controller
+       let itemToShare = [ url ]
+       let activityViewController = UIActivityViewController(activityItems: itemToShare, applicationActivities: nil)
+       activityViewController.popoverPresentationController?.sourceView = self.view
+
+       // present the view controller
+       self.present(activityViewController, animated: true, completion: nil)
     }
     
     @objc private func contentSizeDidChange(_ obj: Any) {
