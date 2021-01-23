@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
+class GalleryViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, LoggableViewController  {
 
     @IBOutlet weak var descriptionTextView: UITextView?
     @IBOutlet weak var imageContainer: MultiPhotoContainerView?
@@ -18,6 +18,9 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var contentType: RTRSScreenType?
     var viewModel: GalleryViewModel!
+    func viewModelForLogging() -> RTRSViewModel? {
+        return viewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +82,11 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
         if PodcastManager.shared.playerViewIsShowing {
             self.collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 150, right: 0)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsUtils.logScreenView(self)
     }
     
     override func viewDidLayoutSubviews() {

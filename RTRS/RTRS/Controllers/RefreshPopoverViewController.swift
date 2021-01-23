@@ -61,10 +61,15 @@ class RefreshPopoverViewController: UIViewController {
     }
 
     @IBAction func processButtonPressed(_ sender: Any) {
-        LoadingManager.shared.executeStartup()
-        self.processButton.isEnabled = false
-        self.processButton.setTitleColor(.gray, for: .normal)
-        self.loadingLabel.text = "PROCESSING......................."
+        AnalyticsUtils.logRefreshTriggered()
+        if let prevLoadFinishTime = LoadingManager.shared.previousLoadCompleted, Date().timeIntervalSince(prevLoadFinishTime) > 60 {
+            LoadingManager.shared.executeStartup(forceReload: true)
+            self.processButton.isEnabled = false
+            self.processButton.setTitleColor(.gray, for: .normal)
+            self.loadingLabel.text = "PROCESSING......................."
+        } else {
+            RTRSErrorHandler.showError(in: self, type: .tooManyRequests, completion: nil)
+        }
     }
     
     @objc private func loadingDidBegin() {

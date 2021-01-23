@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         
-        LoadingManager.shared.executeStartup()
+        LoadingManager.shared.executeStartup(forceReload: false)
         return true
     }
     
@@ -60,9 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let rootVC = self.window?.rootViewController as? RTRSNavigationController {
             
             let podURLString = response.notification.request.content.userInfo["podURLString"] as? String
-            let sharingURLString = response.notification.request.content.userInfo["podSharingURLString"] as? String
+            let youtubeURLString = response.notification.request.content.userInfo["youtubeUrlString"] as? String
             let shouldOpenExternalBrowser = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? Bool
-            let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString, sharingURLString: sharingURLString)
+            let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString, youtubeUrlString: youtubeURLString)
             RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser ?? false)
         }
         

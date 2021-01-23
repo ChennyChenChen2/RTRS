@@ -15,6 +15,7 @@ enum AppSettings: String, CaseIterable {
     case DarkMode = "Dark Mode"
     case TextSize = "Text Size"
     case ReportABug = "Report A Bug"
+    case FAQ = "FAQ"
 }
 
 /*
@@ -98,6 +99,8 @@ class AppSettingsViewController: UITableViewController, MFMailComposeViewControl
             }
         } else if setting == .TextSize {
             Font.presentTextSizeSheet(in: self, completion: nil)
+        } else if setting == .FAQ {
+            self.performSegue(withIdentifier: AppSettings.FAQ.rawValue, sender: nil)
         }
     }
     
@@ -113,6 +116,7 @@ class AppSettingsViewController: UITableViewController, MFMailComposeViewControl
         UserDefaults.standard.set(sender.isOn, forKey: AppSettings.darkModeUserDefaultsKey)
         UserDefaults.standard.synchronize()
         NotificationCenter.default.post(name: .darkModeUpdated, object: nil)
+        AnalyticsUtils.logDarkModeChange(sender.isOn ? "On" : "Off")
     }
 }
 

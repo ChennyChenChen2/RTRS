@@ -25,7 +25,7 @@ class RTRSMoreViewModel: NSObject, RTRSViewModel {
     func pageImage() -> UIImage {
         return #imageLiteral(resourceName: "More-Icon")
     }
-    
+ 
     enum CodingKeys: String {
         case pages = "Pages"
     }

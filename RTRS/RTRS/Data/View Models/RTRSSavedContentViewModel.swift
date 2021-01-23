@@ -44,7 +44,5 @@ class RTRSSavedContentViewModel: NSObject, RTRSViewModel, MultiContentViewModel 
     
     override init() {
         super.init()
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(updateSavedContent), name: .SavedContentUpdated, object: nil)
     }
 }

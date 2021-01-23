@@ -9,11 +9,14 @@
 import Foundation
 import UIKit
 
-class SponsorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SponsorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, LoggableViewController {
 
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     let viewModel = RTRSNavigation.shared.viewModel(for: .sponsors) as? RTRSSponsorsViewModel
+    func viewModelForLogging() -> RTRSViewModel? {
+        return viewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,11 @@ class SponsorsViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.navigationItem.title = "Sponsors"
         self.styleForDarkMode()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsUtils.logScreenView(self)
     }
     
     private func styleForDarkMode() {
@@ -51,8 +59,8 @@ class SponsorsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let view = view as? UITableViewHeaderFooterView {
-            view.backgroundColor = AppStyles.backgroundColor
-            view.textLabel?.textColor = AppStyles.foregroundColor
+            view.contentView.backgroundColor = .gray
+            view.textLabel?.textColor = AppStyles.backgroundColor
         }
     }
     
@@ -80,6 +88,7 @@ class SponsorsViewController: UIViewController, UITableViewDelegate, UITableView
         guard let sponsor = viewModel?.sponsors[indexPath.row],
             let link = sponsor.link,
             let name = sponsor.name else { return }
+        AnalyticsUtils.logVisitSponsor(name)
         RTRSExternalWebViewController.openExternalWebBrowser(self, url: link, name: name)
     }
 }

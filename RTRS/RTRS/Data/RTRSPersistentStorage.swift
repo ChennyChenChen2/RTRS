@@ -38,7 +38,7 @@ class RTRSPersistentStorage: NSObject {
     
     class func save(viewModel: RTRSViewModel, type: RTRSScreenType) {
         let codedData = NSKeyedArchiver.archivedData(withRootObject: viewModel)
-        var path: URL?
+        var path: NSURL?
         if type == .pod || type == .auArticle || type == .normalColumnArticle {
             path = getPathForType(type: type, specificName: viewModel.pageName())
         } else {
@@ -47,7 +47,7 @@ class RTRSPersistentStorage: NSObject {
 
         guard let thePath = path else { return }
         do {
-            try codedData.write(to: thePath)
+            try codedData.write(to: thePath as URL)
         } catch {
             print("Couldn't write to save file: " + error.localizedDescription)
         }
@@ -60,10 +60,14 @@ class RTRSPersistentStorage: NSObject {
 
         guard let thePath = path else { return }
         do {
-            try codedData.write(to: thePath)
+            try codedData.write(to: thePath as URL)
             NotificationCenter.default.post(name: .SavedContentUpdated, object: nil)
         } catch {
             print("Couldn't write to save file: " + error.localizedDescription)
+        }
+        
+        if let title = viewModel.title {
+            AnalyticsUtils.logSavedContent(title)
         }
     }
     
@@ -73,7 +77,7 @@ class RTRSPersistentStorage: NSObject {
 
         guard let thePath = path else { return }
         do {
-            try FileManager.default.removeItem(at: thePath)
+            try FileManager.default.removeItem(at: thePath as URL)
             NotificationCenter.default.post(name: .SavedContentUpdated, object: nil)
         } catch {
             print("Couldn't unsave file: " + error.localizedDescription)
@@ -84,8 +88,8 @@ class RTRSPersistentStorage: NSObject {
         let type = RTRSScreenType.saved
         let path = getPathForType(type: type, specificName: nil)
 
-        guard let thePath = path else { return }
-        let pathURL = URL(fileURLWithPath: thePath.absoluteString)
+        guard let thePath = path, let pathString = thePath.absoluteString else { return }
+        let pathURL = URL(fileURLWithPath: pathString)
         
         do {
             try FileManager.default.removeItem(at: pathURL)
@@ -107,18 +111,46 @@ class RTRSPersistentStorage: NSObject {
         }
     }
     
+    class func updateArticle(articleVM: SingleArticleViewModel, column: RTRSScreenType) {
+        guard let multiArticleVM = getViewModel(type: column) as? MultiArticleViewModel else { return }
+        let index = multiArticleVM.content.firstIndex { (contentVM) -> Bool in
+            guard let compareArticleVM = contentVM as? SingleArticleViewModel else { return false }
+            return compareArticleVM.title == articleVM.title
+        }
+        
+        if let index = index {
+            multiArticleVM.content[index] = articleVM
+            RTRSPersistentStorage.save(viewModel: multiArticleVM, type: column)
+        }
+    }
+    
+    // Naively add pod VM and corresponding URL to beginning of multi pod VM and pod source.
+    // Hope that on the next force reload, they will be sorted correctly and duplicates will be dealt with.
+    class func addPod(podVM: RTRSSinglePodViewModel, podInfo: PodInfo) {
+        guard let multiPodVM = getViewModel(type: .podcasts) as? RTRSMultiPodViewModel, let sourceVM = getViewModel(type: .podSource) as? RTRSPodSourceViewModel else { return }
+        multiPodVM.content.insert(podVM, at: 0)
+        multiPodVM.resortPods()
+        
+        sourceVM.podInfo.insert(podInfo, at: 0)
+        sourceVM.resortPodInfo()
+        
+        RTRSNavigation.shared.registerViewModel(viewModel: multiPodVM, for: .podcasts)
+        RTRSNavigation.shared.registerViewModel(viewModel: sourceVM, for: .podSource)
+        NotificationCenter.default.post(name: Notification.Name.podLoadedNotificationName, object: nil)
+    }
+    
     class func getSavedContent() -> [SingleContentViewModel?] {
         var result = [SingleContentViewModel]()
         let type = RTRSScreenType.saved
-        if let savedContentPath = getPathForType(type: type, specificName: nil),
-            let paths = try? FileManager.default.contentsOfDirectory(atPath: savedContentPath.absoluteString) {
+        if let savedContentPath = getPathForType(type: type, specificName: nil), let pathString = savedContentPath.absoluteString,
+            let paths = try? FileManager.default.contentsOfDirectory(atPath: pathString) {
             
             for path in paths {
-                let fullPathString = savedContentPath.absoluteString + "/\(path)"
-                let fullPath = URL(fileURLWithPath: fullPathString)
+                let fullPathString = pathString + "/\(path)"
+                let fullPath = NSURL(fileURLWithPath: fullPathString)
                 
                 do {
-                    if let codedData = try? Data(contentsOf: fullPath), let viewModel = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(codedData) as? SingleContentViewModel {
+                    if let codedData = try? Data(contentsOf: fullPath as URL), let viewModel = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(codedData) as? SingleContentViewModel {
                         result.append(viewModel)
                     }
                 } catch {
@@ -131,18 +163,20 @@ class RTRSPersistentStorage: NSObject {
     }
     
     class func getViewModel(type: RTRSScreenType, specificName: String? = nil) -> RTRSViewModel? {
-        var path: URL?
+        var path: NSURL?
         if type == .pod || type == .auArticle || type == .normalColumnArticle {
             path = getPathForType(type: type, specificName: specificName)
         } else {
             path = getPathForType(type: type)
         }
         
-        guard let thePath = path, let codedData = try? Data(contentsOf: thePath) else { return nil }
+        guard let thePath = path, let codedData = try? Data(contentsOf: thePath as URL) else { return nil }
         
         do {
             if let viewModel = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(codedData) as? RTRSViewModel {
                 return viewModel
+            } else {
+                print("Couldn't unarchive viewModel?")
             }
         } catch {
             print("Could not fetch view model for type: \(type.rawValue) and specificName: \(specificName ?? "EMPTY")")
@@ -151,7 +185,7 @@ class RTRSPersistentStorage: NSObject {
         return nil
     }
     
-    private class func getPathForType(type: RTRSScreenType, specificName: String? = nil) -> URL? {
+    private class func getPathForType(type: RTRSScreenType, specificName: String? = nil) -> NSURL? {
             switch type {
             case .about, .au, .normalColumn, .moc, .contact, .events, .home, .lotteryParty, .more, .newsletter, .podSource, .podcasts, .processPups, .abbie, .goodDogClub, .shirts, .sponsors, .subscribe:
                 do {
@@ -162,7 +196,7 @@ class RTRSPersistentStorage: NSObject {
                     if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                         FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                     }
-                    return fullPath
+                    return fullPath as NSURL
                 }
             case .auArticle:
                 let dirPath = storageDir.appendingPathComponent("AUArticles", isDirectory: true)
@@ -178,7 +212,7 @@ class RTRSPersistentStorage: NSObject {
                         if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                             FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                         }
-                        return fullPath
+                        return fullPath as NSURL
                     }
                 } catch {
                     print("Couldn't create directory for screen type: \(type.rawValue)")
@@ -198,7 +232,7 @@ class RTRSPersistentStorage: NSObject {
                         if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                             FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                         }
-                        return fullPath
+                        return fullPath as NSURL
                     }
                 } catch {
                     print("Couldn't create directory for screen type: \(type.rawValue)")
@@ -218,7 +252,7 @@ class RTRSPersistentStorage: NSObject {
                         if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                             FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                         }
-                        return fullPath
+                        return fullPath as NSURL
                     }
                 } catch {
                     print("Couldn't create directory for screen type: \(type.rawValue)")
@@ -239,7 +273,7 @@ class RTRSPersistentStorage: NSObject {
                         if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                             FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                         }
-                        return fullPath
+                        return fullPath as NSURL
                     }
                 } catch {
                     print("Couldn't create directory for screen type: \(type.rawValue)")
@@ -258,16 +292,16 @@ class RTRSPersistentStorage: NSObject {
                             if !FileManager.default.fileExists(atPath: fullPath.absoluteString) {
                                 FileManager.default.createFile(atPath: fullPath.absoluteString, contents: nil, attributes: nil)
                             }
-                            return fullPath
+                            return fullPath as NSURL
                         } else {
-                            return URL(string: dirPath.absoluteString.replacingOccurrences(of: "file://", with: "")) ?? dirPath
+                            return NSURL(string: dirPath.absoluteString.replacingOccurrences(of: "file://", with: "")) ?? dirPath as NSURL
                         }
                     }
                 } catch let error {
                     print("ERROR SAVING SAVED CONTENT: \(error.localizedDescription)")
                 }
                 
-                return dirPath
+                return dirPath as NSURL
             }
         
         return nil

@@ -34,13 +34,10 @@ class SingleContentCell: UITableViewCell {
         self.auTimestampLabel.textColor = AppStyles.foregroundColor
         self.auTimestampLabel.adjustsFontForContentSizeCategory = true
         
-//        label.font = UIFont.preferredFont(forTextStyle: .body)
-//        label.adjustsFontForContentSizeCategory = true
-        
         if let imageUrl = viewModel.imageUrl {
-            self.previewImageView.af.setImage(withURL: imageUrl, cacheKey: imageUrl.absoluteString, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"), serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: false) { (response) in
-                if let image = try? response.result.get() {
-                    ImageCache.shared.cacheImage(image, identifier: imageUrl.absoluteString)
+            self.previewImageView.af.setImage(withURL: imageUrl as URL, cacheKey: imageUrl.absoluteString, placeholderImage: #imageLiteral(resourceName: "RickyLogoCutout"), serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(0.5), runImageTransitionIfCached: false) { (response) in
+                if let image = try? response.result.get(), let absoluteString = imageUrl.absoluteString {
+                    ImageCache.shared.cacheImage(image, identifier: absoluteString)
                 }
             }
         }

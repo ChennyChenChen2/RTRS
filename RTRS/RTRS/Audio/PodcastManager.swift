@@ -21,7 +21,7 @@ class PodcastManager: NSObject {
     
     fileprivate var itemObserver: KeyValueObserver<AVPlayerItem>?
     fileprivate var playerObserver: KeyValueObserver<AVPlayer>?
-    fileprivate var player: AVPlayer?
+    fileprivate var player: AVQueuePlayer?
     
     weak var delegate: PodcastManagerDelegate?
     var title: String?
@@ -50,7 +50,7 @@ class PodcastManager: NSObject {
     var duration: CMTime?
     
     func play() {
-        self.player?.play()
+        self.player?.playImmediately(atRate: self.rate)
         self.delegate?.podcastDidBeginPlay()
         if let title = self.title {
             AnalyticsUtils.logPodBegan(title)
@@ -84,7 +84,7 @@ class PodcastManager: NSObject {
         self.player?.rate = rate
     }
     
-    func preparePlayer(title: String, url: URL, image: UIImage, dateString: String) {
+    func preparePlayer(title: String, url: URL, dateString: String) {
         self.title = title
         self.dateString = dateString
         
@@ -101,7 +101,7 @@ class PodcastManager: NSObject {
         
         self.player?.pause()
         let item = AVPlayerItem(url: url)
-        self.player = AVPlayer(playerItem: item)
+        self.player = AVQueuePlayer(playerItem: item)
         
         self.itemObserver = KeyValueObserver(observee: item)
         self.itemObserver?.addObserver(forKeyPath: "status", options: [.old, .new], closure: { [weak self] (item, changes) in
@@ -128,10 +128,17 @@ class PodcastManager: NSObject {
                     }
                     
                     weakSelf.delegate?.podcastDidFinish()
+                    AnalyticsUtils.logPodFinished(title)
                 }
             }
         })
         
+        self.player?.actionAtItemEnd = .advance
+        
+        NotificationCenter.default.post(name: .PodcastManagerLoadedNewPod, object: nil)
+    }
+    
+    func configureNowPlayingInfo(image: UIImage) {
         guard let player = self.player, let playerItem = player.currentItem else { return }
         var nowPlayingInfo = [String:Any]()
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playerItem.currentTime().seconds
@@ -144,8 +151,6 @@ class PodcastManager: NSObject {
         })
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
-        
-        NotificationCenter.default.post(name: .PodcastManagerLoadedNewPod, object: nil)
     }
     
     fileprivate func configureCommandCenter() {

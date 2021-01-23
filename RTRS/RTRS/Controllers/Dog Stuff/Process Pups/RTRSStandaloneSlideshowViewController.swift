@@ -62,6 +62,8 @@ class RTRSStandaloneSlideshowViewController: RTRSCollectionViewController, UICol
                 self.collectionView.alpha = 1
             }
         }
+        
+        AnalyticsUtils.logViewGalleryEntry("\(self.viewModel.pageName()): \(currentEntry.name ?? "No name")")
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {

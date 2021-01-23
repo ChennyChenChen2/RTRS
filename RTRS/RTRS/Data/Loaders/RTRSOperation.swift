@@ -9,6 +9,7 @@
 import Foundation
 import WebKit
 import SwiftSoup
+import Alamofire
 
 class RTRSOperation: Operation {
     
@@ -34,14 +35,16 @@ class RTRSOperation: Operation {
     let urls: [URL]
     let pageName: String
     let type: String
-    let ignoreTitles: [String]
+    let forceReload: Bool
+    var ignoreTitles: [String]
     var customCompletion: ((RTRSViewModel?) -> ())?
     
-    required init(urls: [URL], pageName: String, type: String, ignoreTitles: [String]) {
+    required init(urls: [URL], forceReload: Bool, pageName: String, type: String, ignoreTitles: [String]) {
         self.urls = urls
         self.pageName = pageName
         self.type = type
         self.ignoreTitles = ignoreTitles
+        self.forceReload = forceReload
         
         super.init()
     }
@@ -79,31 +82,6 @@ class RTRSOperation: Operation {
     override func main() {
         print("RTRS beginning to load \(pageName)")
             
-        func retrieveSavedDataIfAvailable() {
-            if let type = RTRSScreenType(rawValue: self.pageName) {
-                var viewModel: RTRSViewModel?
-                
-                print("Retrieving \(type.rawValue) from saved data")
-                if type == .pod || type == .auArticle || type == .normalColumnArticle {
-                    viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
-                } else {
-                    viewModel = RTRSPersistentStorage.getViewModel(type: type)
-                }
-                
-                if let theViewModel = viewModel {
-                    DispatchQueue.main.async {
-                        RTRSNavigation.shared.registerViewModel(viewModel: theViewModel, for: type)
-                    }
-                    self.customCompletion?(theViewModel)
-                    self.state = .Finished
-                    return
-                }
-            }
-            
-            self.customCompletion?(nil)
-            self.state = .Finished
-        }
-            
         var shouldUpdate = false
         if let url = self.urls.first {
             var request = URLRequest(url: url)
@@ -111,13 +89,53 @@ class RTRSOperation: Operation {
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 guard let response = response as? HTTPURLResponse,
                     let headers = response.allHeaderFields as? [String: String] else {
-                    retrieveSavedDataIfAvailable()
+                    RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                     return
                 }
                 
                 let keyName = "\(self.pageName)-\(RTRSUserDefaultsKeys.lastUpdated)"
                 let updated = UserDefaults.standard.string(forKey: keyName)
                 var lastUpdated = headers["Last-Modified"]
+                
+                func retrieveSavedDataIfAvailable() -> RTRSViewModel? {
+                    if let type = RTRSScreenType(rawValue: self.pageName) {
+                        let deferredCompletion = type == .au || type == .podcasts || type == .normalColumn || type == .moc
+                        var viewModel: RTRSViewModel?
+                        
+                        if deferredCompletion {
+                            viewModel = RTRSPersistentStorage.getViewModel(type: type, specificName: self.pageName)
+                        } else {
+                            viewModel = RTRSPersistentStorage.getViewModel(type: type)
+                        }
+
+//                        if viewModel?.needsReload() ?? true {
+//                            print("\(type.rawValue) view model needs reload")
+//                            guard let url = self.urls.first,
+//                                let htmlString = try? String.init(contentsOf: url),
+//                                let doc = try? SwiftSoup.parse(htmlString),
+//                                let lastUpdated = lastUpdated else {
+//                                self.state = .Finished
+//                                return nil
+//                            }
+//
+//                            let newViewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated)
+//
+//                            if !deferredCompletion {
+//                                UserDefaults.standard.set(lastUpdated, forKey: keyName)
+//                                self.state = .Finished
+//                                return newViewModel
+//                            }
+//                        } else {
+                            if let theViewModel = viewModel {
+                                return theViewModel
+                            }
+                            
+                            return nil
+//                        }
+                    }
+                    
+                    return nil
+                }
                 
                 if lastUpdated != nil {
                     if updated != lastUpdated {
@@ -133,48 +151,55 @@ class RTRSOperation: Operation {
                         shouldUpdate = true
                     }
                 }
+                
+                let oldViewModel = retrieveSavedDataIfAvailable()
             
-                if shouldUpdate {
-                    do {
-                        if let url = self.urls.first {
-                            let htmlString = try String.init(contentsOf: url)
-                            var doc: Document
-                            if self.pageName == "Pod Source" {
-                                doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
-                            } else {
-                                doc = try SwiftSoup.parse(htmlString)
-                            }
-                           
-                            if let type = RTRSScreenType(rawValue: self.pageName) {
-                                var viewModel: RTRSViewModel?
-                                var deferredCompletion = false
-                               
-                                if type == .au || type == .podcasts || type == .normalColumn || type == .moc {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated)
-                                    deferredCompletion = true
+                if shouldUpdate || oldViewModel == nil || self.forceReload {
+                    if let url = self.urls.first {
+                        AF.request(url.absoluteString).responseString { (response) in
+                            do {
+                                guard let htmlString = response.value else { self.customCompletion?(retrieveSavedDataIfAvailable()); return }
+                                var doc: Document
+                                if self.pageName == "Pod Source" {
+                                    doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
                                 } else {
-                                    viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
+                                    doc = try SwiftSoup.parse(htmlString)
                                 }
+                               
+                                if let type = RTRSScreenType(rawValue: self.pageName) {
+                                    var viewModel: RTRSViewModel?
+                                    var deferredCompletion = false
                                    
-                                if !deferredCompletion {
-                                    UserDefaults.standard.set(lastUpdated, forKey: keyName)
-                                    self.customCompletion?(viewModel)
+                                    if type == .au || type == .podcasts || type == .normalColumn || type == .moc {
+                                        let oldMultiVM = oldViewModel as? MultiContentViewModel
+                                        viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated, existingViewModels: oldMultiVM?.content.compactMap {$0})
+                                        deferredCompletion = true
+                                    } else {
+                                        viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
+                                    }
+                                       
+                                    if !deferredCompletion {
+                                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
+                                        self.customCompletion?(viewModel)
+                                    }
+                                    
+                                    self.state = .Finished
+                                } else {
+                                    // TODO: throw error for invalid page type...
+                                    // Call to retrieveSavedDataIfAvailable won't do anything because of the invalid page type
+                                    self.customCompletion?(oldViewModel)
                                     self.state = .Finished
                                 }
-                            } else {
-                                // TODO: throw error for invalid page type...
-                                // Call to retrieveSavedDataIfAvailable won't do anything because of the invalid page type
-                                retrieveSavedDataIfAvailable()
+                            } catch let error {
+                                print("Operation error: \(error.localizedDescription)")
+                                self.state = .Finished
                             }
                         }
-                    } catch {
-                        print("Error?")
-                        // TODO: create meaningful html parsing error
-                        retrieveSavedDataIfAvailable()
                     }
                 } else {
                     // Fall here if we've determined we don't need to update existing data
-                    retrieveSavedDataIfAvailable()
+                    self.customCompletion?(oldViewModel)
+                    self.state = .Finished
                 }
             }
             
@@ -184,7 +209,7 @@ class RTRSOperation: Operation {
 }
 
 fileprivate class RTRSViewModelFactory {
-    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil, etag: String? = nil) -> RTRSViewModel? {
+    class func viewModelForType(name: String, doc: Document, urls: [URL]? = nil, ignoreTitles: [String]? = nil, completionHandler: ((RTRSViewModel?) -> ())? = nil, etag: String? = nil, existingViewModels: [SingleContentViewModel]? = nil) -> RTRSViewModel? {
         
         switch name {
         case RTRSScreenType.home.rawValue:
@@ -192,13 +217,17 @@ fileprivate class RTRSViewModelFactory {
         case RTRSScreenType.podSource.rawValue:
             return RTRSPodSourceViewModel(doc: doc, pods: nil, ignoreTitles: ignoreTitles)
         case RTRSScreenType.podcasts.rawValue:
-            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler, etag: etag)
+            let existingViewModels = existingViewModels as? [RTRSSinglePodViewModel] ?? []
+            return RTRSMultiPodViewModel(urls: urls, name: name, pods: nil, ignoreTitles: ignoreTitles, completionHandler: completionHandler, etag: etag, existingPods: existingViewModels)
         case RTRSScreenType.au.rawValue:
-            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
+            let existingViewModels = existingViewModels as? [SingleArticleViewModel] ?? []
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag, ignoreTitles: ignoreTitles ?? [], existingContent: existingViewModels)
         case RTRSScreenType.normalColumn.rawValue:
-            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
+            let existingViewModels = existingViewModels as? [SingleArticleViewModel] ?? []
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag, ignoreTitles: ignoreTitles ?? [], existingContent: existingViewModels)
         case RTRSScreenType.moc.rawValue:
-            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag)
+            let existingViewModels = existingViewModels as? [SingleArticleViewModel] ?? []
+            return MultiArticleViewModel(urls: urls, name: name, articles: nil, completionHandler: completionHandler, etag: etag, ignoreTitles: ignoreTitles ?? [], existingContent: existingViewModels)
         case RTRSScreenType.processPups.rawValue:
             return RTRSProcessPupsViewModel(doc: doc, pups: nil, description: nil, imageURLs: nil, completion: completionHandler, etag: etag)
         case RTRSScreenType.goodDogClub.rawValue:

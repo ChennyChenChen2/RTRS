@@ -27,6 +27,8 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var youtubeButton: UIButton!
+    @IBOutlet weak var buttonStackView: UIStackView!
     
     var displayedViaTabView = false
     var viewModel: RTRSSinglePodViewModel!
@@ -55,6 +57,29 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         
         PodcastManager.shared.delegate = self
         self.playButton.isHidden = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(itemPlayedToEndAction), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateViewModels), name: Notification.Name.podLoadedNotificationName, object: nil)
+    }
+    
+    @objc private func updateViewModels() {
+        self.multiPodViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel
+        self.sourceViewModel = RTRSNavigation.shared.viewModel(for: .podSource) as? RTRSPodSourceViewModel
+    }
+    
+    @objc private func itemPlayedToEndAction() {
+        let indexPaths = self.collectionView.indexPathsForVisibleItems
+        if let path = indexPaths.first, path.row < self.collectionView.numberOfItems(inSection: 0) - 1 {
+            let nextPath = IndexPath(item: path.row + 1, section: 0)
+            self.collectionView.scrollToItem(at: nextPath, at: .centeredHorizontally, animated: true)
+            
+            self.durationLabel.text = "00:00:00"
+            self.seekBar.value = 0
+            
+            self.loadingSpinner.startAnimating()
+            self.loadingSpinner.isHidden = false
+            self.playButton.isHidden = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +88,9 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         self.seekBar.minimumTrackTintColor = .blue
         self.seekBar.maximumTrackTintColor = .gray
         
+        self.youtubeButton.contentHorizontalAlignment = .fill
+        self.youtubeButton.contentVerticalAlignment = .fill
+        self.youtubeButton.tintColor = AppStyles.foregroundColor
         self.backButton.tintColor = AppStyles.foregroundColor
         self.forwardButton.tintColor = AppStyles.foregroundColor
         self.playButton.tintColor = AppStyles.foregroundColor
@@ -80,11 +108,12 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
 
         self.dismissButton.tintColor = AppStyles.foregroundColor
         
+        // If this check fails, VC can get in a weird state with the wrong viewModel. Might want to keep old viewModel
+        // until we know the check has succeeded.
         if !self.displayedViaTabView && (PodcastManager.shared.title == nil || PodcastManager.shared.title! != self.viewModel.title) {
-            self.displayedViaTabView = false
             if let indexPath = self.multiPodViewModel?.content.firstIndex(where: { (vm) -> Bool in
-                guard let vm = vm else { return false }
-                return vm.title == self.viewModel.title
+                guard let vm = vm as? RTRSSinglePodViewModel else { return false }
+                return vm.sharingUrl == self.viewModel.sharingUrl
             }) {
                 let page: Int = indexPath
                 let contentOffset = CGPoint(x: self.view.frame.size.width * CGFloat(page), y: 0)
@@ -92,6 +121,19 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
                     self.collectionView.setContentOffset(contentOffset, animated: false)
                     self.collectionView.reloadData()
                 }
+            }
+        }
+        
+        self.displayedViaTabView = false
+    }
+    
+    @IBAction func youtubeAction(_ sender: Any) {
+        if let youtubeURL = self.viewModel.youtubeUrl {
+            PodcastManager.shared.pause()
+            RTRSExternalWebViewController.openExternalWebBrowser(self, url: youtubeURL as URL, name: "RTRS on Youtube")
+            
+            if let title = self.viewModel.title {
+                AnalyticsUtils.logYoutubeButtonPressed(title)
             }
         }
     }
@@ -107,6 +149,10 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
 
         // present the view controller
         self.present(activityViewController, animated: true, completion: nil)
+        
+        if let absString = url.absoluteString {
+            AnalyticsUtils.logShare(absString)
+        }
     }
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
@@ -209,7 +255,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel,
             let podDate = singlePodViewModel.dateString,
-            let podUrl = self.sourceViewModel?.podUrls[indexPath.row],
+            let podUrl = self.sourceViewModel?.podInfo[indexPath.row].link,
             let podTitle = singlePodViewModel.title,
             let podCell = cell as? PodcastCollectionViewCell {
             self.titleLabel.text = podTitle
@@ -217,19 +263,44 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             self.dateLabel.text = podDate
             self.viewModel = singlePodViewModel
             
+            if self.viewModel?.youtubeUrl == nil {
+                let spinner = UIActivityIndicatorView()
+                self.buttonStackView.insertArrangedSubview(spinner, at: 1)
+                self.youtubeButton.isHidden = true
+                spinner.hidesWhenStopped = true
+                spinner.startAnimating()
+                self.viewModel.lazyLoadPodData {
+                    DispatchQueue.main.async {
+                        spinner.stopAnimating()
+                        self.buttonStackView.removeArrangedSubview(spinner)
+                        self.youtubeButton.isHidden = singlePodViewModel.youtubeUrl == nil
+                        self.multiPodViewModel?.content[indexPath.row] = singlePodViewModel
+                        if let multiPodVM = self.multiPodViewModel {
+                            RTRSPersistentStorage.save(viewModel: multiPodVM, type: .podcasts)
+                        }
+                    }
+                }
+            } else {
+                self.youtubeButton.isHidden = false
+            }
+            
             cell.contentView.backgroundColor = AppStyles.backgroundColor
             
             self.loadingSpinner.startAnimating()
             self.loadingSpinner.isHidden = false
             self.playButton.isHidden = true
             
+            PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl as URL, dateString: podDate)
+            
             if let image = podCell.imageView.image {
-                PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
+                PodcastManager.shared.configureNowPlayingInfo(image: image)
             } else if let imageUrl = singlePodViewModel.imageUrl {
-                podCell.imageView.af.setImage(withURL: imageUrl, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .main, imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (response) in
+                podCell.imageView.af.setImage(withURL: imageUrl as URL, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (response) in
                     if let image = response.value {
                         podCell.imageView.image = image
-                        PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl, image: image, dateString: podDate)
+                        PodcastManager.shared.configureNowPlayingInfo(image: image)
+                    } else {
+                        print("No image?")
                     }
                 }
             } else {
@@ -242,7 +313,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
         
         if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
-            cell.imageView.af.setImage(withURL: imageUrl)
+            cell.imageView.af.setImage(withURL: imageUrl as URL)
         } else {
             print("HERE?")
         }
@@ -276,6 +347,10 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     
     func podcastDidBeginPlay() {
         self.playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        self.playButton.isHidden = false
+        
+        self.loadingSpinner.stopAnimating()
+        self.loadingSpinner.isHidden = true
     }
     
     func podcastDidPause() {

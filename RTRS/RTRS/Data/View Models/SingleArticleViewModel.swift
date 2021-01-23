@@ -13,7 +13,7 @@ protocol SingleContentViewModel {
     var title: String? { get }
     var contentDescription: String? { get }
     var dateString: String? { get }
-    var imageUrl: URL? { get }
+    var imageUrl: NSURL? { get }
 }
 
 class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
@@ -44,12 +44,12 @@ class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
     
     let title: String?
     let contentDescription: String?
-    let baseURL: URL?
+    let baseURL: NSURL?
     let dateString: String?
-    let imageUrl: URL?
+    let imageUrl: NSURL?
     var htmlString: String?
     
-    init(doc: Document?, title: String?, articleDescription: String?, baseURL: URL?, dateString: String?, imageUrl: URL?, htmlString: String?) {
+    init(doc: Document?, title: String?, articleDescription: String?, baseURL: NSURL?, dateString: String?, imageUrl: NSURL?, htmlString: String?) {
         self.title = title
         self.contentDescription = articleDescription
         self.baseURL = baseURL
@@ -73,27 +73,93 @@ class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
     required convenience init?(coder aDecoder: NSCoder) {
         let title = aDecoder.decodeObject(forKey: CodingKeys.title.rawValue) as? String
         let articleDescription = aDecoder.decodeObject(forKey: CodingKeys.articleDescription.rawValue) as? String
-        let baseURL = aDecoder.decodeObject(forKey: CodingKeys.baseURL.rawValue) as? URL
+        let baseURL = aDecoder.decodeObject(forKey: CodingKeys.baseURL.rawValue) as? NSURL
         let dateString = aDecoder.decodeObject(forKey: CodingKeys.dateString.rawValue) as? String
-        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? URL
+        let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? NSURL
         let htmlString = aDecoder.decodeObject(forKey: CodingKeys.htmlString.rawValue) as? String
         
         self.init(doc: nil, title: title, articleDescription: articleDescription, baseURL: baseURL, dateString: dateString, imageUrl: imageUrl, htmlString: htmlString)
     }
     
     func extractDataFromDoc(doc: Document?, urls: [URL]?) {
-        guard let theDoc = doc else { return }
+//        guard let theDoc = doc else { return }
+//        do {
+//            if let divElem = try theDoc.getElementsByClass("content-wrapper").first() {
+//                
+//                if let titleElem = try divElem.getElementsByClass("title").first() {
+//                    try titleElem.remove()
+//                }
+//                
+//                if let headerElem = try divElem.getElementsByTag("header").first() {
+//                    try headerElem.remove()
+//                }
+//                
+//                if let footerElem = try divElem.getElementsByTag("footer").first() {
+//                    try footerElem.remove()
+//                }
+//
+//                if let dateAuthorElem = try divElem.getElementsByClass("date-author").first() {
+//                    try dateAuthorElem.remove()
+//                }
+//
+//                if let imageElem = try divElem.getElementsByClass("sqs-block-content").first() {
+//                    try imageElem.remove()
+//                }
+//                
+//                if let tagElem = try divElem.getElementsByClass("tags-cats").first() {
+//                    try tagElem.remove()
+//                }
+//                
+//                if let paginationElem = try divElem.getElementsByClass("pagination").first() {
+//                    try paginationElem.remove()
+//                }
+//                
+//                let imgElems = try divElem.select("img")
+//                for imgElem in imgElems {
+//                    if let dataSrcAttr = try? imgElem.attr("data-src") {
+//                        try imgElem.attr("src", dataSrcAttr)
+//                    }
+//                }
+//                
+//                let imgWrapperElems = try divElem.select("div.image-block-wrapper")
+//                for imgWrapperElem in imgWrapperElems {
+//                    if let _ = try? imgWrapperElem.attr("style") {
+//                        try imgWrapperElem.attr("style", "")
+//                    }
+//                }
+//                
+//                let intrinsicDivElems = try divElem.select("div.intrinsic")
+//                for intrinsicDivElem in intrinsicDivElems {
+//                    if let _ = try? intrinsicDivElem.attr("style") {
+//                        try intrinsicDivElem.attr("style", "")
+//                    }
+//                }
+//                
+//                let divString = try divElem.html()
+//                
+//                let htmlString = "<html><head><style>{{CSS_PLACEHOLDER}}</style></head><body>\(divString)</body></html>"
+//                self.htmlString = htmlString
+//            }
+//        } catch let error {
+//            print("Error parsing single article viewmodel: \(error.localizedDescription)")
+//        }
+    }
+    
+    func lazyLoadData(completion: () -> ()) {
+        guard let baseURL = self.baseURL as? URL, let htmlString = try? String.init(contentsOf: baseURL),
+              let theDoc = try? SwiftSoup.parse(htmlString) else { completion(); return }
+        
         do {
             if let divElem = try theDoc.getElementsByClass("content-wrapper").first() {
-                
+
                 if let titleElem = try divElem.getElementsByClass("title").first() {
                     try titleElem.remove()
                 }
-                
+
                 if let headerElem = try divElem.getElementsByTag("header").first() {
                     try headerElem.remove()
                 }
-                
+
                 if let footerElem = try divElem.getElementsByTag("footer").first() {
                     try footerElem.remove()
                 }
@@ -105,43 +171,45 @@ class SingleArticleViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
                 if let imageElem = try divElem.getElementsByClass("sqs-block-content").first() {
                     try imageElem.remove()
                 }
-                
+
                 if let tagElem = try divElem.getElementsByClass("tags-cats").first() {
                     try tagElem.remove()
                 }
-                
+
                 if let paginationElem = try divElem.getElementsByClass("pagination").first() {
                     try paginationElem.remove()
                 }
-                
+
                 let imgElems = try divElem.select("img")
                 for imgElem in imgElems {
                     if let dataSrcAttr = try? imgElem.attr("data-src") {
                         try imgElem.attr("src", dataSrcAttr)
                     }
                 }
-                
+
                 let imgWrapperElems = try divElem.select("div.image-block-wrapper")
                 for imgWrapperElem in imgWrapperElems {
                     if let _ = try? imgWrapperElem.attr("style") {
                         try imgWrapperElem.attr("style", "")
                     }
                 }
-                
+
                 let intrinsicDivElems = try divElem.select("div.intrinsic")
                 for intrinsicDivElem in intrinsicDivElems {
                     if let _ = try? intrinsicDivElem.attr("style") {
                         try intrinsicDivElem.attr("style", "")
                     }
                 }
-                
+
                 let divString = try divElem.html()
-                
+
                 let htmlString = "<html><head><style>{{CSS_PLACEHOLDER}}</style></head><body>\(divString)</body></html>"
                 self.htmlString = htmlString
             }
         } catch let error {
             print("Error parsing single article viewmodel: \(error.localizedDescription)")
         }
+        
+        completion()
     }
 }

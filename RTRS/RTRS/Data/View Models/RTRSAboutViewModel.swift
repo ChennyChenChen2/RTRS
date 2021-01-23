@@ -80,11 +80,7 @@ class RTRSAboutViewModel: NSObject, RTRSViewModel {
                 }
             }
             
-            let jonHTML = """
-                <p>Jon Chen is the developer of this app. He works as an app developer and musician in New York City. You can follow him on Twitter <strong><a target="_blank" href="http://www.twitter.com/ChennyChen_Chen">@ChennyChen_Chen</a>.</strong></p>
-            """
-            
-            self.bodyHTML = bodyText + jonHTML
+            self.bodyHTML = bodyText
             
             if let divElement = try doc.getElementsByClass("image-block-wrapper").first(),
                 let imgElement = try divElement.getElementsByTag("img").first() {

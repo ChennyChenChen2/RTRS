@@ -112,7 +112,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                 preference.drawing.arrow.tipCornerRadius = 0
                 preference.drawing.title.color = .white
                 preference.drawing.message.color = .white
-                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "If the logo is spinning, data is being fetched.", message: "If you ever want to refresh the latest data, tap the logo. The app will automatically check on startup.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
+                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "If the logo is spinning, data is being fetched.", message: "The app will automatically check for updates on startup. If you ever want to forcibly reload all data, tap the logo.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
             }
         }
     }
@@ -170,7 +170,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         
         let homeItem = viewModelItems[indexPath.row]
         if let url = homeItem.actionUrl, let title = homeItem.text, let navVC = self.navigationController as? RTRSNavigationController {
-            let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title, podURLString: nil, sharingURLString: nil)
+            let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title, podURLString: nil, youtubeUrlString: nil)
             RTRSDeepLinkHandler.route(payload: payload, navController: navVC, shouldOpenExternalWebBrowser: homeItem.shouldOpenExternalBrowser)
         }
     }
@@ -234,4 +234,9 @@ class RTRSHomeTableViewCell: UITableViewCell {
     static let kReuseId = "RTRSHomeCell"
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var homeImageView: UIImageView!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.homeImageView.image = nil
+    }
 }

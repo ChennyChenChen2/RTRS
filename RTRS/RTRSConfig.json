@@ -67,7 +67,9 @@
                     "https://www.rightstorickysanchez.com/podcast?page=16",
                     "https://www.rightstorickysanchez.com/podcast?page=17",
                     "https://www.rightstorickysanchez.com/podcast?page=18",
-                    "https://www.rightstorickysanchez.com/podcast?page=19"]
+                    "https://www.rightstorickysanchez.com/podcast?page=19",
+                    "https://www.rightstorickysanchez.com/podcast?page=20",
+                    "https://www.rightstorickysanchez.com/podcast?page=21",]
         },
         {
             "name": "If Not, Pick Will Convey As Two Second-Rounders",
@@ -78,18 +80,21 @@
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=5",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=6",
                     "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=7",
-                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=8"],
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=8",
+                    "https://www.rightstorickysanchez.com/if-not-will-convey-as-two-second-rounders?page=9"],
             "type": "contentlist",
         },
         {
             "name": "Sixers Adam Normal Column",
             "links": ["https://www.rightstorickysanchez.com/normal-column",
-                    "https://www.rightstorickysanchez.com/normal-column?page=2"],
+                    "https://www.rightstorickysanchez.com/normal-column?page=2",
+                    "https://www.rightstorickysanchez.com/normal-column?page=3"],
             "type": "contentlist"
         },
         {
             "name": "The Good O'Connor (Mike)",
-            "links": ["https://www.rightstorickysanchez.com/the-good-oconnor-mike"],
+            "links": ["https://www.rightstorickysanchez.com/the-good-oconnor-mike",
+                    "https://www.rightstorickysanchez.com/the-good-oconnor-mike?page=2"],
             "type": "contentlist"
         },
         {
@@ -126,6 +131,7 @@
     "podSource": {
         "url": "https://spikeeskin.libsyn.com/rss",
         "ignoreTitles": [
+            "The Carl Landry Record Club Is Here",
             "Big Announcement: Flip The Switch",
             "Important Announcement: He's Coming Over!",
             "The Nik Stauskas Interview (Ricky Rebroadcast)",
@@ -138,7 +144,8 @@
             "Post Lottery All-Star Podcast From XFINITY Live!",
             "Post Lottery Party Podcast With Spike And Mike, Sixers Get #3 Pick",
             "Bus The Process Instructions And Information (And Hollis Thompson Farewell)",
-            "Sam Hinkie's Resignation Letter"
+            "Sam Hinkie's Resignation Letter",
+            "Special Announcement!",
         ],
     },
     "moreItems": [

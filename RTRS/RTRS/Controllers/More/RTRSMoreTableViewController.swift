@@ -7,13 +7,13 @@
 //
 
 import UIKit
+import MessageUI
 
 #if DEBUG
 import FLEX
 #endif
 
-class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegate {
-
+class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegate, LoggableViewController {
     fileprivate let cellReuseId = "MoreCell"
     fileprivate let notificationCellReuseId = "NotificationCell"
     fileprivate let externalBrowserSegueId = "externalweb"
@@ -23,6 +23,9 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
     fileprivate let dogStuffSegueId = "DogStuff"
     
     var viewModel: RTRSMoreViewModel?
+    func viewModelForLogging() -> RTRSViewModel? {
+        return self.viewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +64,12 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         styleForDarkMode()
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnalyticsUtils.logScreenView(self)
     }
     
     @objc private func styleForDarkMode() {
@@ -80,7 +89,7 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (viewModel?.pages?.count ?? 0) + 3 // 3 = Notifications, app settings, dog stuff
+        return (viewModel?.pages?.count ?? 0) + 4 // 4 = Notifications, app settings, dog stuff, Mail
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -116,6 +125,10 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
             cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
             cell.textLabel?.text = "Dog Stuff"
             cell.imageView?.image = AppStyles.dogStuffIcon
+        } else if indexPath.row == self.tableView.numberOfRows(inSection: 0) - 2 {
+            cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
+            cell.textLabel?.text = "E-mail The Ricky"
+            cell.imageView?.image = AppStyles.mailIcon
         } else if indexPath.row == self.tableView.numberOfRows(inSection: 0) - 1 {
             // Last row = app settings
             cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
@@ -190,6 +203,17 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
             } else if indexPath.row == 1 {
                 self.performSegue(withIdentifier: dogStuffSegueId, sender: nil)
                 return
+            } else if indexPath.row == tableView.numberOfRows(inSection: 0) - 2 {
+                // Mail
+                if MFMailComposeViewController.canSendMail() {
+                    let mail = MFMailComposeViewController()
+                    mail.mailComposeDelegate = self
+                    mail.setToRecipients(["spike@rightstorickysanchez.com"])
+
+                    present(mail, animated: true)
+                }
+                
+                return
             }
             
             guard indexPath.row - 2 >= 0 else {
@@ -223,6 +247,12 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
                 }
             }
         }
+    }
+}
+
+extension RTRSMoreTableViewController: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 

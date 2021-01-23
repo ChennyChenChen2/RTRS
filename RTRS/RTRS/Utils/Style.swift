@@ -30,6 +30,10 @@ enum AppStyles {
         return darkModeEnabled ? #imageLiteral(resourceName: "Dog-Stuff-Light") : #imageLiteral(resourceName: "Dog-Stuff-Dark")
     }
     
+    static var mailIcon: UIImage {
+        return darkModeEnabled ? #imageLiteral(resourceName: "Mail-Light") : #imageLiteral(resourceName: "Mail-Dark")
+    }
+    
     static var shareIcon: UIImage {
         return darkModeEnabled ? #imageLiteral(resourceName: "Share-Light") : #imageLiteral(resourceName: "Share-Dark")
     }
@@ -94,6 +98,7 @@ enum Font {
             let action = UIAlertAction(title: size.rawValue, style: .default) { (action) in
                 guard let title = action.title, let size = TextSize(rawValue: title) else { return }
                 UserDefaults.standard.set(size.size, forKey: self.textSizeDefaultsKey)
+                AnalyticsUtils.logTextSizeChange(size.rawValue)
                 completion?()
             }
             

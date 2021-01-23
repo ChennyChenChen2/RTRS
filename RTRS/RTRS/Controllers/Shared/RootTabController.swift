@@ -9,13 +9,23 @@
 import UIKit
 import MarqueeLabel
 
-class RootTabController: UITabBarController {
+class RootTabController: UITabBarController, UITabBarControllerDelegate {
     
     var playerView: TabBarPlayerView?
+    
+    private let headNames = ["Hinkie", "Brett", "Joel", "Dario", "Roco", "TJ"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.styleTabBar()
+        
+        self.delegate = self
+        
+        if let contentItem = self.tabBar.items?[1] {
+            let index = Int.random(in: 0..<headNames.count)
+            contentItem.image = UIImage(named: headNames[index])
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(styleTabBar), name: NSNotification.Name.darkModeUpdated, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showPlayerView), name: NSNotification.Name.PodcastManagerLoadedNewPod, object: nil)
     }
@@ -77,5 +87,17 @@ class RootTabController: UITabBarController {
             vc.displayedViaTabView = true
             self.present(vc, animated: true, completion: nil)
         }
+    }
+    
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let vc = viewController as? RTRSNavigationController,
+           let topVC = vc.topViewController {
+            if let tableView = topVC.view as? UITableView {
+                tableView.setContentOffset(CGPoint(x: 0, y: -tableView.safeAreaInsets.top), animated: true)
+            }
+        }
+        
+        return true
     }
 }

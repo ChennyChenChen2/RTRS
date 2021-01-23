@@ -40,6 +40,7 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     enum CodingKeys: String {
         case name = "Name"
         case articles = "Articles"
+        case shouldReload = "ShouldReload"
     }
     
     func encode(with aCoder: NSCoder) {
@@ -51,21 +52,25 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
         let name = aDecoder.decodeObject(forKey: CodingKeys.name.rawValue) as? String
         let articles = aDecoder.decodeObject(forKey: CodingKeys.articles.rawValue) as? [SingleArticleViewModel]
         
-        self.init(urls: nil, name: name, articles: articles, completionHandler: nil, etag: nil)
+        self.init(urls: nil, name: name, articles: articles, completionHandler: nil, etag: nil, ignoreTitles: nil, existingContent: nil)
     }
 
     let name: String?
     var content: [SingleContentViewModel?]  = [SingleArticleViewModel]()
     var completion: ((RTRSViewModel?) -> ())?
     let etag: String?
+    var ignoreTitles: [String]?
+    var existingContent = [SingleArticleViewModel]()
     
     private let group = DispatchGroup()
 
-    required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?, etag: String?) {
+    required init(urls: [URL]?, name: String?, articles: [SingleArticleViewModel]?, completionHandler: ((RTRSViewModel?) -> ())?, etag: String?, ignoreTitles: [String]?, existingContent: [SingleArticleViewModel]?) {
         self.name = name
         self.content = articles ?? []
         self.completion = completionHandler
         self.etag = etag
+        self.existingContent = existingContent ?? []
+        self.ignoreTitles = ignoreTitles ?? []
         
         super.init()
         extractDataFromDoc(doc: nil, urls: urls)
@@ -77,23 +82,39 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
             return
         }
         
-//        var batchDict = [Int: [SingleContentViewModel?]]()
-        var batchDict = ThreadSafeDict<Int, [SingleContentViewModel?]>()
+        self.content.append(contentsOf: self.existingContent)
+        self.ignoreTitles?.append(contentsOf: self.content.map { $0?.title ?? "" })
         
-        let concurrentQueue = DispatchQueue(label: "com.queue.concurrent", attributes: .concurrent)
+        var batchDict = ThreadSafeDict<Int, [SingleContentViewModel?]>()
+        let concurrentQueue = DispatchQueue(label: "com.articles.queue.concurrent", attributes: .concurrent)
         self.group.enter()
         for n in 0..<theURLs.count {
+            let url = theURLs[n]
             concurrentQueue.async {
                 do {
-                    let innerQueue = DispatchQueue(label: "com.queue.inner", attributes: .concurrent)
-                    let url = theURLs[n]
+                    let innerQueue = DispatchQueue(label: "com.articles.queue.inner", attributes: .concurrent)
                     let htmlString = try String.init(contentsOf: url)
                     let doc = try SwiftSoup.parse(htmlString)
                     let postElements = try doc.getElementsByTag("article")
-                    var batch = [SingleArticleViewModel?](repeating: nil, count: postElements.count)
-                    var completed = 0
+                    print("\(self.pageName()): Batch \(n) has \(postElements.count) posts")
+                    var batch = [SingleArticleViewModel?]()
                     for i in 0..<postElements.count {
                         innerQueue.async {
+                            func wrapUp(_ singleArticleVM: SingleArticleViewModel?) {
+                                batch.append(singleArticleVM)
+                                
+                                if batch.count == postElements.count {
+                                    print("\(self.pageName()): COMPLETED BATCH \(n), CONTAINS \(batch.filter({ $0 != nil }).count)")
+                                    batchDict.setValue(batch, for: n)
+                                    batchDict.count { (count) in
+                                        if count == theURLs.count {
+                                            self.group.leave()
+                                            return
+                                        }
+                                    }
+                                }
+                            }
+                            
                             let postElement = postElements[i]
                             
                             var theTitleElem: Element? = try? postElement.getElementsByClass("title").first()
@@ -106,70 +127,75 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 theDateElem = try? postElement.getElementsByClass("date").first()
                             }
                         
-                            do {
-                                let imageElement = try postElement.getElementsByClass("squarespace-social-buttons inline-style")
-                                if let titleElement = theTitleElem,
-                                    let aElement = try? titleElement.getElementsByTag("a").first(),
-                                    let dateElement = theDateElem,
-                                    let title = try? aElement.text(),
-                                    let urlSuffix = try? aElement.attr("href"),
-                                    let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
-                                    let articleDescription = try? descriptionTextElement.text(),
-                                    let imageAttribute = try? imageElement.attr("data-asset-url")
-                                {
-                                
-                                    guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-                                        let articleUrl = URL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else {
-                                            print("error with URL encoding... offending URL suffix: \(urlSuffix)")
-                                            return
-                                    }
-                                    
-                                    var dateString = ""
-                                    if let newDate = try? dateElement.text() {
-                                        dateString = newDate
-                                    }
-                                    
-                                    let htmlString = try String.init(contentsOf: articleUrl)
-                                    let articleDoc = try SwiftSoup.parse(htmlString)
-                                    let singleArticleViewModel = SingleArticleViewModel(doc: articleDoc, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: URL(string: imageAttribute), htmlString: nil)
-                                    batch[i] = singleArticleViewModel
-
-                                    completed += 1
-                                    if completed == postElements.count {
-                                        batchDict.setValue(batch, for: n)
-                                        batchDict.count { (count) in
-                                            if count == theURLs.count {
-                                                self.group.leave()
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    print("Something went wrong?")
+                            let imageElement = try? postElement.getElementsByClass("squarespace-social-buttons inline-style")
+                            if let titleElement = theTitleElem,
+                                let aElement = try? titleElement.getElementsByTag("a").first(),
+                                let dateElement = theDateElem,
+                                let title = try? aElement.text(),
+                                let urlSuffix = try? aElement.attr("href"),
+                                let descriptionTextElement = try? postElement.getElementsByTag("p").first(),
+                                let articleDescription = try? descriptionTextElement.text(),
+                                let imageAttribute = try? imageElement?.attr("data-asset-url")
+                            {
+                                guard let encodedUrlSuffix = urlSuffix.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+                                    let articleUrl = NSURL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else {
+                                        print("error with URL encoding... offending URL suffix: \(urlSuffix)")
+                                        wrapUp(nil)
+                                        return
                                 }
-                            } catch let error {
-                                print("Error parsing \(self.pageName()) view model: \(error.localizedDescription)")
+                                
+                                if let titles = self.ignoreTitles, titles.contains(title) {
+                                    print("IGNORING: \(title)")
+                                    wrapUp(nil)
+                                    return
+                                }
+                                
+                                var dateString = ""
+                                if let newDate = try? dateElement.text() {
+                                    dateString = newDate
+                                }
+
+                                let singleArticleViewModel = SingleArticleViewModel(doc: nil, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: NSURL(string: imageAttribute), htmlString: nil)
+
+                                wrapUp(singleArticleViewModel)
+                                return
+                            } else {
+                                print("Multi-article: something went wrong?")
+                                wrapUp(nil)
                                 return
                             }
                         }
                     }
                 } catch let error {
                     print("Error parsing \(self.pageName()) view model: \(error.localizedDescription)")
+                    self.completion?(nil)
                     return
                 }
             }
         }
         
         self.group.notify(queue: .main) {
-            print("FINISHED LOADING \(self.pageName())")
-            batchDict.dictRepresentation { (dict) in
+            batchDict.dictRepresentation { [weak self] (dict) in
+                guard let self = self else { return }
+                print("FINISHED LOADING \(self.pageName()), \(dict.count) entries")
                 let batches = dict.sorted { $0.key < $1.key }
                 for (_, v) in batches {
                     self.content.append(contentsOf: v.compactMap { $0 })
                 }
-
+                
                 if let etag = self.etag {
                     let keyName = "\(self.pageName())-\(RTRSUserDefaultsKeys.lastUpdated)"
                     UserDefaults.standard.set(etag, forKey: keyName)
+                }
+                
+                self.content.sort { (vm1, vm2) -> Bool in
+                    guard let dateString1 = vm1?.dateString, let dateString2 = vm2?.dateString else { return false }
+                    let dateFormatter = DateFormatter()
+                    // "OCTOBER 24, 2020"
+                    dateFormatter.dateFormat = "MMMM dd, yyyy"
+                    guard let date1 = dateFormatter.date(from: dateString1), let date2 = dateFormatter.date(from: dateString2) else { return false }
+                    
+                    return date1.compare(date2) == .orderedDescending
                 }
                 
                 self.completion?(self)
@@ -184,7 +210,7 @@ struct ThreadSafeDict<Key: Hashable, Value> {
     
     func count(_ response: (Int)->()) {
         queue.sync {
-            response(dict.count)
+            response(dict.compactMap { $0 }.count)
         }
     }
     

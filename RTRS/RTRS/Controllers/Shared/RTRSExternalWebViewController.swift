@@ -68,6 +68,14 @@ class RTRSExternalWebViewController: UIViewController, WKNavigationDelegate {
         self.dismissButton.tintColor = AppStyles.foregroundColor
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let name = self.name {
+            AnalyticsUtils.logExternalWebView(name)
+        }
+    }
+    
     @IBAction func dismissButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }

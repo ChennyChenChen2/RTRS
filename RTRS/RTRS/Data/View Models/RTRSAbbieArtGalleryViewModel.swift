@@ -63,8 +63,6 @@ class RTRSAbbieArtGalleryViewModel: NSObject, GalleryViewModel {
                     self.entries.append(galleryEntry)
                 }
             }
-            
-            print("HERE!")
         } catch let error {
             print("Error in Abbie view model: \(error.localizedDescription)")
         }

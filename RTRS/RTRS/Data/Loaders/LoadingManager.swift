@@ -15,6 +15,17 @@ import FirebaseDatabase
     static let shared = LoadingManager()
     let operationCoordinator = RTRSOperationCoordinator()
     var loadingMessages = [String]()
+    private let previousLoadUserDefaultsKey = "previousLoadCompleted"
+    var previousLoadCompleted: Date? {
+        get {
+            return UserDefaults.standard.object(forKey: previousLoadUserDefaultsKey) as? Date
+        }
+        
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: previousLoadUserDefaultsKey)
+        }
+    }
+    
     @objc dynamic var isLoading = false
     
     static var cachedConfigPath: URL {
@@ -23,11 +34,12 @@ import FirebaseDatabase
         return URL(string: "\(documentsDirectory.absoluteString)RTRSConfig.json")!
     }
     
-    func executeStartup() {
-        guard let configURLString = Bundle.main.object(forInfoDictionaryKey: "RTRSConfigURL") as? String else {
-                // We'll show an error here, but really, it was definitely our fault, lol...
-                RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
+    func executeStartup(forceReload: Bool) {
+        // Nobody is allowed to make requests less than 60 seconds apart
+        if let prevLoadFinishTime = LoadingManager.shared.previousLoadCompleted {
+            if Date().timeIntervalSince(prevLoadFinishTime) < 60 {
                 return
+            }
         }
         
         self.isLoading = true
@@ -37,8 +49,7 @@ import FirebaseDatabase
             if !snapshot.exists() { return }
             
             if let token = snapshot.value as? String {
-                let configURLStringWithTemplate = configURLString.replacingOccurrences(of: "{{TOKEN}}", with: token)
-                let url = URL(string: configURLStringWithTemplate)
+                let url = URL(string: token)
                 
                 guard let configURL = url else {
                     RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
@@ -46,29 +57,6 @@ import FirebaseDatabase
                 }
                 
                 URLSession.shared.dataTask(with: configURL) { [weak self] (data, response, error) in
-                    func doStartup(dict: [String: Any]) {
-                        guard let weakSelf = self else { return }
-                        
-                        if let messages = dict["loadingMessages"] as? [String] {
-                            weakSelf.loadingMessages = messages
-                        }
-                        
-                        DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: .loadingBeganNotification, object: nil)
-                        }
-                        
-                        weakSelf.operationCoordinator.beginStartupProcess(dict: dict) { (success) in
-                            if !success {
-                                RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
-                            }
-                            
-                            DispatchQueue.main.async {
-                                NotificationCenter.default.post(name: .loadingFinishedNotification, object: nil)
-                                self?.isLoading = false
-                            }
-                        }
-                    }
-                    
                     func getBundledConfig() -> [String: Any]? {
                         if let configPath = Bundle.main.path(forResource: "RTRSConfig", ofType: "json") {
                             let configUrl = URL(fileURLWithPath: configPath)
@@ -80,6 +68,39 @@ import FirebaseDatabase
                         return nil
                     }
                     
+                    func getCachedConfig() -> [String: Any]? {
+                        if let data = try? Data(contentsOf: LoadingManager.cachedConfigPath),
+                                let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+                            return dict
+                        }
+                        
+                        return nil
+                    }
+                    
+                    func doStartup(dict: [String: Any], forceReload: Bool) {
+                        guard let weakSelf = self else { return }
+                        
+                        if let messages = dict["loadingMessages"] as? [String] {
+                            weakSelf.loadingMessages = messages
+                        }
+                        
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: .loadingBeganNotification, object: nil)
+                        }
+                        
+                        weakSelf.operationCoordinator.beginStartupProcess(dict: dict, forceReload: forceReload) { (success) in
+                            if !success {
+                                RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
+                            }
+                            
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: .loadingFinishedNotification, object: nil)
+                                self?.previousLoadCompleted = Date()
+                                self?.isLoading = false
+                            }
+                        }
+                    }
+                    
                     var isDebug = false
                     #if DEBUG
                     isDebug = true
@@ -88,22 +109,31 @@ import FirebaseDatabase
                     var configDict: [String: Any]?
                     if error != nil || isDebug {
                         if let config = getBundledConfig() {
-                            doStartup(dict: config)
+                            doStartup(dict: config, forceReload: forceReload)
                         } else {
                             RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                         }
                     } else {
+                        var secondaryForceReload = false
                         if let data = data, let theDict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
-                            do {
-                                try data.write(to: LoadingManager.cachedConfigPath)
-                            } catch {
-                                print("Error saving cached config")
+                            
+                            // Force a reload if the config has changed
+                            if let cachedConfig = getCachedConfig() {
+                                let nsConfig = cachedConfig as NSDictionary
+                                let configsDiffer = !nsConfig.isEqual(to: theDict)
+                                secondaryForceReload = configsDiffer
+                                if configsDiffer {
+                                    do {
+                                        try data.write(to: LoadingManager.cachedConfigPath)
+                                    } catch {
+                                        print("Error saving cached config")
+                                    }
+                                }
                             }
                             
                             configDict = theDict
-                        } else if let data = try? Data(contentsOf: LoadingManager.cachedConfigPath),
-                                let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
-                            configDict = dict
+                        } else if let config = getCachedConfig() {
+                            configDict = config
                         } else {
                             if let config = getBundledConfig() {
                                 configDict = config
@@ -111,7 +141,7 @@ import FirebaseDatabase
                         }
                         
                         if let dict = configDict {
-                            doStartup(dict: dict)
+                            doStartup(dict: dict, forceReload: forceReload || secondaryForceReload)
                         } else {
                             RTRSErrorHandler.showError(in: nil, type: .network, completion: nil)
                         }

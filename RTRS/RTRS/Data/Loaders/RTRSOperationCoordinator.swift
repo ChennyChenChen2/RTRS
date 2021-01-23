@@ -15,7 +15,7 @@ class RTRSOperationCoordinator {
     var operationCount: Int = 0
     var processedOperations: Int = 0
     
-    func beginStartupProcess(dict: [String: Any], completionHandler: @escaping (Bool) -> ()) {
+    func beginStartupProcess(dict: [String: Any], forceReload: Bool, completionHandler: @escaping (Bool) -> ()) {
         self.operationQueue.maxConcurrentOperationCount = 100
         self.processedOperations = 0
         
@@ -37,6 +37,8 @@ class RTRSOperationCoordinator {
                         }
                     
                         print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") successfully called custom completion")
+                    } else {
+                        print("\(viewModel?.pageName() ?? "<<MISSING NAME>>") CALLED COMPLETION WITH FAILURE")
                     }
                     
                     if let moreItems = dict["moreItems"] as? [String] {
@@ -72,7 +74,7 @@ class RTRSOperationCoordinator {
                 let podSourceURL = URL(string: podSourceURLString),
                 let ignoreTitles = podSource["ignoreTitles"] as? [String]
             {
-                let operation = RTRSOperation(urls: [podSourceURL], pageName: "Pod Source", type: "Pod Source", ignoreTitles: ignoreTitles)
+                let operation = RTRSOperation(urls: [podSourceURL], forceReload: forceReload, pageName: "Pod Source", type: "Pod Source", ignoreTitles: ignoreTitles)
                 operation.customCompletion = operationCompletion
                 self.operationQueue.addOperation(operation)
             }
@@ -95,7 +97,7 @@ class RTRSOperationCoordinator {
                         ignoreTitles = titles
                     }
                     
-                    let operation = RTRSOperation(urls: urls, pageName: name, type: type, ignoreTitles: ignoreTitles)
+                    let operation = RTRSOperation(urls: urls, forceReload: forceReload, pageName: name, type: type, ignoreTitles: ignoreTitles)
                     operation.customCompletion = operationCompletion
                     self.operationQueue.addOperation(operation)
                 }

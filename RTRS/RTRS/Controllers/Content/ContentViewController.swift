@@ -9,67 +9,78 @@
 import UIKit
 import CoreGraphics
 
-class ContentViewController: UIViewController {
+class ContentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    @IBOutlet weak var podView: UIView!
-    @IBOutlet weak var cornerView: UIView!
-    @IBOutlet weak var explanationView: UIView!
-    @IBOutlet weak var normalColumnContainer: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
-    fileprivate var normalColumnView: NormalColumnView!
-    
-    fileprivate let mocSegueId = "MOC"
-    fileprivate let auCornerSegueId = "AU's Corner"
+    fileprivate let mocSegueId = "The Good O'Connor (Mike)"
+    fileprivate let auCornerSegueId = "If Not, Pick Will Convey As Two Second-Rounders"
     fileprivate let podSegueId = "The Pod"
-    fileprivate let normalColumnSegueId = "Normal Column"
+    fileprivate let normalColumnSegueId = "Sixers Adam Normal Column"
+    
+    private let contentPageTypes: [RTRSScreenType] = [.podcasts, .au, .normalColumn, .moc]
+    
+    private let contentPageImageMap: [RTRSScreenType: UIImage] = [
+        .podcasts: #imageLiteral(resourceName: "Pod"),
+        .au: #imageLiteral(resourceName: "AU"),
+        .normalColumn: #imageLiteral(resourceName: "NormalColumn"),
+        .moc: #imageLiteral(resourceName: "MOC")
+    ]
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    self.navigationController?.navigationBar.isHidden = true
+        styleForDarkMode()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        self.collectionView.contentInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
-        let transitionCoordinator = RTRSTransittionCoordinator()
-        self.navigationController?.delegate = transitionCoordinator
+        self.navigationItem.title = "CONTENT"
         
-        // Draw borders for "THE POD" and "AU'S CORNER"
-        
-        //AU'S CORNER:
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openAuCorner))
-        gestureRecognizer.numberOfTapsRequired = 1
-        self.cornerView.addGestureRecognizer(gestureRecognizer)
-        
-        // THE POD:
-        let podGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openPods))
-        podGestureRecognizer.numberOfTapsRequired = 1
-        self.podView.addGestureRecognizer(podGestureRecognizer)
-        
-        // NORMAL COLUMN:
-        self.normalColumnView = NormalColumnView(frame: self.normalColumnContainer.frame)
-        self.normalColumnContainer.addSubview(self.normalColumnView)
-        
-        self.normalColumnView.translatesAutoresizingMaskIntoConstraints = false
-        self.normalColumnView.leftAnchor.constraint(equalTo: self.normalColumnContainer.leftAnchor).isActive = true
-        self.normalColumnView.topAnchor.constraint(equalTo: self.normalColumnContainer.topAnchor).isActive = true
-        self.normalColumnView.rightAnchor.constraint(equalTo: self.normalColumnContainer.rightAnchor).isActive = true
-        self.normalColumnView.bottomAnchor.constraint(equalTo: self.normalColumnContainer.bottomAnchor).isActive = true
-            
-        // MOC:
-        // TODO: apply gesture recognizer once content refresh page is applied
-        let mocRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(openMOC))
-        mocRecognizer.direction = .left
-        self.podView.addGestureRecognizer(mocRecognizer)
+        NotificationCenter.default.addObserver(self, selector: #selector(styleForDarkMode), name: .darkModeUpdated, object: nil)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let point = touches.first?.location(in: self.normalColumnView), let shapeLayer = self.normalColumnView.shapeLayer {
-            if let path = shapeLayer.path, path.contains(point) {
-                openNormalColumn()
-            }
-        }
+    @objc private func styleForDarkMode() {
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.collectionView.backgroundColor = AppStyles.backgroundColor
+        
+        self.collectionView.reloadData()
     }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return contentPageTypes.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let page = self.contentPageTypes[indexPath.row]
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContentCell", for: indexPath) as? ContentCollectionViewCell,
+            let image = self.contentPageImageMap[page] else { return UICollectionViewCell() }
+        
+        
+        cell.titleLabel.text = page.rawValue.uppercased()
+        cell.titleLabel.textColor = AppStyles.foregroundColor
+        
+        cell.imageView.image = image
+        cell.imageView.tintColor = AppStyles.foregroundColor
+        
+        cell.contentView.backgroundColor = AppStyles.backgroundColor
+        
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = AppStyles.foregroundColor.cgColor
+        cell.layer.masksToBounds = false
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let page = self.contentPageTypes[indexPath.row]
+        self.performSegue(withIdentifier: page.rawValue, sender: page)
+    }
+    
     
     @objc fileprivate func openPods() {
         self.navigationController?.navigationBar.isHidden = false
@@ -107,62 +118,18 @@ class ContentViewController: UIViewController {
     }
 }
 
-fileprivate class NormalColumnView: UIView {
-    
-    var titleLabel: UILabel
-    var shapeLayer: CAShapeLayer?
-    var angle: CGFloat?
-    
-    override init(frame: CGRect) {
-        self.titleLabel = UILabel()
-        self.titleLabel.font = Utils.defaultFont.withSize(25.0)
-        self.titleLabel.text = "SIXERS ADAM: NORMAL COLUMN"
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        self.titleLabel = UILabel()
-        self.titleLabel.font = Utils.defaultFont.withSize(25.0)
-        self.titleLabel.text = "SIXERS ADAM: NORMAL COLUMN"
-        super.init(coder: coder)
-    }
-    
-    override func draw(_ rect: CGRect) {
-        self.shapeLayer = CAShapeLayer()
+class ContentCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
+}
 
-        self.shapeLayer?.path = self.createBezierPath(rect).cgPath
-
-        self.shapeLayer?.strokeColor = UIColor.white.cgColor
-        self.shapeLayer?.fillColor = UIColor.white.cgColor
-        self.shapeLayer?.lineWidth = 1.0
-
-        self.layer.addSublayer(shapeLayer!)
-        
-        self.addSubview(self.titleLabel)
-        self.titleLabel.textColor = .black
-        self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        if let angle = self.angle {
-            self.titleLabel.transform = CGAffineTransform(rotationAngle: angle)
-        }
-        
-        self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-    }
+class ContentCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
-    private func createBezierPath(_ frame: CGRect) -> UIBezierPath {
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: frame.size.height / 2))
-        path.addLine(to: CGPoint(x: frame.size.width, y: 0))
-        path.addLine(to: CGPoint(x: frame.size.width, y: frame.size.height / 2))
-        path.addLine(to: CGPoint(x: 0, y: frame.size.height))
-        path.addLine(to: CGPoint(x: 0, y: frame.size.height / 2))
-        
-        self.angle = atan2((0 - frame.size.height / 2), (frame.size.width - 0))
-        
-        path.close()
-        
-        return path
+    override var itemSize: CGSize {
+        get {
+            let width = (UIScreen.main.bounds.width / 2) - 10
+            return CGSize(width: width, height: width)
+        } set {}
     }
     
 }

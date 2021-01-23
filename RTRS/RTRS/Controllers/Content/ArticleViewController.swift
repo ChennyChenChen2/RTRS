@@ -48,7 +48,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         self.navigationItem.rightBarButtonItems = [shareButton, saveButton, textSizeButton]
         
         if let url = self.viewModel?.imageUrl {
-            self.imageView.af.setImage(withURL: url)
+            self.imageView.af.setImage(withURL: url as URL)
         }
         
         self.titleLabel.text = self.viewModel?.title
@@ -121,6 +121,13 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         self.loadContent()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let vm = self.viewModel, let title = vm.title, let column = column {
+            AnalyticsUtils.logViewArticle(title, column: column)
+        }
+    }
+    
     private func htmlWithCSS(_ templateHTML: String) -> String {
         let cssPlaceholder = "{{CSS_PLACEHOLDER}}"
         var cssString = ""
@@ -148,22 +155,37 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     }
     
     private func loadContent() {
-        if let htmlString = self.viewModel?.htmlString, let baseURL = self.viewModel?.baseURL {
-            let htmlPlusCSS = htmlWithCSS(htmlString)
+        if let htmlString = self.viewModel?.htmlString, let baseURL = self.viewModel?.baseURL as? URL {
+            let htmlPlusCSS = self.htmlWithCSS(htmlString)
             self.webView?.loadHTMLString(htmlPlusCSS, baseURL: baseURL)
+        } else {
+            self.viewModel?.lazyLoadData {
+                if let htmlString = self.viewModel?.htmlString, let baseURL = self.viewModel?.baseURL as? URL, let column = self.column, let screenType = RTRSScreenType(rawValue: column), let viewModel = self.viewModel {
+                    DispatchQueue.main.async {
+                        RTRSPersistentStorage.updateArticle(articleVM: viewModel, column: screenType)
+                    
+                        let htmlPlusCSS = self.htmlWithCSS(htmlString)
+                        self.webView?.loadHTMLString(htmlPlusCSS, baseURL: baseURL)
+                    }
+                }
+            }
         }
     }
     
     @objc private func shareAction() {
         guard let url = viewModel?.baseURL else { return }
 
-       // set up activity view controller
-       let itemToShare = [ url ]
-       let activityViewController = UIActivityViewController(activityItems: itemToShare, applicationActivities: nil)
-       activityViewController.popoverPresentationController?.sourceView = self.view
+        // set up activity view controller
+        let itemToShare = [ url ]
+        let activityViewController = UIActivityViewController(activityItems: itemToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
 
-       // present the view controller
-       self.present(activityViewController, animated: true, completion: nil)
+        // present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
+        
+        if let urlString = url.absoluteString {
+            AnalyticsUtils.logShare(urlString)
+        }
     }
     
     @objc private func contentSizeDidChange(_ obj: Any) {

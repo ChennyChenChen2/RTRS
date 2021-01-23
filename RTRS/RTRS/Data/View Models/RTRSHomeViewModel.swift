@@ -172,7 +172,7 @@ class RTRSHomeViewModel: NSObject, RTRSViewModel {
                     let actionElem = try? titleElem?.getElementsByTag("a").first()
                     
                     if let imgURL = URL(string: try imgElem.attr("data-src")) {
-                        if let theActionElem = actionElem, let urlString = try? theActionElem.attr("href"), let url = URL(string: urlString) {
+                        if let theActionElem = actionElem, let urlString = try? theActionElem.attr("href").replacingOccurrences(of: "http://", with: "https://"), let url = URL(string: urlString) {
                             var titleElemPlaceholder: Element? = nil
                             if let h2Elem = try titleElem?.getElementsByTag("h2").first() {
                                 titleElemPlaceholder = h2Elem
