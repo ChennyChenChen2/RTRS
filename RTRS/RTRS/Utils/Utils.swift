@@ -9,6 +9,7 @@
 import Foundation
 import SwiftSoup
 import Atributika
+import MKToolTip
 
 class RTRSUserDefaultsKeys {
     static let lastUpdated = "RickyLastUpdated"
@@ -19,6 +20,20 @@ class RTRSUserDefaultsKeys {
 class Utils {
     static let defaultFont = UIFont(name: "TrebuchetMS", size: 14)!
     static let defaultFontBold = UIFont(name: "TrebuchetMS-Bold", size: 14)!
+    
+    static func showToolTip(in view: UIView, title: String, message: String, identifier: String, direction: MKToolTip.ArrowPosition) {
+        DispatchQueue.main.async {
+            let gradientColor = UIColor.black
+            let gradientColor2 = UIColor.darkGray
+            let preference = ToolTipPreferences()
+            preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
+            preference.drawing.arrow.tipCornerRadius = 0
+            preference.drawing.title.color = .white
+            preference.drawing.message.color = .white
+            
+            view.showToolTip(identifier: identifier, title: title, message: message, button: nil, arrowPosition: direction, preferences: preference, delegate: nil)
+        }
+    }
 }
 
 extension NSAttributedString {

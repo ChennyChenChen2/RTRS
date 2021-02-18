@@ -11,8 +11,9 @@ import AlamofireImage
 import MarqueeLabel
 import AVFoundation
 
-class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionViewDataSource, PodcastManagerDelegate {
+class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionViewDataSource, PodcastManagerDelegate, UIPopoverPresentationControllerDelegate {
     
+    private let kInfoTooltipSeenDefaultwsKey = "kInfoTooltipSeen"
     let cellReuseId = "PodcastCell"
     var player: AVPlayer?
     
@@ -29,6 +30,7 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var youtubeButton: UIButton!
     @IBOutlet weak var buttonStackView: UIStackView!
+    @IBOutlet weak var infoButton: UIButton!
     
     var displayedViaTabView = false
     var viewModel: RTRSSinglePodViewModel!
@@ -41,6 +43,14 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             return Float(filteredText) ?? 1.0
         } else {
             return 1.0
+        }
+    }
+    
+    fileprivate var infoTooltipSeen: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: kInfoTooltipSeenDefaultwsKey)
+        } set {
+            UserDefaults.standard.set(newValue, forKey: kInfoTooltipSeenDefaultwsKey)
         }
     }
     
@@ -95,9 +105,9 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         self.forwardButton.tintColor = AppStyles.foregroundColor
         self.playButton.tintColor = AppStyles.foregroundColor
         self.shareButton.tintColor = AppStyles.foregroundColor
+        self.infoButton.tintColor = AppStyles.foregroundColor
         self.rateButton.setTitleColor(AppStyles.foregroundColor, for: .normal)
         self.loadingSpinner.color = AppStyles.foregroundColor
-        
         self.durationLabel.textColor = AppStyles.foregroundColor
         self.elapsedLabel.textColor = AppStyles.foregroundColor
         self.dateLabel.textColor = AppStyles.foregroundColor
@@ -125,6 +135,34 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         }
         
         self.displayedViaTabView = false
+    }
+    
+    @IBAction func infoButtonPressed(_ sender: Any) {
+        guard let button = sender as? UIButton, let summary = self.viewModel.podSummary else { return }
+        let popoverContentController = PopoverTextViewController(text: summary)
+        popoverContentController.preferredContentSize = popoverContentController.textView.intrinsicContentSize
+        popoverContentController.modalPresentationStyle = .popover
+         
+        if let popoverPresentationController = popoverContentController.popoverPresentationController {
+            popoverPresentationController.permittedArrowDirections = .down
+            popoverPresentationController.sourceView = self.view
+            popoverPresentationController.sourceRect = button.frame
+            popoverPresentationController.delegate = self
+            present(popoverContentController, animated: true, completion: nil)
+        }
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+    return .none
+    }
+     
+    //UIPopoverPresentationControllerDelegate
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+     
+    }
+     
+    func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
+    return true
     }
     
     @IBAction func youtubeAction(_ sender: Any) {
@@ -263,10 +301,11 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             self.dateLabel.text = podDate
             self.viewModel = singlePodViewModel
             
-            if self.viewModel?.youtubeUrl == nil {
+            if self.viewModel?.podSummary == nil || self.viewModel?.youtubeUrl == nil {
                 let spinner = UIActivityIndicatorView()
                 self.buttonStackView.insertArrangedSubview(spinner, at: 1)
                 self.youtubeButton.isHidden = true
+                self.infoButton.isHidden = true
                 spinner.hidesWhenStopped = true
                 spinner.startAnimating()
                 self.viewModel.lazyLoadPodData {
@@ -274,9 +313,16 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
                         spinner.stopAnimating()
                         self.buttonStackView.removeArrangedSubview(spinner)
                         self.youtubeButton.isHidden = singlePodViewModel.youtubeUrl == nil
+                        self.infoButton.isHidden = singlePodViewModel.podSummary == nil
+                        
                         self.multiPodViewModel?.content[indexPath.row] = singlePodViewModel
                         if let multiPodVM = self.multiPodViewModel {
                             RTRSPersistentStorage.save(viewModel: multiPodVM, type: .podcasts)
+                        }
+                        
+                        if !self.infoTooltipSeen {
+                            Utils.showToolTip(in: self.infoButton, title: "Tap here to read pod description", message: "Pod will continue playing as you read", identifier: "Pod info button", direction: .bottom)
+                            self.infoTooltipSeen = true
                         }
                     }
                 }
@@ -455,3 +501,37 @@ extension UICollectionView {
          self.scrollDirection = .horizontal
      }
  }
+
+fileprivate class PopoverTextViewController: UIViewController {
+    let textView = UITextView()
+    
+    init(text: String) {
+        self.textView.font = Utils.defaultFont
+        self.textView.translatesAutoresizingMaskIntoConstraints = false
+        self.textView.text = text
+//        self.textView.isScrollEnabled = false
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.backgroundColor = AppStyles.backgroundColor
+        self.textView.backgroundColor = AppStyles.backgroundColor
+        self.textView.textColor = AppStyles.foregroundColor
+
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.view.addSubview(self.textView)
+        self.textView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant:10).isActive = true
+        self.textView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant:-10).isActive = true
+        self.textView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
+        self.textView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
+    }
+}

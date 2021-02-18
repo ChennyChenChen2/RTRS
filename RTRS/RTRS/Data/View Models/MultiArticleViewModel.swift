@@ -92,24 +92,24 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
             let url = theURLs[n]
             concurrentQueue.async {
                 do {
-                    let innerQueue = DispatchQueue(label: "com.articles.queue.inner", attributes: .concurrent)
                     let htmlString = try String.init(contentsOf: url)
                     let doc = try SwiftSoup.parse(htmlString)
                     let postElements = try doc.getElementsByTag("article")
                     print("\(self.pageName()): Batch \(n) has \(postElements.count) posts")
                     var batch = [SingleArticleViewModel?]()
                     for i in 0..<postElements.count {
-                        innerQueue.async {
                             func wrapUp(_ singleArticleVM: SingleArticleViewModel?) {
-                                batch.append(singleArticleVM)
-                                
-                                if batch.count == postElements.count {
-                                    print("\(self.pageName()): COMPLETED BATCH \(n), CONTAINS \(batch.filter({ $0 != nil }).count)")
-                                    batchDict.setValue(batch, for: n)
-                                    batchDict.count { (count) in
-                                        if count == theURLs.count {
-                                            self.group.leave()
-                                            return
+                                DispatchQueue.global().sync {
+                                    batch.append(singleArticleVM)
+                                    
+                                    if batch.count == postElements.count {
+                                        print("\(self.pageName()): COMPLETED BATCH \(n), CONTAINS \(batch.filter({ $0 != nil }).count)")
+                                        batchDict.setValue(batch, for: n)
+                                        batchDict.count { (count) in
+                                            if count == theURLs.count {
+                                                self.group.leave()
+                                                return
+                                            }
                                         }
                                     }
                                 }
@@ -141,13 +141,13 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                     let articleUrl = NSURL(string: "https://www.rightstorickysanchez.com\(encodedUrlSuffix)") else {
                                         print("error with URL encoding... offending URL suffix: \(urlSuffix)")
                                         wrapUp(nil)
-                                        return
+                                        continue
                                 }
                                 
                                 if let titles = self.ignoreTitles, titles.contains(title) {
                                     print("IGNORING: \(title)")
                                     wrapUp(nil)
-                                    return
+                                    continue
                                 }
                                 
                                 var dateString = ""
@@ -158,13 +158,12 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 let singleArticleViewModel = SingleArticleViewModel(doc: nil, title: title, articleDescription: articleDescription, baseURL: articleUrl, dateString: dateString, imageUrl: NSURL(string: imageAttribute), htmlString: nil)
 
                                 wrapUp(singleArticleViewModel)
-                                return
+                                continue
                             } else {
                                 print("Multi-article: something went wrong?")
                                 wrapUp(nil)
-                                return
+                                continue
                             }
-                        }
                     }
                 } catch let error {
                     print("Error parsing \(self.pageName()) view model: \(error.localizedDescription)")

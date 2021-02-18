@@ -136,7 +136,7 @@ class RTRSDeepLinkHandler: NSObject {
                     let description = try? descriptionElem.first()?.attr("content"),
                     let imgUrlString = try? imgElem.first()?.attr("data-src"),
                     let imgUrl = NSURL(string: imgUrlString) {
-                    podVMToPresent = RTRSSinglePodViewModel(doc: document, title: title, date: date, description: description, imageURL: imgUrl, sharingUrl: payload.baseURL as NSURL, youtubeUrl: nil)
+                    podVMToPresent = RTRSSinglePodViewModel(doc: document, title: title, date: date, description: description, imageURL: imgUrl, sharingUrl: payload.baseURL as NSURL, youtubeUrl: nil, podSummary: nil)
                     
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "MMMM dd, yyyy"

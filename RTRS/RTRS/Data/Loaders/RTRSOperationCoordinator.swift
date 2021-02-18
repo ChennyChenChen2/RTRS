@@ -15,8 +15,7 @@ class RTRSOperationCoordinator {
     var operationCount: Int = 0
     var processedOperations: Int = 0
     
-    func beginStartupProcess(dict: [String: Any], forceReload: Bool, completionHandler: @escaping (Bool) -> ()) {
-        self.operationQueue.maxConcurrentOperationCount = 100
+    func beginStartupProcess(dict: [String: Any], forceReload: Bool, completionHandler: @escaping (Bool) -> ()) { 
         self.processedOperations = 0
         
         if let pages = dict["pages"] as? [[String: Any]] {

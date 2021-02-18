@@ -24,6 +24,7 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
     let imageUrl: NSURL?
     let sharingUrl: NSURL?
     var youtubeUrl: NSURL?
+    var podSummary: String?
     
     enum CodingKeys: String {
         case title = "title"
@@ -32,15 +33,17 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         case dateString = "dateString"
         case sharingUrl = "sharingUrl"
         case youtubeUrl = "youtubeUrl"
+        case podSummary = "podSummary"
     }
     
-    required init(doc: Document?, title: String?, date: String?, description: String?, imageURL: NSURL?, sharingUrl: NSURL?, youtubeUrl: NSURL?) {
+    required init(doc: Document?, title: String?, date: String?, description: String?, imageURL: NSURL?, sharingUrl: NSURL?, youtubeUrl: NSURL?, podSummary: String?) {
         self.title = title
         self.dateString = date
         self.contentDescription = description
         self.imageUrl = imageURL
         self.sharingUrl = sharingUrl
         self.youtubeUrl = youtubeUrl
+        self.podSummary = podSummary
         super.init()
     }
 
@@ -58,24 +61,25 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         let youtubeUrlString = try? youtubeElem.attr("src"),
         let youtubeUrl = NSURL(string: youtubeUrlString) {
             self.youtubeUrl = youtubeUrl
-            completion()
-            return
         }
         
-        let regex = try! NSRegularExpression(pattern: "www.youtube.com/embed/[A-Za-z0-9]+", options: .caseInsensitive)
-        if let youtubeElem = try? postElem.getElementsByAttributeValueContaining("data-block-json", "www.youtube.com").first(),
-           let blob = try? youtubeElem.attr("data-block-json"),
-           let decodedBlob = blob.removingPercentEncoding
-           {
-            let range = NSRange(location: 0, length: decodedBlob.utf16.count)
-            if let match = regex.firstMatch(in: decodedBlob, options: [], range: range),
-               let range = Range(match.range, in: decodedBlob) {
-                let youtubeUrlString = String(decodedBlob[range])
-                self.youtubeUrl = NSURL(string: "https://\(youtubeUrlString)")
-                completion()
-                return
+        if self.youtubeUrl == nil {
+            let regex = try! NSRegularExpression(pattern: "www.youtube.com/embed/[A-Za-z0-9]+", options: .caseInsensitive)
+            if let youtubeElem = try? postElem.getElementsByAttributeValueContaining("data-block-json", "www.youtube.com").first(),
+               let blob = try? youtubeElem.attr("data-block-json"),
+               let decodedBlob = blob.removingPercentEncoding
+               {
+                let range = NSRange(location: 0, length: decodedBlob.utf16.count)
+                if let match = regex.firstMatch(in: decodedBlob, options: [], range: range),
+                   let range = Range(match.range, in: decodedBlob) {
+                    let youtubeUrlString = String(decodedBlob[range])
+                    self.youtubeUrl = NSURL(string: "https://\(youtubeUrlString)")
+                }
             }
-            
+        }
+        
+        if let summaryElem = try? postElem.getElementsByTag("p").first() {
+            self.podSummary = try? summaryElem.text()
         }
         
         completion()
@@ -96,6 +100,7 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         aCoder.encode(self.imageUrl, forKey: CodingKeys.imageUrl.rawValue)
         aCoder.encode(self.sharingUrl, forKey: CodingKeys.sharingUrl.rawValue)
         aCoder.encode(self.youtubeUrl, forKey: CodingKeys.youtubeUrl.rawValue)
+        aCoder.encode(self.podSummary, forKey: CodingKeys.podSummary.rawValue)
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -105,7 +110,8 @@ class RTRSSinglePodViewModel: NSObject, RTRSViewModel, SingleContentViewModel {
         let imageUrl = aDecoder.decodeObject(forKey: CodingKeys.imageUrl.rawValue) as? NSURL
         let sharingUrl = aDecoder.decodeObject(forKey: CodingKeys.sharingUrl.rawValue) as? NSURL
         let youtubeUrl = aDecoder.decodeObject(forKey: CodingKeys.youtubeUrl.rawValue) as? NSURL
+        let podSummary = aDecoder.decodeObject(forKey: CodingKeys.podSummary.rawValue) as? String
         
-        self.init(doc: nil, title: title, date: dateString, description: description, imageURL: imageUrl, sharingUrl: sharingUrl, youtubeUrl: youtubeUrl)
+        self.init(doc: nil, title: title, date: dateString, description: description, imageURL: imageUrl, sharingUrl: sharingUrl, youtubeUrl: youtubeUrl, podSummary: podSummary)
     }
 }

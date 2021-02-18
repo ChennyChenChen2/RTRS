@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MKToolTip
 
 class RTRSHomeViewController: UITableViewController, LoggableViewController, UIPopoverPresentationControllerDelegate {
     private let firstLaunchFinishedKey = "kRTRSFirstLaunchFinishedKey"
@@ -71,11 +70,15 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     
     func showFTUEIfNecessary() {
         let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
+        let tooltipTitle = "If the logo is spinning, data is being fetched."
+        let tooltipMessage = "The app will automatically check for updates on startup. If you ever want to forcibly reload all data, tap the logo."
+        let tooltipIdentifier = "FTUE"
+        
         if !firstLaunchFinished {
             let alert = UIAlertController(title: "Welcome to the Ricky app!", message: "Please trust the processor as the app loads for the first time.\nWould you like to receive notifications for all Ricky-related updates, including new pods, articles, and events?", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { [weak self] (action) in
-                guard let self = self else { return }
-                self.showToolTip()
+                guard let self = self, let titleView = self.navigationItem.titleView else { return }
+                Utils.showToolTip(in: titleView, title: tooltipTitle, message: tooltipMessage, identifier: tooltipIdentifier, direction: .top)
                 UserDefaults.standard.set(true, forKey: self.firstLaunchFinishedKey)
             }))
             
@@ -91,28 +94,14 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     UIApplication.shared.registerUserNotificationSettings(settings)
                 }
                 
-                self.showToolTip()
+                if let titleView = self.navigationItem.titleView {
+                    Utils.showToolTip(in: titleView, title: tooltipTitle, message: tooltipMessage, identifier: tooltipMessage, direction: .top)
+                }
                 UserDefaults.standard.set(true, forKey: self.firstLaunchFinishedKey)
             }))
             
             DispatchQueue.main.async {
                 self.present(alert, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    @objc private func showToolTip() {
-        let firstLaunchFinished = UserDefaults.standard.bool(forKey: firstLaunchFinishedKey)
-        if !firstLaunchFinished {
-            DispatchQueue.main.async {
-                let gradientColor = UIColor.black
-                let gradientColor2 = UIColor.darkGray
-                let preference = ToolTipPreferences()
-                preference.drawing.bubble.gradientColors = [gradientColor, gradientColor2]
-                preference.drawing.arrow.tipCornerRadius = 0
-                preference.drawing.title.color = .white
-                preference.drawing.message.color = .white
-                self.navigationItem.titleView?.showToolTip(identifier: "FTUE", title: "If the logo is spinning, data is being fetched.", message: "The app will automatically check for updates on startup. If you ever want to forcibly reload all data, tap the logo.", button: nil, arrowPosition: .top, preferences: preference, delegate: nil)
             }
         }
     }

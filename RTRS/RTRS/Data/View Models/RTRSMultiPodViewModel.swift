@@ -79,24 +79,23 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
             let url = theURLs[batchNum]
             concurrentQueue.async {
                 do {
-                    let innerQueue = DispatchQueue(label: "com.pods.queue.inner", attributes: .concurrent)
                     let htmlString = try String.init(contentsOf: url)
                     let doc = try SwiftSoup.parse(htmlString)
                     let postElements = try doc.getElementsByTag("article")
                     print("Multi-Pod: Batch \(batchNum) has \(postElements.count) posts")
                     var batch = [RTRSSinglePodViewModel?]()
                     for i in 0..<postElements.count {
-                        innerQueue.async {
                             func wrapUp(_ result: RTRSSinglePodViewModel?) {
-                                batch.append(result)
-                                
-                                if batch.count == postElements.count {
-                                    print("MULTI-POD: COMPLETED BATCH \(batchNum), CONTAINS \(batch.filter({ $0 != nil }).count)")
-                                    batchDict.setValue(batch, for: batchNum)
-                                    batchDict.count { (count) in
-                                        if count == theURLs.count {
-                                            self.group.leave()
-                                            return
+                                DispatchQueue.global().sync {
+                                    batch.append(result)
+                                    
+                                    if batch.count == postElements.count {
+                                        print("MULTI-POD: COMPLETED BATCH \(batchNum), CONTAINS \(batch.filter({ $0 != nil }).count)")
+                                        batchDict.setValue(batch, for: batchNum)
+                                        batchDict.count { (count) in
+                                            if count == theURLs.count {
+                                                self.group.leave()
+                                            }
                                         }
                                     }
                                 }
@@ -112,7 +111,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                             if let titleElem = theTitleElem, let title = try? titleElem.text(), title == "Copy of Sample RTRS Post To Duplicate" {
                                 print("Skipping \(title)!")
                                 wrapUp(nil)
-                                return
+                                continue
                             }
                             
                             var theDateElem: Element? = try? postElement.getElementsByClass("date-author").first()
@@ -133,7 +132,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 #if DEBUG
                                 if title == "Shake At The Point, and Larry Hughes On Iverson, LeBron, The Bubble and The Nelly Video" {
                                     wrapUp(nil)
-                                    return
+                                    continue
                                 }
                                 #endif
                                 
@@ -146,7 +145,7 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                 if let titles = self.ignoreTitles, titles.contains(theTitle) {
                                     print("IGNORING: \(theTitle)")
                                     wrapUp(nil)
-                                    return
+                                    continue
                                 }
                                 
                                 var dateString = ""
@@ -154,16 +153,15 @@ class RTRSMultiPodViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
                                     dateString = newDate
                                 }
                                 
-                                let singleViewModel = RTRSSinglePodViewModel(doc: nil, title: theTitle, date: dateString, description: podDescription, imageURL: NSURL(string: imageAttribute), sharingUrl: sharingUrl, youtubeUrl: nil)
+                                let singleViewModel = RTRSSinglePodViewModel(doc: nil, title: theTitle, date: dateString, description: podDescription, imageURL: NSURL(string: imageAttribute), sharingUrl: sharingUrl, youtubeUrl: nil, podSummary: nil)
                                 
                                 wrapUp(singleViewModel)
-                                return
+                                continue
                             } else {
                                 print("Multi-pod: something went wrong? URL: \(url.absoluteString)")
                                 wrapUp(nil)
-                                return
+                                continue
                             }
-                        }
                     }
                 } catch let error {
                     print("Error parsing multi pod view model: \(error.localizedDescription)")

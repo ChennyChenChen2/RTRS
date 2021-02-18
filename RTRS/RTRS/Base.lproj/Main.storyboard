@@ -399,20 +399,27 @@
                                     <action selector="seekBarValueChanged:" destination="z1F-01-woh" eventType="valueChanged" id="K1e-S1-5PO"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFU-De-5aa">
-                                <rect key="frame" x="20" y="668" width="52.5" height="14.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99:99:99" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TQ1-Rk-7XN">
                                 <rect key="frame" x="341" y="667" width="53" height="14.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFU-De-5aa">
+                                <rect key="frame" x="20" y="668" width="52.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z0w-xY-uQL">
+                                <rect key="frame" x="194.5" y="767" width="25" height="25"/>
+                                <state key="normal" image="Info"/>
+                                <connections>
+                                    <action selector="infoButtonPressed:" destination="z1F-01-woh" eventType="touchUpInside" id="4Zm-mI-f4J"/>
+                                </connections>
+                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Ymg-ya-H2c">
-                                <rect key="frame" x="134.5" y="793" width="145" height="50"/>
+                                <rect key="frame" x="134.5" y="807" width="145" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FHf-rK-7HB">
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="50"/>
@@ -445,9 +452,11 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="TQ1-Rk-7XN" firstAttribute="trailing" secondItem="Vgr-rn-PaH" secondAttribute="trailing" id="1hx-4o-6Kb"/>
+                            <constraint firstItem="Z0w-xY-uQL" firstAttribute="centerX" secondItem="dlb-Yv-5ia" secondAttribute="centerX" id="29S-MB-flA"/>
                             <constraint firstItem="cjk-ej-5Y0" firstAttribute="trailing" secondItem="dlb-Yv-5ia" secondAttribute="trailing" id="5pQ-ve-0t6"/>
                             <constraint firstItem="Vgr-rn-PaH" firstAttribute="top" secondItem="Czn-8n-dC0" secondAttribute="bottom" constant="26" id="72l-ma-Qfw"/>
                             <constraint firstItem="09P-SH-BCb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5yN-Iz-R57" secondAttribute="trailing" constant="8" symbolic="YES" id="8W3-Yy-ZHC"/>
+                            <constraint firstItem="Z0w-xY-uQL" firstAttribute="top" secondItem="BHp-Yv-SzE" secondAttribute="bottom" constant="3" id="9dH-QT-qa8"/>
                             <constraint firstItem="TQ1-Rk-7XN" firstAttribute="top" secondItem="Vgr-rn-PaH" secondAttribute="bottom" constant="7" id="BO1-jO-YZz"/>
                             <constraint firstItem="5dq-BG-0bN" firstAttribute="bottom" secondItem="09P-SH-BCb" secondAttribute="bottom" id="D9t-Eg-ZBZ"/>
                             <constraint firstItem="dlb-Yv-5ia" firstAttribute="trailing" secondItem="Vgr-rn-PaH" secondAttribute="trailing" constant="20" id="Flo-8z-7aE"/>
@@ -456,7 +465,6 @@
                             <constraint firstItem="NFU-De-5aa" firstAttribute="top" secondItem="Vgr-rn-PaH" secondAttribute="bottom" constant="8" id="P3Z-Fo-cSJ"/>
                             <constraint firstItem="04m-aD-Oy1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="09P-SH-BCb" secondAttribute="trailing" constant="8" symbolic="YES" id="QE1-Yb-bVJ"/>
                             <constraint firstItem="cjk-ej-5Y0" firstAttribute="leading" secondItem="dlb-Yv-5ia" secondAttribute="leading" id="R1n-f1-QXT"/>
-                            <constraint firstItem="Ymg-ya-H2c" firstAttribute="top" secondItem="BHp-Yv-SzE" secondAttribute="bottom" constant="29" id="ROg-3x-pn7"/>
                             <constraint firstItem="Ymg-ya-H2c" firstAttribute="centerX" secondItem="dlb-Yv-5ia" secondAttribute="centerX" id="Vqs-Yb-FGh"/>
                             <constraint firstItem="5yN-Iz-R57" firstAttribute="leading" secondItem="dlb-Yv-5ia" secondAttribute="leading" constant="20" id="XQS-rL-FEM"/>
                             <constraint firstItem="5dq-BG-0bN" firstAttribute="leading" secondItem="09P-SH-BCb" secondAttribute="leading" id="YX7-t2-9jq"/>
@@ -481,6 +489,7 @@
                             <constraint firstItem="cjk-ej-5Y0" firstAttribute="top" secondItem="NOO-MV-M9W" secondAttribute="bottom" constant="40" id="oN5-6Y-EwO"/>
                             <constraint firstItem="Czn-8n-dC0" firstAttribute="top" secondItem="1xC-Xt-Boa" secondAttribute="bottom" constant="8" id="uC6-e2-Q6q"/>
                             <constraint firstItem="Vgr-rn-PaH" firstAttribute="leading" secondItem="dlb-Yv-5ia" secondAttribute="leading" constant="20" id="vFB-vw-l7J"/>
+                            <constraint firstItem="Ymg-ya-H2c" firstAttribute="top" secondItem="Z0w-xY-uQL" secondAttribute="bottom" constant="15" id="xNR-Dw-RnY"/>
                             <constraint firstItem="1xC-Xt-Boa" firstAttribute="centerX" secondItem="dlb-Yv-5ia" secondAttribute="centerX" id="zhb-XV-ndF"/>
                         </constraints>
                     </view>
@@ -493,6 +502,7 @@
                         <outlet property="durationLabel" destination="TQ1-Rk-7XN" id="6Ew-yp-zcz"/>
                         <outlet property="elapsedLabel" destination="NFU-De-5aa" id="UHC-C7-Ocx"/>
                         <outlet property="forwardButton" destination="04m-aD-Oy1" id="Wkr-9K-8eU"/>
+                        <outlet property="infoButton" destination="Z0w-xY-uQL" id="UGQ-bU-OOj"/>
                         <outlet property="loadingSpinner" destination="5dq-BG-0bN" id="g8R-E9-Pzn"/>
                         <outlet property="playButton" destination="09P-SH-BCb" id="rFj-Jk-eI7"/>
                         <outlet property="rateButton" destination="BHp-Yv-SzE" id="RaB-2v-bNa"/>
@@ -1357,6 +1367,7 @@ A: Because of course it does.</string>
         <image name="Dismiss-Icon" width="25" height="25"/>
         <image name="Heart-No-Fill-Dark" width="25" height="25"/>
         <image name="Hinkie" width="33" height="33"/>
+        <image name="Info" width="25" height="25"/>
         <image name="More-Icon" width="19" height="19"/>
         <image name="Notifications" width="38" height="38"/>
         <image name="Play" width="25" height="25"/>
