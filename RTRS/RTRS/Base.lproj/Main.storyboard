@@ -81,9 +81,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2k6-do-H75" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="985.50724637681162" y="1591.7410714285713"/>
+            <point key="canvasLocation" x="2229" y="1582"/>
         </scene>
-        <!--Content Table View Controller-->
+        <!--Item-->
         <scene sceneID="Dau-ON-pxB">
             <objects>
                 <tableViewController id="bOP-We-QCa" customClass="ContentTableViewController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
@@ -178,6 +178,7 @@
                             <outlet property="delegate" destination="bOP-We-QCa" id="fdW-tF-9y3"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Item" id="T9Y-5F-iUz"/>
                     <navigationItem key="navigationItem" id="jAo-2b-duO"/>
                     <connections>
                         <outlet property="searchBar" destination="QBW-ud-gQe" id="Zc6-GL-HHr"/>
@@ -186,7 +187,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hjA-jI-jsN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="986" y="2261"/>
+            <point key="canvasLocation" x="512" y="2253"/>
         </scene>
         <!--Article View Controller-->
         <scene sceneID="Ohz-tD-fVP">
@@ -197,7 +198,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0VL-Nu-n0L">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8wu-f2-bDP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="217"/>
@@ -546,6 +547,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="KMl-cS-gNU" kind="relationship" relationship="viewControllers" id="1tJ-H4-LCO"/>
+                        <segue destination="gyl-vr-aew" kind="relationship" relationship="viewControllers" id="Jay-GM-zRt"/>
                         <segue destination="kzQ-dS-CKm" kind="relationship" relationship="viewControllers" id="8XM-be-3nw"/>
                         <segue destination="Ggk-yU-Rbc" kind="relationship" relationship="viewControllers" id="77Q-mO-bcl"/>
                     </connections>
@@ -832,7 +834,7 @@ A: Because of course it does.</string>
                             <outlet property="delegate" destination="Ais-zc-7KX" id="XPx-f3-2XJ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="More" id="qss-6s-tE4"/>
+                    <navigationItem key="navigationItem" title="MORE" id="qss-6s-tE4"/>
                     <connections>
                         <segue destination="e0p-yq-Sqf" kind="show" identifier="About" id="Bvv-Jk-y72"/>
                         <segue destination="61u-pN-KfT" kind="show" identifier="externalweb" id="roz-li-Ohd"/>
@@ -958,11 +960,28 @@ A: Because of course it does.</string>
             </objects>
             <point key="canvasLocation" x="3542.0289855072465" y="862.5"/>
         </scene>
-        <!--Content-->
+        <!--Watch/Listen-->
+        <scene sceneID="SJn-81-0nq">
+            <objects>
+                <navigationController title="Watch/Listen" automaticallyAdjustsScrollViewInsets="NO" id="gyl-vr-aew" customClass="RTRSNavigationController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Watch/Listen" id="iNo-mv-usd"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2Wh-8O-9s5">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bOP-We-QCa" kind="relationship" relationship="rootViewController" id="5ON-1f-L09"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mOh-p2-nb9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1130" y="863"/>
+        </scene>
+        <!--Read-->
         <scene sceneID="m2D-GR-2ue">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kzQ-dS-CKm" customClass="RTRSNavigationController" customModule="RTRS" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Content" image="Hinkie" id="Hcq-JW-oYB">
+                    <tabBarItem key="tabBarItem" title="Read" image="Hinkie" id="Hcq-JW-oYB">
                         <color key="badgeColor" name="textColor" catalog="System" colorSpace="catalog"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -977,7 +996,7 @@ A: Because of course it does.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iF9-yX-MsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="986" y="863"/>
+            <point key="canvasLocation" x="2229" y="863"/>
         </scene>
         <!--About-->
         <scene sceneID="Z9C-tW-a2i">
@@ -1359,8 +1378,8 @@ A: Because of course it does.</string>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="fi0-I9-NnX"/>
-        <segue reference="BWH-bX-Mxo"/>
+        <segue reference="DW7-VD-uJw"/>
+        <segue reference="cqK-au-f3a"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>

@@ -89,7 +89,7 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (viewModel?.pages?.count ?? 0) + 4 // 4 = Notifications, app settings, dog stuff, Mail
+        return (viewModel?.pages?.count ?? 0) + 4 // 4 = Notifications, app settings, pet stuff, Mail
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -121,9 +121,9 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
             
             cell = noteCell
         } else if indexPath.row == 1 {
-            // Second row = dog stuff
+            // Second row = pet stuff
             cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)
-            cell.textLabel?.text = "Dog Stuff"
+            cell.textLabel?.text = "Pet Stuff"
             cell.imageView?.image = AppStyles.dogStuffIcon
         } else if indexPath.row == self.tableView.numberOfRows(inSection: 0) - 2 {
             cell = tableView.dequeueReusableCell(withIdentifier: self.cellReuseId, for: indexPath)

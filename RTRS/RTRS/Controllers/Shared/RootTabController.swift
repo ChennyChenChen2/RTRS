@@ -21,7 +21,12 @@ class RootTabController: UITabBarController, UITabBarControllerDelegate {
         
         self.delegate = self
         
-        if let contentItem = self.tabBar.items?[1] {
+        if let watchListenItem = self.tabBar.items?[1] {
+            let index = Int.random(in: 0..<headNames.count)
+            watchListenItem.image = UIImage(named: headNames[index])
+        }
+        
+        if let contentItem = self.tabBar.items?[2] {
             let index = Int.random(in: 0..<headNames.count)
             contentItem.image = UIImage(named: headNames[index])
         }

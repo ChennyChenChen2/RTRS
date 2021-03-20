@@ -508,6 +508,7 @@ fileprivate class PopoverTextViewController: UIViewController {
     init(text: String) {
         self.textView.font = Utils.defaultFont
         self.textView.translatesAutoresizingMaskIntoConstraints = false
+        self.textView.isUserInteractionEnabled = false
         self.textView.text = text
 //        self.textView.isScrollEnabled = false
         

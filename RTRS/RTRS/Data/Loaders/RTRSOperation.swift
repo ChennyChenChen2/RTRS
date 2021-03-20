@@ -108,30 +108,11 @@ class RTRSOperation: Operation {
                             viewModel = RTRSPersistentStorage.getViewModel(type: type)
                         }
 
-//                        if viewModel?.needsReload() ?? true {
-//                            print("\(type.rawValue) view model needs reload")
-//                            guard let url = self.urls.first,
-//                                let htmlString = try? String.init(contentsOf: url),
-//                                let doc = try? SwiftSoup.parse(htmlString),
-//                                let lastUpdated = lastUpdated else {
-//                                self.state = .Finished
-//                                return nil
-//                            }
-//
-//                            let newViewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated)
-//
-//                            if !deferredCompletion {
-//                                UserDefaults.standard.set(lastUpdated, forKey: keyName)
-//                                self.state = .Finished
-//                                return newViewModel
-//                            }
-//                        } else {
-                            if let theViewModel = viewModel {
-                                return theViewModel
-                            }
-                            
-                            return nil
-//                        }
+                        if let theViewModel = viewModel {
+                            return theViewModel
+                        }
+                        
+                        return nil
                     }
                     
                     return nil
@@ -157,42 +138,43 @@ class RTRSOperation: Operation {
                 if shouldUpdate || oldViewModel == nil || self.forceReload {
                     if let url = self.urls.first {
                         AF.request(url.absoluteString).responseString { (response) in
-                            do {
-                                guard let htmlString = response.value else { self.customCompletion?(retrieveSavedDataIfAvailable()); return }
-                                var doc: Document
-                                if self.pageName == "Pod Source" {
-                                    doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
-                                } else {
-                                    doc = try SwiftSoup.parse(htmlString)
-                                }
-                               
-                                if let type = RTRSScreenType(rawValue: self.pageName) {
-                                    var viewModel: RTRSViewModel?
-                                    var deferredCompletion = false
-                                   
-                                    if type == .au || type == .podcasts || type == .normalColumn || type == .moc {
-                                        let oldMultiVM = oldViewModel as? MultiContentViewModel
-                                        viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated, existingViewModels: oldMultiVM?.content.compactMap {$0})
-                                        deferredCompletion = true
+                            DispatchQueue.global().async {
+                                do {
+                                    guard let htmlString = response.value else { self.customCompletion?(retrieveSavedDataIfAvailable()); return }
+                                    var doc: Document
+                                    if self.pageName == "Pod Source" {
+                                        doc = try SwiftSoup.parse(htmlString, "", Parser.xmlParser())
                                     } else {
-                                        viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
+                                        doc = try SwiftSoup.parse(htmlString)
                                     }
+                                   
+                                    if let type = RTRSScreenType(rawValue: self.pageName) {
+                                        var viewModel: RTRSViewModel?
+                                        var deferredCompletion = false
                                        
-                                    if !deferredCompletion {
-                                        UserDefaults.standard.set(lastUpdated, forKey: keyName)
-                                        self.customCompletion?(viewModel)
+                                        if type == .au || type == .podcasts || type == .normalColumn || type == .moc {
+                                            let oldMultiVM = oldViewModel as? MultiContentViewModel
+                                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles, completionHandler: self.customCompletion, etag: lastUpdated, existingViewModels: oldMultiVM?.content.compactMap {$0})
+                                            deferredCompletion = true
+                                        } else {
+                                            viewModel = RTRSViewModelFactory.viewModelForType(name: self.pageName, doc: doc, urls: self.urls, ignoreTitles: self.ignoreTitles)
+                                        }
+                                           
+                                        if !deferredCompletion {
+                                            UserDefaults.standard.set(lastUpdated, forKey: keyName)
+                                            self.customCompletion?(viewModel)
+                                        }
+                                        
+                                        self.state = .Finished
+                                    } else {
+                                        // TODO: throw error for invalid page type...
+                                        self.customCompletion?(oldViewModel)
+                                        self.state = .Finished
                                     }
-                                    
-                                    self.state = .Finished
-                                } else {
-                                    // TODO: throw error for invalid page type...
-                                    // Call to retrieveSavedDataIfAvailable won't do anything because of the invalid page type
-                                    self.customCompletion?(oldViewModel)
+                                } catch let error {
+                                    print("Operation error: \(error.localizedDescription)")
                                     self.state = .Finished
                                 }
-                            } catch let error {
-                                print("Operation error: \(error.localizedDescription)")
-                                self.state = .Finished
                             }
                         }
                     }

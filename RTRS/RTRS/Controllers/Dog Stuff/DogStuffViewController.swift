@@ -28,7 +28,7 @@ class DogStuffViewController: UITableViewController {
         super.viewDidLoad()
         
         self.styleForDarkMode()
-        self.navigationItem.title = "Dog Stuff"
+        self.navigationItem.title = "Pet Stuff"
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .processPupsLoadedNotificationName, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(loadingFinished), name: .goodDogClubLoadedNotificationName, object: nil)

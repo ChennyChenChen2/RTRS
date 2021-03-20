@@ -26,7 +26,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         button.setImage(#imageLiteral(resourceName: "RickyLogoCutout"), for: .normal)
         button.addTarget(self, action: #selector(openRefreshView), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFit
-        button.frame.size = CGSize(width: 40.0, height: 40.0)
+        button.frame.size = CGSize(width: 60.0, height: 60.0)
         self.navigationItem.titleView = button
         
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
@@ -48,7 +48,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         barAppearance.barTintColor = AppStyles.backgroundColor
         
         self.navigationController?.navigationBar.tintColor = AppStyles.backgroundColor
-        self.tableView.reloadData()
+//        self.tableView.reloadData()
         self.setNeedsStatusBarAppearanceUpdate()
     }
     
@@ -107,19 +107,21 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
     }
     
     @objc private func rotateRefreshButton() {
-        if let titleView = self.navigationItem.titleView {
-            if self.refreshButtonShouldRotate {
-                titleView.isUserInteractionEnabled = false
-                let duration: TimeInterval = 1.0
-                UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: { [weak self] in
-                    self?.navigationItem.titleView?.transform = titleView.transform.rotated(by: CGFloat(Float.pi))
-                }) { [weak self] finished in
-                    self?.rotateRefreshButton()
+        DispatchQueue.main.async {
+            if let titleView = self.navigationItem.titleView {
+                if self.refreshButtonShouldRotate {
+                    titleView.isUserInteractionEnabled = false
+                    let duration: TimeInterval = 1.0
+                    UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: {
+                        self.navigationItem.titleView?.transform = titleView.transform.rotated(by: CGFloat(Float.pi))
+                    }) { finished in
+                        self.rotateRefreshButton()
+                    }
+                } else {
+                    titleView.transform = .identity
+                    titleView.isUserInteractionEnabled = true
+                    titleView.layer.removeAllAnimations()
                 }
-            } else {
-                titleView.transform = .identity
-                titleView.isUserInteractionEnabled = true
-                titleView.layer.removeAllAnimations()
             }
         }
     }

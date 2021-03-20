@@ -203,30 +203,30 @@ class MultiArticleViewModel: NSObject, RTRSViewModel, MultiContentViewModel {
     }
 }
 
-struct ThreadSafeDict<Key: Hashable, Value> {
+class ThreadSafeDict<Key: Hashable, Value> {
     private var dict = [Key: Value]()
-    private let queue = DispatchQueue.global()
+    private let queue = DispatchQueue(label: "ThreadSafeDict", attributes: .concurrent)
     
     func count(_ response: (Int)->()) {
-        queue.sync {
+        self.queue.sync {
             response(dict.compactMap { $0 }.count)
         }
     }
     
     func getValue(for key: Key, response: (Value?)->()) {
-        queue.sync {
+        self.queue.sync {
             response(dict[key])
         }
     }
     
-    mutating func setValue(_ value: Value, for key: Key) {
-        queue.sync {
+    func setValue(_ value: Value, for key: Key) {
+        self.queue.async(flags: .barrier) {
             self.dict[key] = value
         }
     }
     
     func dictRepresentation(_ response: ([Key: Value])->()) {
-        queue.sync {
+        self.queue.sync {
             response(dict)
         }
     }

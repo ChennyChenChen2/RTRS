@@ -18,10 +18,9 @@ class ContentViewController: UIViewController, UICollectionViewDelegate, UIColle
     fileprivate let podSegueId = "The Pod"
     fileprivate let normalColumnSegueId = "Sixers Adam Normal Column"
     
-    private let contentPageTypes: [RTRSScreenType] = [.podcasts, .au, .normalColumn, .moc]
+    private let contentPageTypes: [RTRSScreenType] = [.au, .normalColumn, .moc]
     
     private let contentPageImageMap: [RTRSScreenType: UIImage] = [
-        .podcasts: #imageLiteral(resourceName: "Pod"),
         .au: #imageLiteral(resourceName: "AU"),
         .normalColumn: #imageLiteral(resourceName: "NormalColumn"),
         .moc: #imageLiteral(resourceName: "MOC")
@@ -38,7 +37,7 @@ class ContentViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.collectionView.dataSource = self
         self.collectionView.contentInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
-        self.navigationItem.title = "CONTENT"
+        self.navigationItem.title = "READ"
         
         NotificationCenter.default.addObserver(self, selector: #selector(styleForDarkMode), name: .darkModeUpdated, object: nil)
     }
@@ -111,8 +110,6 @@ class ContentViewController: UIViewController, UICollectionViewDelegate, UIColle
                 vc.contentType = .normalColumn
             } else if id == self.mocSegueId {
                 vc.contentType = .moc
-            } else {
-                vc.contentType = .podcasts
             }
         }
     }
@@ -131,5 +128,4 @@ class ContentCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return CGSize(width: width, height: width)
         } set {}
     }
-    
 }

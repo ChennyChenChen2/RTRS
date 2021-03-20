@@ -18,7 +18,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
             }
         }
     }
-    var contentType: RTRSScreenType!
+    var contentType: RTRSScreenType?
     fileprivate let cellReuseId = "ContentCell"
     fileprivate let articleSegueId = "AUArticleSegue"
     fileprivate let playerId = "PodcastPlayer"
@@ -27,6 +27,11 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Default to "Watch/Listen"
+        if self.contentType == nil {
+            self.contentType = .podcasts
+        }
 
         self.searchBar.delegate = self
         self.navigationController?.navigationBar.isHidden = false
@@ -60,7 +65,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
                 self.viewModel = theViewModel
             }
         } else if self.contentType == .podcasts {
-            self.navigationItem.title = "THE POD"
+            self.navigationItem.title = "WATCH/LISTEN"
             name = .podLoadedNotificationName
             if let theViewModel = RTRSNavigation.shared.viewModel(for: .podcasts) as? RTRSMultiPodViewModel {
                 self.viewModel = theViewModel
@@ -251,7 +256,7 @@ class ContentTableViewController: UITableViewController, UISearchBarDelegate, Lo
         let vc = segue.destination as! ArticleViewController
         if indexPath.row < self.filteredResults.count {
             vc.viewModel = self.filteredResults[indexPath.row] as? SingleArticleViewModel
-            vc.column = self.contentType.rawValue
+            vc.column = self.contentType!.rawValue
         }
     }
     

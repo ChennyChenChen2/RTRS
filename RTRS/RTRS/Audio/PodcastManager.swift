@@ -82,6 +82,9 @@ class PodcastManager: NSObject {
     
     fileprivate func setRate(rate: Float) {
         self.player?.rate = rate
+        if (rate > 0.0) {
+            self.delegate?.podcastDidBeginPlay()
+        }
     }
     
     func preparePlayer(title: String, url: URL, dateString: String) {
