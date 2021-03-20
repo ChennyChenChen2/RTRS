@@ -61,9 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             let podURLString = response.notification.request.content.userInfo["podURLString"] as? String
             let youtubeURLString = response.notification.request.content.userInfo["youtubeUrlString"] as? String
-            let shouldOpenExternalBrowser = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? Bool
+            let shouldOpenExternalBrowserString = response.notification.request.content.userInfo["shouldOpenExternalBrowser"] as? String
+            let shouldOpenExternalBrowser = shouldOpenExternalBrowserString?.lowercased() == "true" ? true : false
             let payload = RTRSDeepLinkPayload(baseURL: url, title: title, podURLString: podURLString, youtubeUrlString: youtubeURLString)
-            RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser ?? false)
+            RTRSDeepLinkHandler.route(payload: payload, navController: rootVC, shouldOpenExternalWebBrowser: shouldOpenExternalBrowser)
         }
         
         completionHandler()
