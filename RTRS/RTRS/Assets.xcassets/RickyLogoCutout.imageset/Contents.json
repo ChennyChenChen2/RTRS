@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "spinning@1x.png",
+      "filename" : "spinning-cropped@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "spinning@2x.png",
+      "filename" : "spinning-cropped@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "spinning@3x.png",
+      "filename" : "spinning-cropped@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

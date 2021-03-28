@@ -18,10 +18,17 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     @IBOutlet weak var webViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollViewTopConstraint: NSLayoutConstraint!
     
+    var navButtonStack: UIStackView?
     var dismissButton: UIButton?
-    var saveButton: UIBarButtonItem!
-    var textSizeButton: UIBarButtonItem!
-    var shareButton: UIBarButtonItem!
+    
+    var saveButton: UIButton?
+    var textSizeButton: UIButton?
+    var shareButton: UIButton?
+    
+    var saveBarButton: UIBarButtonItem?
+    var textSizeBarButton: UIBarButtonItem?
+    var shareBarButton: UIBarButtonItem?
+    
     var viewModel: SingleArticleViewModel?
     var column: String?
     var webView: WKWebView?
@@ -35,17 +42,6 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         AnalyticsUtils.logViewArticle(title, column: column)
         
         self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
-        
-        let saveButton = UIBarButtonItem(image: AppStyles.likeIcon(for: vm), style: .plain, target: self, action: #selector(saveAction))
-        self.saveButton = saveButton
-        
-        let textSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextSize-Dark"), style: .plain, target: self, action: #selector(textSizeChangeAction))
-        self.textSizeButton = textSizeButton
-        
-        let shareButton = UIBarButtonItem(image: AppStyles.shareIcon, style: .plain, target: self, action: #selector(shareAction))
-        self.shareButton = shareButton
-        
-        self.navigationItem.rightBarButtonItems = [shareButton, saveButton, textSizeButton]
         
         if let url = self.viewModel?.imageUrl {
             self.imageView.af.setImage(withURL: url as URL)
@@ -87,11 +83,51 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
             self.dismissButton?.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
             self.view.addSubview(self.dismissButton!)
             self.scrollViewTopConstraint.constant = 50
+            
+            let saveButton = UIButton()
+            saveButton.addTarget(self, action: #selector(saveAction), for: .touchUpInside)
+            saveButton.setImage(AppStyles.likeIcon(for: vm), for: .normal)
+            self.saveButton = saveButton
+            
+            let textSizeButton = UIButton()
+            textSizeButton.addTarget(self, action: #selector(textSizeChangeAction), for: .touchUpInside)
+            textSizeButton.setImage(#imageLiteral(resourceName: "TextSize-Dark"), for: .normal)
+            self.textSizeButton = textSizeButton
+            
+            let shareButton = UIButton()
+            shareButton.addTarget(self, action: #selector(shareAction), for: .touchUpInside)
+            shareButton.setImage(AppStyles.shareIcon, for: .normal)
+            self.shareButton = shareButton
+            
+            self.createNavButtonStack(buttons: [shareButton, saveButton, textSizeButton])
         } else {
             self.scrollViewTopConstraint.constant = 0
+            let saveButton = UIBarButtonItem(image: AppStyles.likeIcon(for: vm), style: .plain, target: self, action: #selector(saveAction))
+            self.saveBarButton = saveButton
+            
+            let textSizeButton = UIBarButtonItem(image: #imageLiteral(resourceName: "TextSize-Dark"), style: .plain, target: self, action: #selector(textSizeChangeAction))
+            self.textSizeBarButton = textSizeButton
+            
+            let shareButton = UIBarButtonItem(image: AppStyles.shareIcon, style: .plain, target: self, action: #selector(shareAction))
+            self.shareBarButton = shareButton
+            
+            self.navigationItem.rightBarButtonItems = [shareButton, saveButton, textSizeButton]
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
+    }
+    
+    private func createNavButtonStack(buttons: [UIButton]) {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 30.0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        buttons.forEach { (button) in
+            stackView.addArrangedSubview(button)
+        }
+        self.navButtonStack = stackView
+        self.view.addSubview(stackView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,11 +138,15 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
         self.scrollView.backgroundColor = AppStyles.backgroundColor
         
         self.dismissButton?.tintColor = AppStyles.foregroundColor
-        self.textSizeButton.tintColor = AppStyles.foregroundColor
-        self.shareButton.tintColor = AppStyles.foregroundColor
+        self.textSizeButton?.tintColor = AppStyles.foregroundColor
+        self.shareButton?.tintColor = AppStyles.foregroundColor
+        
+        self.textSizeBarButton?.tintColor = AppStyles.foregroundColor
+        self.shareBarButton?.tintColor = AppStyles.foregroundColor
         
         if let vm = self.viewModel {
-            self.saveButton.image = AppStyles.likeIcon(for: vm)
+            self.saveBarButton?.image = AppStyles.likeIcon(for: vm)
+            self.saveButton?.setImage(AppStyles.likeIcon(for: vm), for: .normal)
         }
         
         self.titleLabel.textColor = AppStyles.foregroundColor
@@ -204,6 +244,9 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
     override func viewWillLayoutSubviews() {
         self.dismissButton?.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
         self.dismissButton?.bottomAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: -10).isActive = true
+        
+        self.navButtonStack?.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
+        self.navButtonStack?.bottomAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: -10).isActive = true
                 
         self.webView?.leftAnchor.constraint(equalTo: self.webViewContainer.leftAnchor, constant:2.5).isActive = true
         self.webView?.rightAnchor.constraint(equalTo: self.webViewContainer.rightAnchor, constant: 2.5).isActive = true
@@ -219,7 +262,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
                 RTRSPersistentStorage.saveContent(vm)
             }
             
-            self.saveButton.image = AppStyles.likeIcon(for: vm)
+            self.saveButton?.setImage(AppStyles.likeIcon(for: vm), for: .normal)
         }
     }
     

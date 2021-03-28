@@ -113,7 +113,7 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
                     titleView.isUserInteractionEnabled = false
                     let duration: TimeInterval = 1.0
                     UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: {
-                        self.navigationItem.titleView?.transform = titleView.transform.rotated(by: CGFloat(Float.pi))
+                        titleView.transform = titleView.transform.rotated(by: CGFloat(Float.pi))
                     }) { finished in
                         self.rotateRefreshButton()
                     }
