@@ -48,8 +48,9 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
         barAppearance.barTintColor = AppStyles.backgroundColor
         
         self.navigationController?.navigationBar.tintColor = AppStyles.backgroundColor
-//        self.tableView.reloadData()
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        self.tableView.reloadData()
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -164,6 +165,12 @@ class RTRSHomeViewController: UITableViewController, LoggableViewController, UIP
             let payload = RTRSDeepLinkPayload(baseURL: url as URL, title: title, podURLString: nil, youtubeUrlString: nil)
             RTRSDeepLinkHandler.route(payload: payload, navController: navVC, shouldOpenExternalWebBrowser: homeItem.shouldOpenExternalBrowser)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? RTRSHomeTableViewCell else { return }
+        cell.titleLabel.textColor = AppStyles.foregroundColor
+        cell.backgroundColor = AppStyles.backgroundColor
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

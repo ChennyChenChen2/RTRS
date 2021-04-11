@@ -43,7 +43,11 @@ enum AppStyles {
     }
     
     private static var likeIconFilled: UIImage {
-        return #imageLiteral(resourceName: "Heart-Fill")
+        return darkModeEnabled ? #imageLiteral(resourceName: "Heart-Fill-Light") : #imageLiteral(resourceName: "Heart-Fill-Dark")
+    }
+    
+    static var textSizeIcon: UIImage {
+        return darkModeEnabled ? #imageLiteral(resourceName: "TextSize-Light") : #imageLiteral(resourceName: "TextSize-Dark")
     }
     
     static func likeIcon(for viewModel: SingleContentViewModel) -> UIImage {

@@ -11,12 +11,31 @@ import AVFoundation
 import MediaPlayer
 import MarqueeLabel
 
+protocol PodcastManagerDelegate: NSObject {
+    func podcastReadyToPlay(duration: CMTime)
+    func podcastDidFinish()
+    func podcastDidBeginPlay()
+    func podcastDidPause()
+    func podcastTimeDidUpdate(elapsed: CMTime, position: Float)
+}
+
+extension Notification.Name {
+    static let PodcastManagerLoadedNewPod = Notification.Name("PodcastManagerLoadedNewPod")
+    static let PodcastManagerDidPlay = Notification.Name("PodcastManagerDidPlay")
+    static let PodcastManagerDidPause = Notification.Name("PodcastManagerDidPause")
+}
+
 class PodcastManager: NSObject {
 
     static let shared = PodcastManager()
     override private init() {
         super.init()
-        self.configureCommandCenter()
+        self.configure()
+    }
+    
+    deinit {
+        UIApplication.shared.endReceivingRemoteControlEvents()
+        try? AVAudioSession.sharedInstance().setActive(false)
     }
     
     fileprivate var itemObserver: KeyValueObserver<AVPlayerItem>?
@@ -55,13 +74,15 @@ class PodcastManager: NSObject {
         if let title = self.title {
             AnalyticsUtils.logPodBegan(title)
         }
-        self.tabPlayerView?.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        
+        NotificationCenter.default.post(name: .PodcastManagerDidPlay, object: nil)
     }
     
     func pause() {
         self.player?.pause()
         self.delegate?.podcastDidPause()
-        self.tabPlayerView?.playPauseButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        
+        NotificationCenter.default.post(name: .PodcastManagerDidPause, object: nil)
     }
     
     func skip(delta: Double) {
@@ -90,17 +111,6 @@ class PodcastManager: NSObject {
     func preparePlayer(title: String, url: URL, dateString: String) {
         self.title = title
         self.dateString = dateString
-        
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback)
-            print("Playback OK")
-            try AVAudioSession.sharedInstance().setActive(true)
-            print("Session is Active")
-        } catch {
-            print(error)
-        }
         
         self.player?.pause()
         let item = AVPlayerItem(url: url)
@@ -156,7 +166,17 @@ class PodcastManager: NSObject {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
-    fileprivate func configureCommandCenter() {
+    fileprivate func configure() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            print("Playback OK")
+            try AVAudioSession.sharedInstance().setActive(true)
+            print("Session is Active")
+        } catch {
+            print(error)
+        }
         
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.skipForwardCommand.isEnabled = true
@@ -227,20 +247,6 @@ class PodcastManager: NSObject {
     }
 }
 
-protocol PodcastManagerDelegate: NSObject {
-    func podcastReadyToPlay(duration: CMTime)
-    func podcastDidFinish()
-    func podcastDidBeginPlay()
-    func podcastDidPause()
-    func podcastTimeDidUpdate(elapsed: CMTime, position: Float)
-}
-
-extension Notification.Name {
-    static let PodcastManagerLoadedNewPod = Notification.Name("PodcastManagerLoadedNewPod")
-    static let PodcastManagerDidPlay = Notification.Name("PodcastManagerDidPlay")
-    static let PodcastManagerDidPause = Notification.Name("PodcastManagerDidPause")
-}
-
 class TabBarPlayerView: UIView {
     fileprivate var playPauseButton: UIButton!
     fileprivate var titleLabel: MarqueeLabel!
@@ -255,6 +261,9 @@ class TabBarPlayerView: UIView {
         self.backgroundColor = AppStyles.backgroundColor
         self.layer.borderColor = AppStyles.foregroundColor.cgColor
         self.layer.borderWidth = 1.0
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePlayPauseButton), name: .PodcastManagerDidPlay, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updatePlayPauseButton), name: .PodcastManagerDidPause, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -288,7 +297,7 @@ class TabBarPlayerView: UIView {
             self.dateLabel.frame = CGRect(x: 10, y: self.titleLabel.bounds.origin.y + 10 + self.dateLabel.frame.size.height, width: self.dateLabel.frame.size.width, height: self.dateLabel.frame.size.height)
             
             self.playPauseButton = UIButton()
-            self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+            self.playPauseButton.setImage(PodcastManager.shared.isPlaying ? #imageLiteral(resourceName: "Pause") : #imageLiteral(resourceName: "Play"), for: .normal)
             self.playPauseButton.frame = CGRect(x: self.frame.size.width - 50, y: (self.frame.size.height / 2) - 12, width: 25, height: 25)
             self.playPauseButton.addTarget(self, action: #selector(playerViewPlayPauseAction), for: .touchUpInside)
             self.playPauseButton.tintColor = AppStyles.foregroundColor
@@ -302,10 +311,18 @@ class TabBarPlayerView: UIView {
     @objc func playerViewPlayPauseAction() {
         if PodcastManager.shared.isPlaying {
             PodcastManager.shared.pause()
-            self.playPauseButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
         } else {
             PodcastManager.shared.play()
+        }
+        
+        self.updatePlayPauseButton()
+    }
+    
+    @objc private func updatePlayPauseButton() {
+        if PodcastManager.shared.isPlaying {
             self.playPauseButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        } else {
+            self.playPauseButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
         }
     }
 }

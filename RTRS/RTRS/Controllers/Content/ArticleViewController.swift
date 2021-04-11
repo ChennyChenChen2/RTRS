@@ -91,7 +91,7 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
             
             let textSizeButton = UIButton()
             textSizeButton.addTarget(self, action: #selector(textSizeChangeAction), for: .touchUpInside)
-            textSizeButton.setImage(#imageLiteral(resourceName: "TextSize-Dark"), for: .normal)
+            textSizeButton.setImage(AppStyles.textSizeIcon, for: .normal)
             self.textSizeButton = textSizeButton
             
             let shareButton = UIButton()
@@ -262,7 +262,10 @@ class ArticleViewController: UIViewController, WKNavigationDelegate {
                 RTRSPersistentStorage.saveContent(vm)
             }
             
-            self.saveButton?.setImage(AppStyles.likeIcon(for: vm), for: .normal)
+            DispatchQueue.main.async {
+                self.saveButton?.setImage(AppStyles.likeIcon(for: vm), for: .normal)
+                self.saveBarButton?.image = AppStyles.likeIcon(for: vm)
+            }
         }
     }
     

@@ -96,6 +96,8 @@ class AppSettingsViewController: UITableViewController, MFMailComposeViewControl
                 mail.setMessageBody(body, isHTML: true)
 
                 present(mail, animated: true)
+            } else {
+                RTRSErrorHandler.showError(in: self, type: .mailNotEnabled, completion: nil)
             }
         } else if setting == .TextSize {
             Font.presentTextSizeSheet(in: self, completion: nil)

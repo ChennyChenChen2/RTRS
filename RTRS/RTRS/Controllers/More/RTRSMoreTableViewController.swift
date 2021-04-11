@@ -208,9 +208,10 @@ class RTRSMoreTableViewController: UITableViewController, RightSwitchCellDelegat
                 if MFMailComposeViewController.canSendMail() {
                     let mail = MFMailComposeViewController()
                     mail.mailComposeDelegate = self
-                    mail.setToRecipients(["spike@rightstorickysanchez.com"])
-
+                    mail.setToRecipients(["rightstorickysanchez@gmail.com"])
                     present(mail, animated: true)
+                } else {
+                    RTRSErrorHandler.showError(in: self, type: .mailNotEnabled, completion: nil)
                 }
                 
                 return

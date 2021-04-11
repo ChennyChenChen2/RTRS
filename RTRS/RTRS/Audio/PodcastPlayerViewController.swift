@@ -200,7 +200,6 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
     @IBAction func playButtonPressed(_ sender: Any) {
         let manager = PodcastManager.shared
         if manager.isPlaying {
-            manager.rate = 0
             manager.pause()
             self.playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
         } else {
@@ -290,12 +289,19 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
         return 0.0
     }
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let singlePodViewModel = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel,
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
+        let content = self.multiPodViewModel?.content
+        let source = self.sourceViewModel
+        assert(content != nil && indexPath.row < content!.count)
+        assert(source != nil && indexPath.row < source!.podInfo.count)
+        
+        if let content = content, let source = source, indexPath.row < content.count, indexPath.row < source.podInfo.count, let singlePodViewModel = content[indexPath.row] as? RTRSSinglePodViewModel,
             let podDate = singlePodViewModel.dateString,
-            let podUrl = self.sourceViewModel?.podInfo[indexPath.row].link,
-            let podTitle = singlePodViewModel.title,
-            let podCell = cell as? PodcastCollectionViewCell {
+            let podUrl = source.podInfo[indexPath.row].link,
+            let podTitle = singlePodViewModel.title {
             self.titleLabel.text = podTitle
             self.elapsedLabel.text = "00:00:00"
             self.dateLabel.text = podDate
@@ -303,7 +309,12 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             
             if self.viewModel?.podSummary == nil || self.viewModel?.youtubeUrl == nil {
                 let spinner = UIActivityIndicatorView()
-                self.buttonStackView.insertArrangedSubview(spinner, at: 1)
+                if self.buttonStackView.arrangedSubviews.count > 1 {
+                    self.buttonStackView.insertArrangedSubview(spinner, at: 1)
+                } else {
+                    // Just to account for any possible index out of bounds issues
+                    self.buttonStackView.addArrangedSubview(spinner)
+                }
                 self.youtubeButton.isHidden = true
                 self.infoButton.isHidden = true
                 spinner.hidesWhenStopped = true
@@ -338,12 +349,12 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
             
             PodcastManager.shared.preparePlayer(title: podTitle, url: podUrl as URL, dateString: podDate)
             
-            if let image = podCell.imageView.image {
+            if let image = cell.imageView.image {
                 PodcastManager.shared.configureNowPlayingInfo(image: image)
             } else if let imageUrl = singlePodViewModel.imageUrl {
-                podCell.imageView.af.setImage(withURL: imageUrl as URL, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .crossDissolve(1.0), runImageTransitionIfCached: false) { (response) in
+                cell.imageView.af.setImage(withURL: imageUrl as URL, cacheKey: imageUrl.absoluteString, placeholderImage: nil, serializer: nil, filter: nil, progress: nil, progressQueue: .global(), imageTransition: .noTransition, runImageTransitionIfCached: false) { (response) in
                     if let image = response.value {
-                        podCell.imageView.image = image
+                        cell.imageView.image = image
                         PodcastManager.shared.configureNowPlayingInfo(image: image)
                     } else {
                         print("No image?")
@@ -353,19 +364,21 @@ class PodcastPlayerViewController: RTRSCollectionViewController, UICollectionVie
                 print("PodcastPlayerViewController cannot display image?")
             }
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
-        
-        if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
-            cell.imageView.af.setImage(withURL: imageUrl as URL)
-        } else {
-            print("HERE?")
-        }
         
         return cell
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseId, for: indexPath) as! PodcastCollectionViewCell
+//
+//        if let content = self.multiPodViewModel?.content[indexPath.row] as? RTRSSinglePodViewModel, let imageUrl = content.imageUrl {
+//            cell.imageView.af.setImage(withURL: imageUrl as URL)
+//        } else {
+//            print("HERE?")
+//        }
+//
+//        return cell
+//    }
     
     // MARK: PodcastManagerDelegate
     func podcastReadyToPlay(duration: CMTime) {
@@ -510,7 +523,6 @@ fileprivate class PopoverTextViewController: UIViewController {
         self.textView.translatesAutoresizingMaskIntoConstraints = false
         self.textView.isUserInteractionEnabled = false
         self.textView.text = text
-//        self.textView.isScrollEnabled = false
         
         super.init(nibName: nil, bundle: nil)
     }

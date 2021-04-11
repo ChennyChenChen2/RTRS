@@ -13,6 +13,7 @@ enum RTRSError: Error {
     case dataNotAvailable
     case tooManyRequests
     case dataNotFound
+    case mailNotEnabled
     
     var alertTitle: String {
         switch self {
@@ -20,6 +21,7 @@ enum RTRSError: Error {
         case .dataNotAvailable: return "Data still loading! Trust the Process."
         case .tooManyRequests: return "Slow your roll!"
         case .dataNotFound: return "We couldn't find the content you were looking for"
+        case .mailNotEnabled: return "Mail not enabled"
         }
     }
     
@@ -29,6 +31,7 @@ enum RTRSError: Error {
         case .dataNotAvailable: return "The app is still downloading data, try again in a few seconds."
         case .tooManyRequests: return "You've requested a reload too quickly since the last one. Please wait at least one minute to prevent Squarespace from throttling your requests."
         case .dataNotFound: return "More than likely this is because something went wrong when we tried to fetch data from Squarespace. Please refresh the data by tapping the home screen icon, then try again."
+        case .mailNotEnabled: return "It looks like mail isn't enabled for your device. Verify your email accounts are set up correctly in your Settings app > Mail > Accounts."
         }
     }
 }
